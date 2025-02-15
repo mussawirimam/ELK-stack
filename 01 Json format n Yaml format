@@ -1,5 +1,8 @@
+Data exchange happens in the json format. And, data configuration happens with the yaml format
 ----------------------------------------------------------------------------------------------------------------------
 JSON FORMAT
+
+### DataTypes in Elasticsearch
 Text Used for full-text search, analyzed for tokenization
 keyword Used for exact matching, not analyzed
 long 64-bit integet (e.g 1234567890).
@@ -55,4 +58,30 @@ company Future
 ---------------------------------------------------------------------------------------------------
 YAML FORMAT 
 
+#Human readable
+name: Alice
+age: 25
+city: New York
+
+#yaml format
+student:
+  name: Bob
+  age: 22
+  subjects:
+    - Math
+    - Science
+  address:                  ### this is how a nested values looks like, street, city, zipcode are with their own seperate values. 
+    street: 123 Main St
+    city: Los Angeles
+    zipcode: 90001
+
+#or you can mention the array in format below as well
+student:
+  name: Bob
+  age: 22
+  subjects: [Math, Science]
+  address:
+    street: 123 Main St
+    city: Los Angeles
+    zipcode: 90001
 
