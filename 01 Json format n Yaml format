@@ -1,0 +1,58 @@
+----------------------------------------------------------------------------------------------------------------------
+JSON FORMAT
+Text Used for full-text search, analyzed for tokenization
+keyword Used for exact matching, not analyzed
+long 64-bit integet (e.g 1234567890).
+integer 32-bit integer (e.g 1000).
+short 16 bit integer (e.g, 255).
+byte 8-bit integer (e.g 127).
+float 32-bit floating point.
+Bool - True False
+
+Desc="Used for full-text ssearch, analyzed for tokenization"
+Desc1="Used for "full-text search, analyzed for tokenization"
+long=1454555
+integer=1000
+name=false
+
+------------------------
+json is a data format, which get utilized for the data exchange between two systems or two applications. 
+
+e.g of json
+# human readable 
+name Chintaman
+age 28
+company Future
+
+# data exhcange through json between the machines. 
+{
+  "name": "Chintaman",
+  "age": 28,
+  "Company": "Future"
+}
+
+# [] Array in json. An Array can have 1 or more value. And, Nested json
+[                                            //[] list array
+  {
+    "name": "Chintaman",
+    "age": 28,
+    "Company": "Future"
+  },
+  {
+    "student": {                           // Nested JSON object starts here
+      "name": "Bob",
+      "age": 22,
+      "subjects": ["Math", "Science"],    // [] list array
+      "address": {                       // Another nested JSON object starts here
+        "street": "123 Main St",
+        "city": "Los Angeles",
+        "zipcode": "90001"
+      }                                   // Nested JSON object ends here
+    }                                     // Nested JSON object ends here
+  }
+]
+
+---------------------------------------------------------------------------------------------------
+YAML FORMAT 
+
+
