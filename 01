@@ -1,0 +1,69 @@
+you should have understanding of ca (certificate authorities) and certificates tls encryptions.
+# when we try to access or configure the things in elasticsearch, we are going to deal with the http and https both
+but in production environment we will deal with the https only. That is why we need to know the configuration of the certificates. 
+# but for now we will use the self signed certificates for our configurations. 
+
+versions:
+7x: we will be able to use without the certificates and tls
+8x: for this we need the certificate and tls
+
+https is tls encrypted url, where we use the certificates for data exchange on the browser side. 
+http the information is being exchanged in the plain text and is not encrypted
+
+
+### go to my docker-kubernetes repository
+### install the docker from convinience script
+### install docker compoose apt-install docker-compose -y
+### use this for testing purpose only.
+docker compose file:
+vi compose.yaml:
+
+version: '3.8'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    container_name: kibana
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+
+volumes:
+  es_data:
+    driver: local
+
+wq!
+
+
+# command flow:
+#docker-compose up 
+#docker-compose ps
+#docker-compose logs <service_name>
+#docker-compose logs elasticsearch
+#docker-compose down
+#docker-compose up -d --build
+#Remove Volumes:
+If you want to remove the volumes (e.g., es_data) when stopping the containers, use:
+#docker-compose down -v # for volume: 
+
+# to access kibana http://localhost:5601
