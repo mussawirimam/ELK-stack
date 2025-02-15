@@ -85,3 +85,33 @@ student:
     city: Los Angeles
     zipcode: 90001
 
+----------------------------------------------------------------------------------------------------------------------
+Elk director/file structure
+-----------------------
+Config - /etc/elastic/elastic.yml
+Bin - /usr/share/elastic/bin
+Data - /lib/var/elasticsearch
+Logs - /var/log/elasticsearch 
+
+ELK Ports: 
+
+ELK - 9200
+ELK Transport - 9300
+Kibana - 5601
+
+Elk is divided into master and worker node clusters
+
+network concepts that you must know:
+ip: unique identifier on network
+subnet: unique unit of the identifier where it sits
+gateway: a gateway to the world of networking
+firewall: can be virtual or physical, which blocks or allows the ports and ips
+
+Linux basics:
+File system structure
+Basic commands: ls, cd, mv, grep, sed, awk
+User and permission management
+Process management
+networking basics: netstat, curl, wget, firewalls
+System monitoring: top, htop, iostat
+
