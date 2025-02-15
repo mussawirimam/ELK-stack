@@ -1,0 +1,33 @@
+# elastic is A distributed architecture. 
+what is a distribution terminology
+The elasticsearch for avoiding fault tolerance and will be resilient, it has a distributed data across all the server. 
+based on the our configuration defined in the index template for index. Index configuration will be defined in the index template and how this configuration is applied?
+based on the pattern which we define in the index template and settings 
+shard will be 1
+replica will be 4 
+etc
+
+replicas needs to be o different servers, because if one server is lost and there are two replicas on the same server than 2 will be lost incase the server is down. 
+our data will be highly availabe with the distributed data. 
+
+Master nodes
+
+source:
+logs
+
+processor: 
+filebeat
+
+parse:
+logstash
+
+dataNode:
+Replicas
+
+hypothesis: water mark is added for the percentage of the resources are allowed for the node to use
+
+Data role settings:
+https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html
+
+
+### watch the video again
