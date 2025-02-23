@@ -452,6 +452,7 @@ API:
 https://localhost:9200
 
 ### put this in the url for the access of other apis
+# with the api below, you will be able to get more api
 https://192.168.1.232:9200/_cat
 
 =^.^=
@@ -492,3 +493,13 @@ https://192.168.1.232:9200/_cat
 /_cat/ml/data_frame/analytics/{id}
 /_cat/transforms
 /_cat/transforms/{transform_id}
+
+### to check the master node 
+# this information is coming from the database
+https://192.168.1.232:9200/_cat/master
+
+https://192.168.1.232:9200/_cat/indices:
+# right now we done have any indices in the cluster
+
+https://192.168.1.232:9200/_cat/health:
+1740264701 22:51:41 my_elk green 1 1 1 1 0 0 0 0 - 100.0%
