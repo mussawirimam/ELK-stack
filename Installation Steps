@@ -423,7 +423,72 @@ Escape character is '^]'.
 Connection closed by foreign host.
 root@ubuntu-jammy:/etc/elasticsearch#
 
+### we are using the self signed certificate authority in order to get the access of it. 
 === on browser ===
 https://192.168.1.232:9200/
 # username: elastic
 # password: is mentioned above at the time of installation
+{
+  "name" : "node-1",
+  "cluster_name" : "my_elk",
+  "cluster_uuid" : "aeKN9TcSSRW5CiIJb9Bh5A",
+  "version" : {
+    "number" : "8.14.1",
+    "build_flavor" : "default",
+    "build_type" : "deb",
+    "build_hash" : "93a57a1a76f556d8aee6a90d1a95b06187501310",
+    "build_date" : "2024-06-10T23:35:17.114581191Z",
+    "build_snapshot" : false,
+    "lucene_version" : "9.10.0",
+    "minimum_wire_compatibility_version" : "7.17.0",
+    "minimum_index_compatibility_version" : "7.0.0"
+  },
+  "tagline" : "You Know, for Search"
+}
+
+### our elasticsearch is running but if it is running healthy or not that is something we have to check through writing the api 
+API:
+
+https://localhost:9200
+
+### put this in the url for the access of other apis
+https://192.168.1.232:9200/_cat
+
+=^.^=
+/_cat/allocation
+/_cat/shards
+/_cat/shards/{index}
+/_cat/master
+/_cat/nodes
+/_cat/tasks
+/_cat/indices
+/_cat/indices/{index}
+/_cat/segments
+/_cat/segments/{index}
+/_cat/count
+/_cat/count/{index}
+/_cat/recovery
+/_cat/recovery/{index}
+/_cat/health
+/_cat/pending_tasks
+/_cat/aliases
+/_cat/aliases/{alias}
+/_cat/thread_pool
+/_cat/thread_pool/{thread_pools}
+/_cat/plugins
+/_cat/fielddata
+/_cat/fielddata/{fields}
+/_cat/nodeattrs
+/_cat/repositories
+/_cat/snapshots/{repository}
+/_cat/templates
+/_cat/component_templates/_cat/ml/anomaly_detectors
+/_cat/ml/anomaly_detectors/{job_id}
+/_cat/ml/datafeeds
+/_cat/ml/datafeeds/{datafeed_id}
+/_cat/ml/trained_models
+/_cat/ml/trained_models/{model_id}
+/_cat/ml/data_frame/analytics
+/_cat/ml/data_frame/analytics/{id}
+/_cat/transforms
+/_cat/transforms/{transform_id}
