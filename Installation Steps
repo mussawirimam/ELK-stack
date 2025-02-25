@@ -545,3 +545,51 @@ root@ubuntu-jammy:/usr/share/elasticsearch/bin#
 /usr/share/elasticsearch/bin/elasticsearch-certutil ca --pem --out /etc/elasticsearch/certs/ca_elastic.zip
 
 
+root@ubuntu-jammy:/usr/share/elasticsearch/bin# /usr/share/elasticsearch/bin/elasticsearch-certutil ca --pem --out /etc/elasticsearch/certs/ca_elastic.zip
+This tool assists you in the generation of X.509 certificates and certificate
+signing requests for use with SSL/TLS in the Elastic stack.
+
+The 'ca' mode generates a new 'certificate authority'
+This will create a new X.509 certificate and private key that can be used
+to sign certificate when running in 'cert' mode.
+
+Use the 'ca-dn' option if you wish to configure the 'distinguished name'
+of the certificate authority
+
+By default the 'ca' mode produces a single PKCS#12 output file which holds:
+    * The CA certificate
+    * The CA's private key
+
+If you elect to generate PEM format certificates (the -pem option), then the output will
+be a zip file containing individual files for the CA certificate and private key
+
+root@ubuntu-jammy:/usr/share/elasticsearch/bin#
+
+root@ubuntu-jammy:/usr/share/elasticsearch/bin# cd /etc/elasticsearch/certs/
+root@ubuntu-jammy:/etc/elasticsearch/certs# ls
+ca_elastic.zip  http.p12  http_ca.crt  transport.p12
+root@ubuntu-jammy:/etc/elasticsearch/certs#
+
+### I have to unzip it now. 
+root@ubuntu-jammy:/etc/elasticsearch/certs# unzip ca_elastic.zip
+Archive:  ca_elastic.zip
+   creating: ca/
+  inflating: ca/ca.crt
+  inflating: ca/ca.key
+root@ubuntu-jammy:/etc/elasticsearch/certs#
+
+### I got my ca (certificate authority)
+root@ubuntu-jammy:/etc/elasticsearch/certs# ls
+ca  ca_elastic.zip  http.p12  http_ca.crt  transport.p12
+root@ubuntu-jammy:/etc/elasticsearch/certs#
+
+### in this ca directory we will get the certificate authority and a key
+# this certificate and key is signing authority certificated key, not our certificate which we want to use
+root@ubuntu-jammy:/etc/elasticsearch/certs# cd ca
+root@ubuntu-jammy:/etc/elasticsearch/certs/ca# ls
+ca.crt  ca.key
+root@ubuntu-jammy:/etc/elasticsearch/certs/ca#
+
+### now we have to generate certificate and key from this ca certificated key
+### hey elasticsearch certificate utility, earlier 
+/usr/share/elasticsearch/bin/elasticsearch-certutil cert --out /etc/elasticsearch/certs/certificate.zip --name elastic --ca-cert /etc/elasticsearch/certs/ca/ca.crt --ca-key /etc/elasticsearch/certs/ca/ca.key --dns sys.fcc –pem
