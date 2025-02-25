@@ -503,3 +503,45 @@ https://192.168.1.232:9200/_cat/indices:
 
 https://192.168.1.232:9200/_cat/health:
 1740264701 22:51:41 my_elk green 1 1 1 1 0 0 0 0 - 100.0%
+
+# we see the get commands, we will see the put, post, delete api commands as well. 
+#
+
+### because of internal certificate, I am not able to get the response from the server itself. 
+root@ubuntu-jammy:/etc/elasticsearch# curl -u elastic:H-u87nwujeL3=ubnALjf https://10.0.2.15:9200/_cat/health
+curl: (60) SSL certificate problem: self-signed certificate in certificate chain
+More details here: https://curl.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the web page mentioned above.
+root@ubuntu-jammy:/etc/elasticsearch#
+
+### you have to mention the -k flag. Because, as you go through on the browser and click on the advance option insecure. On linux system it is doing the same thing. (Proceed insecure) because it is trying to uderstand the certificate. We have used the internal certificate not the public certificate. 
+root@ubuntu-jammy:/etc/elasticsearch# curl -u elastic:H-u87nwujeL3=ubnALjf https://10.0.2.15:9200/_cat/health -k
+1740505081 17:38:01 my_elk green 1 1 1 1 0 0 0 0 - 100.0%
+
+
+
+---------------------------------------------------------------------
+SSL CERTIFICATE
+### we dont have public certificate but we will try to setup certificate in the similar way.
+
+### important note:
+# elasticsearch is an executable binary for running the database.
+# this file path uses the executables binaries.
+root@ubuntu-jammy:/etc/elasticsearch# cd /usr/share/elasticsearch/bin
+root@ubuntu-jammy:/usr/share/elasticsearch/bin# ls
+elasticsearch                          elasticsearch-env            elasticsearch-reconfigure-node  elasticsearch-sql-cli
+elasticsearch-certgen                  elasticsearch-env-from-file  elasticsearch-reset-password    elasticsearch-sql-cli-8.14.1.jar
+elasticsearch-certutil                 elasticsearch-geoip          elasticsearch-saml-metadata     elasticsearch-syskeygen
+elasticsearch-cli                      elasticsearch-keystore       elasticsearch-service-tokens    elasticsearch-users
+elasticsearch-create-enrollment-token  elasticsearch-node           elasticsearch-setup-passwords   systemd-entrypoint
+elasticsearch-croneval                 elasticsearch-plugin         elasticsearch-shard
+root@ubuntu-jammy:/usr/share/elasticsearch/bin#
+
+### Let's create a certificate with the certutility command:
+# what this command is doing is saying: hey certutil generate a ca (signing authority). Trough which will be able to generate certificate. Generate it in a pem form. Previously we say we saw p12 which was the encrypted form. Now we are generating the pem form, which is the general format. And, we are --out it into the zip
+/usr/share/elasticsearch/bin/elasticsearch-certutil ca --pem --out /etc/elasticsearch/certs/ca_elastic.zip
+
+
