@@ -1,3 +1,26 @@
+import subprocess
+
+def run_command(command):
+	result = subprocess.run(command, shell=True, text=True, capture_output=True)
+	if result.returncode != 0:
+		print(f"Error: {result.stderr}")
+		exit(result.returncode)
+	else:
+		print(result.stdout)
+
+run_command("sudo apt update")
+run_command("sudo apt install -y openjdk-17-jdk")
+run_command("sudo apt install -y apt-transport-https")
+run_command("wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg")
+run_command('echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list')
+run_command("sudo apt update")
+run_command("sudo apt install -y elasticsearch=8.14.1")
+
+# I need to add missing steps above
+# this script is still not yet perfected.
+# I need to add the logic for console output to the output.txt 
+#######################
+
 ElasticSearch installation: 
 https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html
 Step 1: Update System Packages
