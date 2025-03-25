@@ -235,6 +235,7 @@ root@ubuntu-jammy:~#
 ################################################## SETTING UP A SINGLE NODE CLUSTER ELK ##################################################
 ### we are going to setup the Elk on a single machine/stand alone cluster
 
+######### CONFIGURING STAND ALONE ELK #########
 ### configuration location of elasticsearch: /etc/elasticsearch
 root@ubuntu-jammy:~# cd /etc/elasticsearch
 root@kibana:/etc/elasticsearch# ls
@@ -263,7 +264,7 @@ root@ubuntu-jammy:/etc/elasticsearch# vi elasticsearch.yml
 #
 # Use a descriptive name for your cluster:
 #
-cluster.name: my_elk
+cluster.name: my_elk	<---------- my cluster name that I have defined. For now we are installing only single elk (single machine as stand-alone cluster)
 #
 # ------------------------------------ Node ------------------------------------
 #
