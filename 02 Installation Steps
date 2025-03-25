@@ -235,9 +235,18 @@ root@ubuntu-jammy:~#
 ################################################## SETTING UP A SINGLE NODE CLUSTER ELK ##################################################
 ### we are going to setup the Elk on a single machine/stand alone cluster
 
-### 
-root@ubuntu-jammy:/etc/elasticsearch# cat vim elasticsearch.yml
-cat: vim: No such file or directory
+### configuration location of elasticsearch: /etc/elasticsearch
+root@ubuntu-jammy:~# cd /etc/elasticsearch
+root@kibana:/etc/elasticsearch# ls
+certs                   elasticsearch-plugins.example.yml  jvm.options    log4j2.properties  roles.yml  users_roles
+elasticsearch.keystore  elasticsearch.yml                  jvm.options.d  role_mapping.yml   users
+root@kibana:/etc/elasticsearch#
+
+### all of the files above are used by elasticsearch but we will interact with elasticsearch.yml, log4j2.properties, and certs for now. 
+### open elasticsearch file and we will uncomment some of the commented section in order to configure our elasticsearch
+
+root@ubuntu-jammy:/etc/elasticsearch# vi elasticsearch.yml
+### below I have uncommented configuration parameters or uncommenting configuration lines. When you will freshly install the elasticsearch, those will be commented and will have default parameters and values.
 # ======================== Elasticsearch Configuration =========================
 #
 # NOTE: Elasticsearch comes with reasonable defaults for most settings.
