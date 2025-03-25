@@ -189,7 +189,7 @@ Warning: The unit file, source configuration file or drop-ins of systemd-sysctl.
 --------------------------- Security autoconfiguration information ------------------------------
 
 Authentication and authorization are enabled.
-TLS for the transport and HTTP layers is enabled and configured.
+TLS for the transport and HTTP layers is enabled and configured.			### by default it configured the tls and http, you will see below how it got generated.
 
 The generated password for the elastic built-in superuser is : H-u87nwujeL3=ubnALjf          <---------------------------------------------------------------- you will get the password here, username: elastic 
 
