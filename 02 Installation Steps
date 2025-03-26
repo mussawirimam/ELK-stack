@@ -232,8 +232,11 @@ root@ubuntu-jammy:~#
 
 
 
-################################################## SETTING UP A SINGLE NODE CLUSTER ELK ##################################################
+################################################## CONFIGURIATION SETTING UP A SINGLE NODE CLUSTER ELK ##################################################
 ### we are going to setup the Elk on a single machine/stand alone cluster
+### 9200 is a application layer for kibana
+### 9300 is a transport layer for data exchange
+### h.w certification and tls
 
 ######### CONFIGURING STAND ALONE ELK #########
 ### configuration location of elasticsearch: /etc/elasticsearch
@@ -321,7 +324,7 @@ http.port: 9200
 #
 # Bootstrap the cluster using an initial set of master-eligible nodes:
 #
-cluster.initial_master_nodes: ["node-1"]
+cluster.initial_master_nodes: ["node-1"]	<--------------- # this has to match the initial master node that you have uncommented above
 #
 # For more information, consult the discovery and cluster formation module documentation.
 #
@@ -344,29 +347,31 @@ xpack.security.enabled: true
 xpack.security.enrollment.enabled: true
 
 # Enable encryption for HTTP API client connections, such as Kibana, Logstash, and Agents
-xpack.security.http.ssl:
+xpack.security.http.ssl:	#<----------------- http ssl you see the certifcate is enabled with the self signed certificated
   enabled: true
-  keystore.path: certs/http.p12
+  keystore.path: certs/http.p12		#<---------------- which is stored in this keystore path. So certificates are stored within the keystore. Q: what is keystore? A: instead of plain text, the keys for the cluster will be encrypted (we can change/override the store key as well). Keystore is like an encryption atm. Q: why is it needed? for id, password, or critical system config etc to be encrypted.
 
 # Enable encryption and mutual authentication between cluster nodes
-xpack.security.transport.ssl:
+### in older version of elasticsearch, the security features werent enabled by default but latest version will be configured with the self signed certificates.
+xpack.security.transport.ssl:		#<----------- transport ssl # elasticsearch work on two ports localhost:9200 http agent end user kibana etc and 9300 transport. For internal there will be different certificate and for the external it will have the different certiciates. # 9300 is used for transport layer (data exchange/communication) and 9200 is used for the application layer
   enabled: true
-  verification_mode: certificate
-  keystore.path: certs/transport.p12
-  truststore.path: certs/transport.p12
+  verification_mode: certificate	
+  keystore.path: certs/transport.p12	
+  truststore.path: certs/transport.p12		#<------------ truststore is the CA (certificate authority) who generate the certificate, who can recognize the certificates. 
 # Create a new cluster with the current node only
 # Additional nodes can still join the cluster later
-#cluster.initial_master_nodes: ["ubuntu-jammy"]
+#cluster.initial_master_nodes: ["ubuntu-jammy"]	#<-------------- we will comment this because, we have uncommented the cluster master node above 
 
 # Allow HTTP API connections from anywhere
 # Connections are encrypted and require user authentication
-http.host: 0.0.0.0
+http.host: 0.0.0.0	#<-------------- localhost ip
 
 # Allow other nodes to join the cluster from anywhere
 # Connections are encrypted and mutually authenticated
 #transport.host: 0.0.0.0
 
 #----------------------- END SECURITY AUTO CONFIGURATION -------------------------
+:wq!   
 root@ubuntu-jammy:/etc/elasticsearch#
 root@ubuntu-jammy:/etc/elasticsearch#
 
@@ -379,9 +384,12 @@ my certifcates are stored within the keystore.
 9200 is on which the elasticsearch communicated externally (http agent end user kibana etc)
 ### we are using the self-signed certificates in this case that comes be default. 
 
+################# STARTING ELASTIC SEARCH ####################
 
 ### make sure to know which version of elasticserach you have installed and keep a copy of the password that it provides you in the begining.
-### we will start elasticsearch
+### we should note the version of the elasticsearch we have installed so that we can install the same version of kibana as well. 
+### we will start elasticsearch:
+### it will take time, because elasticsearch is setting up all the things and is getting bootstrap with the configuration that we have provided within the elasticsearch.yml file and if we made any mistakes while providing the parameters within the elasticsearch.yml file, it should throw errors on console.
 
 root@ubuntu-jammy:/etc/elasticsearch# systemctl start elasticsearch
 root@ubuntu-jammy:/etc/elasticsearch# systemctl status elasticsearch
@@ -391,7 +399,9 @@ root@ubuntu-jammy:/etc/elasticsearch# systemctl status elasticsearch
        Docs: https://www.elastic.co
    Main PID: 4951 (java)
 
-# this mean that the elasticsearch is connected 
+### to verify if the port is active: this mean that the elasticsearch is connected
+### when we do the telnet on localhost 9200, it means that the port was open locally.
+
 root@ubuntu-jammy:/etc/elasticsearch# telnet localhost 9200
 Trying 127.0.0.1...
 Connected to localhost.
@@ -399,11 +409,18 @@ Escape character is '^]'.
 Connection closed by foreign host.
 root@ubuntu-jammy:/etc/elasticsearch#
 
+### ifconfig to get the nic ip 
+root@kibana:/etc/elasticsearch# ifconfig
+ens33: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.xxx.xxx.xxx  netmask 255.xxx.xxx.xxx  broadcast 192.xxx.xxx.xxx
+or 
+you can use the localhost
 ### we are using the self signed certificate authority in order to get the access of it. 
+### https is mandatory
 === on browser ===
-https://192.168.1.232:9200/
-# username: elastic
-# password: is mentioned above at the time of installation
+https://192.xxx.xxx.xxx:9200/
+# username: elastic		#<------------------ our superuser will be elastic, so put the username: elastic
+# password: is mentioned above at the time of installation #<----------- very important you should have saved the password at the time of installation.
 {
   "name" : "node-1",
   "cluster_name" : "my_elk",
@@ -422,13 +439,16 @@ https://192.168.1.232:9200/
   "tagline" : "You Know, for Search"
 }
 
+############# INTERACTING WITH BASIC API's ##############
 ### our elasticsearch is running but if it is running healthy or not that is something we have to check through writing the api 
+### api's will provide response in the json format
 API:
 
 https://localhost:9200
 
 ### put this in the url for the access of other apis
 # with the api below, you will be able to get more api
+### this api below will show other api's that we can use:
 https://192.168.1.232:9200/_cat
 
 =^.^=
@@ -470,6 +490,17 @@ https://192.168.1.232:9200/_cat
 /_cat/transforms
 /_cat/transforms/{transform_id}
 
+### alternatively you can use the api through curl in your Cli as well:
+-k flag is for insecure certificate since it is internal certificate
+root@kibana:/etc/elasticsearch# curl -u elastic:password https://192.168.29.137:9200/_cat -k
+=^.^=
+/_cat/allocation
+/_cat/shards
+/_cat/shards/{index}
+/_cat/master
+/_cat/nodes
+...
+
 ### to check the master node 
 # this information is coming from the database
 https://192.168.1.232:9200/_cat/master
@@ -480,8 +511,8 @@ https://192.168.1.232:9200/_cat/indices:
 https://192.168.1.232:9200/_cat/health:
 1740264701 22:51:41 my_elk green 1 1 1 1 0 0 0 0 - 100.0%
 
-# we see the get commands, we will see the put, post, delete api commands as well. 
-#
+# we will com across the GET/PUT/POST/DELETE api commands as well. 
+# 
 
 ### because of internal certificate, I am not able to get the response from the server itself. 
 root@ubuntu-jammy:/etc/elasticsearch# curl -u elastic:H-u87nwujeL3=ubnALjf https://10.0.2.15:9200/_cat/health
@@ -501,11 +532,14 @@ root@ubuntu-jammy:/etc/elasticsearch# curl -u elastic:H-u87nwujeL3=ubnALjf https
 
 ---------------------------------------------------------------------
 ########################### SSL CERTIFICATE ###########################
+
+#IMPORTANT### we are using the ssl so incase you dont want to use the localhost but use a public ssl certifcate. We dont have the public certificate but below we are going through how we will generate the ssl certificates
 ### we dont have public certificate but we will try to setup certificate in the similar way.
 
 ### important note:
-# elasticsearch is an executable binary for running the database.
-# this file path uses the executables binaries.
+# /usr/share/elasticsearch/bin # this directory is very useful, it stores all the elasticsearch related binaries.
+# elasticsearch is an executable binary for running the database.???
+
 root@ubuntu-jammy:/etc/elasticsearch# cd /usr/share/elasticsearch/bin
 root@ubuntu-jammy:/usr/share/elasticsearch/bin# ls
 elasticsearch                          elasticsearch-env            elasticsearch-reconfigure-node  elasticsearch-sql-cli
