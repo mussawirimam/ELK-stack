@@ -885,9 +885,9 @@ xpack.security.enrollment.enabled: true
 # Enable encryption for HTTP API client connections, such as Kibana, Logstash, and Agents
 xpack.security.http.ssl:
   enabled: true
-  key: /etc/elasticsearch/certs/elastic/elastic.key			#<------------------------- we added this line to provide the key
-  certificate: /etc/elasticsearch/certs/elastic/elastic.crt		#<------------------------- we added this line to provide the elastic.crt
-  certificate_authorities: ["/etc/elasticsearch/certs/ca/ca.crt"]	#<------------------------- we added this line to provide the ca.crt
+  key: /etc/elasticsearch/certs/elastic/elastic.key			#<------------------------- we added this line to provide the key		# KEY file which will be verified by the certificate authority verifierbelow
+  certificate: /etc/elasticsearch/certs/elastic/elastic.crt		#<------------------------- we added this line to provide the elastic.crt # CERTIFICATE file which will be verified by the certificate authority verifier below
+  certificate_authorities: ["/etc/elasticsearch/certs/ca/ca.crt"]	#<------------------------- we added this line to provide the ca.crt # CERTIFICATE AUTHORITY: verifier
 
 # Enable encryption and mutual authentication between cluster nodes
 xpack.security.transport.ssl:
