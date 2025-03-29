@@ -771,7 +771,12 @@ drwxrwxr-x 2 elasticsearch elasticsearch  4096 Mar 25 23:41 elastic/
 root@kibana:/etc/elasticsearch/certs#
 
 
-### TO CONFIGURE THE CERTIFICATES IN ELASTICSEARCH ###
+
+################# TO CONFIGURE THE CERTIFICATES IN ELASTICSEARCH #############
+### NOTE: elk master node election process
+# QORUM METHOD: https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery-quorums.html
+
+
 https://www.elastic.co/blog/configuring-ssl-tls-and-https-to-secure-elasticsearch-kibana-beats-and-logstash
 # for now we are just going to follow the steps below, not from the official docuementation. 
 
@@ -911,3 +916,5 @@ Now we will restart the elasticsearch to implement the certificates
 then we will access our elasticsearch with the sys.fcc domain name
 """
 ############## DEMO ENDS #################
+
+
