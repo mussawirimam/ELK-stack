@@ -60,13 +60,8 @@ lines 1-17/17 (END)
 root@kibana:/etc/elasticsearch# systemctl restart elasticsearch
 
 ### no errors:
-root@kibana:/etc/elasticsearch# tail -n 100 /var/log/elasticsearch/
-gc.log                              my_elk-2025-03-25-1.json.gz         my_elk_index_indexing_slowlog.json
-gc.log.00                           my_elk-2025-03-25-1.log.gz          my_elk_index_search_slowlog.json
-gc.log.01                           my_elk-2025-03-26-1.json.gz         my_elk.log
-gc.log.02                           my_elk-2025-03-26-1.log.gz          my_elk_server.json
-gc.log.03                           my_elk_audit.json
-gc.log.04                           my_elk_deprecation.json
+# most errors that you might encounter are the java errors which you need to understand. 
+# there might be some warning but the cluster will be running, since we didnt encounter any errors in the logs below, atleast the errors we are concerned with reading the certificate:
 root@kibana:/etc/elasticsearch# tail -n 100 /var/log/elasticsearch/elk_elk.log
 tail: cannot open '/var/log/elasticsearch/elk_elk.log' for reading: No such file or directory
 root@kibana:/etc/elasticsearch# tail -n 100 /var/log/elasticsearch/elk_elk.log
@@ -174,11 +169,70 @@ root@kibana:/etc/elasticsearch# tail -n 100 /var/log/elasticsearch/my_elk.log
 [2025-03-29T03:44:39,430][INFO ][o.e.c.r.a.AllocationService] [node-1] current.health="GREEN" message="Cluster health status changed from [RED] to [GREEN] (reason: [shards started [[.security-7][0]]])." previous.health="RED" reason="shards started [[.security-7][0]]"
 root@kibana:/etc/elasticsearch#
 
+# access the elasticsearch on browser
+=== on browser ===
+https://192.xxx.xxx.xxx:9200/
+# remember to add the superuser password that you got at the time of installing the elastic search.
+user: elastic
+password: <superuser-password> # if you lose the elasticsearch superuser password, you will have to install the elasticsearch again.
+Display on browser
+
+{
+  "name" : "node-1",
+  "cluster_name" : "my_elk",
+  "cluster_uuid" : "P-dfjw6fQGK2v8-El1Ztdg",
+  "version" : {
+    "number" : "8.14.1",
+    "build_flavor" : "default",
+    "build_type" : "deb",
+    "build_hash" : "93a57a1a76f556d8aee6a90d1a95b06187501310",
+    "build_date" : "2024-06-10T23:35:17.114581191Z",
+    "build_snapshot" : false,
+    "lucene_version" : "9.10.0",
+    "minimum_wire_compatibility_version" : "7.17.0",
+    "minimum_index_compatibility_version" : "7.0.0"
+  },
+  "tagline" : "You Know, for Search"
+}
 
 
 
+### to make the fqdn with the domain name: If we have to access the elasticsearch with the certificate name, we will have to do the host entry.
+because we are working on the local environment, not on the internet environment so we have to do the host entry in windows
 
+STEPS:
+1. open run program on your window
+  a. type drivers, it will open this location: C:\Windows\System32\drivers. Click on etc > open hosts
+it should look similar to this:
+# Copyright (c) 1993-2009 Microsoft Corp.
+#
+# This is a sample HOSTS file used by Microsoft TCP/IP for Windows.
+#
+# This file contains the mappings of IP addresses to host names. Each
+# entry should be kept on an individual line. The IP address should
+# be placed in the first column followed by the corresponding host name.
+# The IP address and the host name should be separated by at least one
+# space.
+#
+# Additionally, comments (such as these) may be inserted on individual
+# lines or following the machine name denoted by a '#' symbol.
+#
+# For example:
+#
+#      102.54.94.97     rhino.acme.com          # source server
+#       38.25.63.10     x.acme.com              # x client host
 
+# localhost name resolution is handled within DNS itself.
+#	127.0.0.1       localhost
+#	::1             localhost
+2. add your ip address of your vm/guest machine below and the domain name
+# localhost name resolution is handled within DNS itself.
+#	127.0.0.1       localhost
+#	::1             localhost
+	192.xxx.xxx.xxx	sys.fcc    <-------------------------------------------------
+3. close the file
+
+### we are doing host entry step because we are working in the local environment. Because in local environment we have to configure the dns, and the hosts file we are making the entry for local dns with the ip mapped to the domain name
 
 
 
