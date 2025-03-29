@@ -1,3 +1,256 @@
+Continuing form 02 self signed certificate
+from previous file 02 is how you bind your public certificate as well
+# Enable encryption for HTTP API client connections, such as Kibana, Logstash, and Agents
+xpack.security.http.ssl:
+  enabled: true
+  key: /etc/elasticsearch/certs/elastic/elastic.key
+  certificate: /etc/elasticsearch/certs/elastic/elastic.crt
+  certificate_authorities: ["/etc/elasticsearch/certs/ca/ca.crt"]    # when working in organization, you dont have to mention the certificate authority, because you are generating your certificated key from the public issuer.
+## but since we have generated self signed certificates that is why we are using elasticsearch ca.crt for verifying the certificates and key
+
+# these certificates were issued by us and that is why we are using ## /etc/elasticsearch/certs/ca/ca.crt as the certificate authority for self signed certificate. Only ## /etc/elasticsearch/certs/ca/ca.crt this authority can verify. 
+  key: /etc/elasticsearch/certs/elastic/elastic.key
+  certificate: /etc/elasticsearch/certs/elastic/elastic.crt
+
+## /etc/elasticsearch/certs/ca/ca.crt # ca verifier 
+
+### when you are generate public certificate, key and certificate you have to configure. You will get this information from someone from devops team or whoever is managing certificates.
+
+# make sure the configuration and elasticsearch.yml files are configured properly.
+# keys you can copy paste from elasticsearch documention.
+
+
+########## Start the service for elastic search ##########
+### first you have to check if the files have sufficient permissions. Otherwise, the elasticsearch will not be able to read the files. It should have ownership of elasticsearch and it should have read write permissions.
+
+root@kibana:/etc/elasticsearch# ll /etc/elasticsearch/certs/
+total 48
+drwxrwxr-x 4 elasticsearch elasticsearch  4096 Mar 25 23:41 ./
+drwxrwsr-x 4 elasticsearch elasticsearch  4096 Mar 29 03:01 ../
+drwxrwxr-x 2 elasticsearch elasticsearch  4096 Mar 25 23:15 ca/
+-rwxrwxr-x 1 elasticsearch elasticsearch  2522 Mar 25 23:15 ca_elastic.zip*
+-rwxrwxr-x 1 elasticsearch elasticsearch  2579 Mar 25 23:41 certificate.zip*
+drwxrwxr-x 2 elasticsearch elasticsearch  4096 Mar 25 23:41 elastic/
+-rwxrwxr-x 1 elasticsearch elasticsearch  1915 Mar 24 23:09 http_ca.crt*
+-rwxrwxr-x 1 elasticsearch elasticsearch 10029 Mar 24 23:09 http.p12*
+-rwxrwxr-x 1 elasticsearch elasticsearch  5822 Mar 24 23:09 transport.p12*
+root@kibana:/etc/elasticsearch#
+
+
+root@kibana:/etc/elasticsearch# systemctl status elasticsearch
+● elasticsearch.service - Elasticsearch
+     Loaded: loaded (/usr/lib/systemd/system/elasticsearch.service; disabled; preset: enabled)
+     Active: active (running) since Tue 2025-03-25 22:30:17 EDT; 3 days ago
+       Docs: https://www.elastic.co
+   Main PID: 22604 (java)
+      Tasks: 102 (limit: 10063)
+     Memory: 4.7G (peak: 4.7G)
+        CPU: 7min 12.275s
+     CGroup: /system.slice/elasticsearch.service
+             ├─22604 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.name=server -Dcli.script=/usr/share/>
+             ├─22664 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.networkaddress.cache.negative.ttl=10>
+             └─22686 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-x86_64/bin/controller
+
+Mar 25 22:29:06 kibana systemd[1]: Starting elasticsearch.service - Elasticsearch...
+Mar 25 22:29:29 kibana systemd-entrypoint[22604]: Mar 25, 2025 10:29:29 PM sun.util.locale.provider.LocaleProviderAdapter <clinit>
+Mar 25 22:29:29 kibana systemd-entrypoint[22604]: WARNING: COMPAT locale provider will be removed in a future release
+Mar 25 22:30:17 kibana systemd[1]: Started elasticsearch.service - Elasticsearch.
+lines 1-17/17 (END)
+
+root@kibana:/etc/elasticsearch# systemctl restart elasticsearch
+
+### no errors:
+root@kibana:/etc/elasticsearch# tail -n 100 /var/log/elasticsearch/
+gc.log                              my_elk-2025-03-25-1.json.gz         my_elk_index_indexing_slowlog.json
+gc.log.00                           my_elk-2025-03-25-1.log.gz          my_elk_index_search_slowlog.json
+gc.log.01                           my_elk-2025-03-26-1.json.gz         my_elk.log
+gc.log.02                           my_elk-2025-03-26-1.log.gz          my_elk_server.json
+gc.log.03                           my_elk_audit.json
+gc.log.04                           my_elk_deprecation.json
+root@kibana:/etc/elasticsearch# tail -n 100 /var/log/elasticsearch/elk_elk.log
+tail: cannot open '/var/log/elasticsearch/elk_elk.log' for reading: No such file or directory
+root@kibana:/etc/elasticsearch# tail -n 100 /var/log/elasticsearch/elk_elk.log
+tail: cannot open '/var/log/elasticsearch/elk_elk.log' for reading: No such file or directory
+root@kibana:/etc/elasticsearch# tail -n 100 /var/log/elasticsearch/my_elk.log
+[2025-03-29T03:44:11,386][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [rank-rrf]
+[2025-03-29T03:44:11,387][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [analysis-common]
+[2025-03-29T03:44:11,387][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [health-shards-availability]
+[2025-03-29T03:44:11,388][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [transport-netty4]
+[2025-03-29T03:44:11,389][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [aggregations]
+[2025-03-29T03:44:11,390][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [ingest-common]
+[2025-03-29T03:44:11,390][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [frozen-indices]
+[2025-03-29T03:44:11,391][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-identity-provider]
+[2025-03-29T03:44:11,391][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-shutdown]
+[2025-03-29T03:44:11,392][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-text-structure]
+[2025-03-29T03:44:11,392][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [snapshot-repo-test-kit]
+[2025-03-29T03:44:11,393][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [ml-package-loader]
+[2025-03-29T03:44:11,393][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [kibana]
+[2025-03-29T03:44:11,394][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [constant-keyword]
+[2025-03-29T03:44:11,395][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-logstash]
+[2025-03-29T03:44:11,396][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-ccr]
+[2025-03-29T03:44:11,396][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-graph]
+[2025-03-29T03:44:11,397][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-esql]
+[2025-03-29T03:44:11,397][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [parent-join]
+[2025-03-29T03:44:11,397][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [counted-keyword]
+[2025-03-29T03:44:11,398][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-enrich]
+[2025-03-29T03:44:11,399][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [repositories-metering-api]
+[2025-03-29T03:44:11,399][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [transform]
+[2025-03-29T03:44:11,399][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [repository-azure]
+[2025-03-29T03:44:11,400][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [repository-gcs]
+[2025-03-29T03:44:11,401][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [spatial]
+[2025-03-29T03:44:11,401][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [apm]
+[2025-03-29T03:44:11,402][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [mapper-extras]
+[2025-03-29T03:44:11,403][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [mapper-version]
+[2025-03-29T03:44:11,403][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-rollup]
+[2025-03-29T03:44:11,404][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [percolator]
+[2025-03-29T03:44:11,404][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [data-streams]
+[2025-03-29T03:44:11,405][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-stack]
+[2025-03-29T03:44:11,406][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [rank-eval]
+[2025-03-29T03:44:11,406][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [reindex]
+[2025-03-29T03:44:11,407][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [systemd]
+[2025-03-29T03:44:11,408][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-security]
+[2025-03-29T03:44:11,408][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [blob-cache]
+[2025-03-29T03:44:11,409][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [searchable-snapshots]
+[2025-03-29T03:44:11,410][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-slm]
+[2025-03-29T03:44:11,410][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [snapshot-based-recoveries]
+[2025-03-29T03:44:11,411][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-watcher]
+[2025-03-29T03:44:11,413][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [old-lucene-versions]
+[2025-03-29T03:44:11,413][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-ilm]
+[2025-03-29T03:44:11,414][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-inference]
+[2025-03-29T03:44:11,414][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-voting-only-node]
+[2025-03-29T03:44:11,415][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-deprecation]
+[2025-03-29T03:44:11,415][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-fleet]
+[2025-03-29T03:44:11,416][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-profiling]
+[2025-03-29T03:44:11,416][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-aggregate-metric]
+[2025-03-29T03:44:11,417][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-downsample]
+[2025-03-29T03:44:11,418][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [ingest-geoip]
+[2025-03-29T03:44:11,418][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-write-load-forecaster]
+[2025-03-29T03:44:11,419][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [search-business-rules]
+[2025-03-29T03:44:11,419][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [ingest-attachment]
+[2025-03-29T03:44:11,420][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [wildcard]
+[2025-03-29T03:44:11,421][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-apm-data]
+[2025-03-29T03:44:11,421][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-sql]
+[2025-03-29T03:44:11,422][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [unsigned-long]
+[2025-03-29T03:44:11,422][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [runtime-fields-common]
+[2025-03-29T03:44:11,423][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-async]
+[2025-03-29T03:44:11,423][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [vector-tile]
+[2025-03-29T03:44:11,423][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [lang-expression]
+[2025-03-29T03:44:11,424][INFO ][o.e.p.PluginsService     ] [node-1] loaded module [x-pack-eql]
+[2025-03-29T03:44:13,887][INFO ][o.e.e.NodeEnvironment    ] [node-1] using [1] data paths, mounts [[/ (/dev/sda2)]], net usable_space [80.4gb], net total_space [97.8gb], types [ext4]
+[2025-03-29T03:44:13,888][INFO ][o.e.e.NodeEnvironment    ] [node-1] heap size [4.1gb], compressed ordinary object pointers [true]
+[2025-03-29T03:44:14,092][INFO ][o.e.n.Node               ] [node-1] node name [node-1], node ID [bK_7ai1PRTaTRUOykMFwsA], cluster name [my_elk], roles [ingest, data_cold, data, remote_cluster_client, master, data_warm, data_content, transform, data_hot, ml, data_frozen]
+[2025-03-29T03:44:24,334][INFO ][o.e.f.FeatureService     ] [node-1] Registered local node features [data_stream.auto_sharding, data_stream.lifecycle.global_retention, data_stream.rollover.lazy, desired_node.version_deprecated, esql.agg_values, esql.async_query, esql.base64_decode_encode, esql.disable_nullable_opts, esql.from_options, esql.metadata_fields, esql.mv_sort, esql.spatial_points_from_source, esql.spatial_shapes, esql.st_centroid_agg, esql.st_contains_within, esql.st_disjoint, esql.st_intersects, esql.st_x_y, esql.string_literal_auto_casting, esql.string_literal_auto_casting_extended, features_supported, health.dsl.info, health.extended_repository_indicator, knn_retriever_supported, license-trial-independent-version, retrievers_supported, rrf_retriever_supported, standard_retriever_supported, usage.data_tiers.precalculate_stats]
+[2025-03-29T03:44:25,580][INFO ][o.e.x.m.p.l.CppLogMessageHandler] [node-1] [controller/32067] [Main.cc@123] controller (64 bit): Version 8.14.1 (Build 269300b8ef3c83) Copyright (c) 2024 Elasticsearch BV
+[2025-03-29T03:44:26,613][INFO ][o.e.t.a.APM              ] [node-1] Sending apm metrics is disabled
+[2025-03-29T03:44:26,613][INFO ][o.e.t.a.APM              ] [node-1] Sending apm tracing is disabled
+[2025-03-29T03:44:26,682][INFO ][o.e.x.s.Security         ] [node-1] Security is enabled
+[2025-03-29T03:44:27,657][INFO ][o.e.x.s.a.s.FileRolesStore] [node-1] parsed [0] roles from file [/etc/elasticsearch/roles.yml]
+[2025-03-29T03:44:28,517][INFO ][o.e.x.s.InitialNodeSecurityAutoConfiguration] [node-1] Auto-configuration will not generate a password for the elastic built-in superuser, as we cannot  determine if there is a terminal attached to the elasticsearch process. You can use the `bin/elasticsearch-reset-password` tool to set the password for the elastic user.
+[2025-03-29T03:44:29,347][INFO ][o.e.x.w.Watcher          ] [node-1] Watcher initialized components at 2025-03-29T07:44:29.346Z
+[2025-03-29T03:44:29,511][INFO ][o.e.x.p.ProfilingPlugin  ] [node-1] Profiling is enabled
+[2025-03-29T03:44:29,561][INFO ][o.e.x.p.ProfilingPlugin  ] [node-1] profiling index templates will not be installed or reinstalled
+[2025-03-29T03:44:29,577][INFO ][o.e.x.a.APMPlugin        ] [node-1] APM ingest plugin is disabled
+[2025-03-29T03:44:31,206][INFO ][o.e.t.n.NettyAllocator   ] [node-1] creating NettyAllocator with the following configs: [name=elasticsearch_configured, chunk_size=1mb, suggested_max_allocation_size=1mb, factors={es.unsafe.use_netty_default_chunk_and_page_size=false, g1gc_enabled=true, g1gc_region_size=4mb}]
+[2025-03-29T03:44:31,284][INFO ][o.e.i.r.RecoverySettings ] [node-1] using rate limit [40mb] with [default=40mb, read=0b, write=0b, max=0b]
+[2025-03-29T03:44:31,521][INFO ][o.e.d.DiscoveryModule    ] [node-1] using discovery type [multi-node] and seed hosts providers [settings]
+[2025-03-29T03:44:35,816][INFO ][o.e.n.Node               ] [node-1] initialized
+[2025-03-29T03:44:35,818][INFO ][o.e.n.Node               ] [node-1] starting ...
+[2025-03-29T03:44:35,883][INFO ][o.e.x.s.c.f.PersistentCache] [node-1] persistent cache index loaded
+[2025-03-29T03:44:35,885][INFO ][o.e.x.d.l.DeprecationIndexingComponent] [node-1] deprecation component started
+[2025-03-29T03:44:36,208][INFO ][o.e.t.TransportService   ] [node-1] publish_address {127.0.0.1:9300}, bound_addresses {[::1]:9300}, {127.0.0.1:9300}
+[2025-03-29T03:44:37,063][WARN ][o.e.c.c.ClusterBootstrapService] [node-1] this node is locked into cluster UUID [P-dfjw6fQGK2v8-El1Ztdg] but [cluster.initial_master_nodes] is set to [node-1]; remove this setting to avoid possible data loss caused by subsequent cluster bootstrap attempts; for further information see https://www.elastic.co/guide/en/elasticsearch/reference/8.14/important-settings.html#initial_master_nodes
+[2025-03-29T03:44:37,345][INFO ][o.e.c.s.MasterService    ] [node-1] elected-as-master ([1] nodes joined in term 2)[_FINISH_ELECTION_, {node-1}{bK_7ai1PRTaTRUOykMFwsA}{GH78bwtNQ2iSTFnv3H8AdA}{node-1}{127.0.0.1}{127.0.0.1:9300}{cdfhilmrstw}{8.14.1}{7000099-8505000} completing election], term: 2, version: 44, delta: master node changed {previous [], current [{node-1}{bK_7ai1PRTaTRUOykMFwsA}{GH78bwtNQ2iSTFnv3H8AdA}{node-1}{127.0.0.1}{127.0.0.1:9300}{cdfhilmrstw}{8.14.1}{7000099-8505000}]}
+[2025-03-29T03:44:37,493][INFO ][o.e.c.s.ClusterApplierService] [node-1] master node changed {previous [], current [{node-1}{bK_7ai1PRTaTRUOykMFwsA}{GH78bwtNQ2iSTFnv3H8AdA}{node-1}{127.0.0.1}{127.0.0.1:9300}{cdfhilmrstw}{8.14.1}{7000099-8505000}]}, term: 2, version: 44, reason: Publication{term=2, version=44}
+[2025-03-29T03:44:37,591][INFO ][o.e.c.f.AbstractFileWatchingService] [node-1] starting file watcher ...
+[2025-03-29T03:44:37,615][INFO ][o.e.c.f.AbstractFileWatchingService] [node-1] file settings service up and running [tid=60]
+[2025-03-29T03:44:37,616][INFO ][o.e.r.s.FileSettingsService] [node-1] setting file [/etc/elasticsearch/operator/settings.json] not found, initializing [file_settings] as empty
+[2025-03-29T03:44:37,633][INFO ][o.e.c.c.NodeJoinExecutor ] [node-1] node-join: [{node-1}{bK_7ai1PRTaTRUOykMFwsA}{GH78bwtNQ2iSTFnv3H8AdA}{node-1}{127.0.0.1}{127.0.0.1:9300}{cdfhilmrstw}{8.14.1}{7000099-8505000}] with reason [completing election]
+[2025-03-29T03:44:37,635][INFO ][o.e.h.AbstractHttpServerTransport] [node-1] publish_address {192.168.29.137:9200}, bound_addresses {[::]:9200}
+[2025-03-29T03:44:37,686][INFO ][o.e.n.Node               ] [node-1] started {node-1}{bK_7ai1PRTaTRUOykMFwsA}{GH78bwtNQ2iSTFnv3H8AdA}{node-1}{127.0.0.1}{127.0.0.1:9300}{cdfhilmrstw}{8.14.1}{7000099-8505000}{ml.allocated_processors=4, ml.machine_memory=8869670912, transform.config_version=10.0.0, xpack.installed=true, ml.config_version=12.0.0, ml.max_jvm_size=4437573632, ml.allocated_processors_double=4.0}
+[2025-03-29T03:44:38,559][INFO ][o.e.x.s.a.Realms         ] [node-1] license mode is [basic], currently licensed security realms are [reserved/reserved,file/default_file,native/default_native]
+[2025-03-29T03:44:38,566][INFO ][o.e.l.ClusterStateLicenseService] [node-1] license [8bf0312d-d77a-4654-ac0d-97d92b13a201] mode [basic] - valid
+[2025-03-29T03:44:38,577][INFO ][o.e.g.GatewayService     ] [node-1] recovered [1] indices into cluster_state
+[2025-03-29T03:44:39,268][INFO ][o.e.h.n.s.HealthNodeTaskExecutor] [node-1] Node [{node-1}{bK_7ai1PRTaTRUOykMFwsA}] is selected as the current health node.
+[2025-03-29T03:44:39,430][INFO ][o.e.c.r.a.AllocationService] [node-1] current.health="GREEN" message="Cluster health status changed from [RED] to [GREEN] (reason: [shards started [[.security-7][0]]])." previous.health="RED" reason="shards started [[.security-7][0]]"
+root@kibana:/etc/elasticsearch#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ###
 """
 we are going to understand about self signed certificate how it gets applied on the elasticsearch. Similarly,
