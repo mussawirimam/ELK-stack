@@ -235,6 +235,31 @@ it should look similar to this:
 ### we are doing host entry step because we are working in the local environment. Because in local environment we have to configure the dns, and the hosts file we are making the entry for local dns with the ip mapped to the domain name
 
 
+############################ KIBANA SETUP ############################
+root@kibana:~# apt-get update 
+### install the same version as your elasticsearch
+root@kibana:~# apt-get install kibana=8.14.1
+
+# if you are using the aws, you need to open the inboud port to a specific ip
+# in my local machine, I can just simply open the port with the firewall. 
+# in organizaiton, you will need to reach out to the networking team
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
