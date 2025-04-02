@@ -1,0 +1,376 @@
+### topic: integration of elasticsearch, kibana configuration, kibana certificates, and how we will starting kibana
+# kibana certificates and how to integrate the elasticsearch certificates with kibana
+# from previous we have elasticsearch running with the certificates configured.
+
+root@kibana:~# systemctl status elasticsearch
+● elasticsearch.service - Elasticsearch
+     Loaded: loaded (/usr/lib/systemd/system/elasticsearch.service; enabled; preset: enabled)
+     Active: active (running) since Sun 2025-03-30 20:40:52 EDT; 2 days ago
+       Docs: https://www.elastic.com...
+
+##################### KIBANA ##################
+# we need to create elasticsearch id and password through the api (download postman or you can do it on your system as well)
+in postman POST https://192.xxx.xxx.xxx:9200/_security/user/kibana_system/_password
+
+To create new user name and password:
+# change the password to the one your system generated.
+curl -X POST "http://localhost:9200/_security/user/kibana_system/_password" -u elastic:cENFFOQ_4GUDyU-poCts -H "Content-Type: application/json" -d '{"password": "123456789"}'
+
+curl -X POST "https://localhost:9200/_security/user/kibana_system/_password" -u elastic:cENFFOQ_4GUDyU-poCts -H "Content-Type: application/json" -d '{"password": "123456789"}' -k
+
+Elsatic auth roles https://www.elastic.co/guide/en/elasticsearch/reference/current/built-in-roles.html
+
+### id and password was created successfully with empty response in the bracket 
+# username for kibana: kibana_system
+# password: 123456789
+root@kibana:~# curl -X POST "https://localhost:9200/_security/user/kibana_system/_password" -u elastic:=VkEPC-DbgU5p-P1waQH -H "Content-Type: application/json" -d '{"password": "123456789"}' -k
+{}root@kibana:~#
+
+### if you are not using the superuser and user the kibana user, we will be able to login. And also, run the elasticsearch api's as well.
+as well as the uri's
+
+### now we have to configure the kibana user and password in the /etc/kibana/kibana.yml file and the path to the certificates
+
+# if you see the kibana is running with the kibana user
+root@kibana:/etc/kibana# ll
+total 32
+drwxr-s---   2 root kibana  4096 Apr  1 22:22 ./
+drwxr-xr-x 143 root root   12288 Mar 31 01:02 ../
+-rw-rw----   1 root kibana   130 Mar 31 01:03 kibana.keystore
+-rw-rw----   1 root kibana  7818 Apr  1 22:22 kibana.yml
+-rw-rw-r--   1 root kibana   447 Jun 10  2024 node.options
+root@kibana:/etc/kibana#
+
+# mkdir should have kibana user permisison
+root@kibana:/etc/kibana# mkdir certs
+root@kibana:/etc/kibana# ll
+total 36
+drwxr-s---   3 root kibana  4096 Apr  1 22:23 ./
+drwxr-xr-x 143 root root   12288 Mar 31 01:02 ../
+drwxr-sr-x   2 root kibana  4096 Apr  1 22:23 certs/
+-rw-rw----   1 root kibana   130 Mar 31 01:03 kibana.keystore
+-rw-rw----   1 root kibana  7818 Apr  1 22:22 kibana.yml
+-rw-rw-r--   1 root kibana   447 Jun 10  2024 node.options
+root@kibana:/etc/kibana#
+
+### now we have to copy our certificates to certs location within /etc/kibana/certs. We are copying elasticsearch certificates. 
+root@kibana:/etc/kibana/certs# cp /etc/elasticsearch/certs/
+ca/              ca_elastic.zip   certificate.zip  elastic/         http_ca.crt      http.p12         transport.p12
+root@kibana:/etc/kibana/certs# cp -r /etc/elasticsearch/certs/ca .
+root@kibana:/etc/kibana/certs# ll
+total 12
+drwxr-sr-x 3 root kibana 4096 Apr  1 22:25 ./
+drwxr-s--- 3 root kibana 4096 Apr  1 22:23 ../
+drwxr-sr-x 2 root kibana 4096 Apr  1 22:25 ca/
+root@kibana:/etc/kibana/certs# cp -r /etc/elasticsearch/certs/elastic .
+root@kibana:/etc/kibana/certs# ll
+total 16
+drwxr-sr-x 4 root kibana 4096 Apr  1 22:25 ./
+drwxr-s--- 3 root kibana 4096 Apr  1 22:23 ../
+drwxr-sr-x 2 root kibana 4096 Apr  1 22:25 ca/
+drwxr-sr-x 2 root kibana 4096 Apr  1 22:25 elastic/
+
+root@kibana:/etc/kibana/certs# ls -R
+.:
+ca  elastic
+
+./ca:
+ca.crt  ca.key
+
+./elastic:
+elastic.crt  elastic.key
+root@kibana:/etc/kibana/certs#
+
+### we have to configure this /etc/kibana/certs/elastic certificate and key and also the certificate authroity ca within the kibana.yml file 
+#if our certificate was public, then we wouldnt give the elastic ca
+# in some cases we will be doing ca configuration in organization as well but they will be provided to you whoever is managing ssl 
+
+
+root@kibana:/etc/kibana/certs# cd -
+/etc/kibana
+root@kibana:/etc/kibana# vim kibana.yml
+root@kibana:/etc/kibana# cat kibana.yml
+# For more configuration options see the configuration guide for Kibana in
+# https://www.elastic.co/guide/index.html
+
+# =================== System: Kibana Server ===================
+# Kibana is served by a back end server. This setting specifies the port to use.
+server.port: 5601
+
+# Specifies the address to which the Kibana server will bind. IP addresses and host names are both valid values.
+# The default is 'localhost', which usually means remote machines will not be able to connect.
+# To allow connections from remote users, set this parameter to a non-loopback address.
+server.host: "localhost"
+
+# Enables you to specify a path to mount Kibana at if you are running behind a proxy.
+# Use the `server.rewriteBasePath` setting to tell Kibana if it should remove the basePath
+# from requests it receives, and to prevent a deprecation warning at startup.
+# This setting cannot end in a slash.
+#server.basePath: ""
+
+# Specifies whether Kibana should rewrite requests that are prefixed with
+# `server.basePath` or require that they are rewritten by your reverse proxy.
+# Defaults to `false`.
+#server.rewriteBasePath: false
+
+# Specifies the public URL at which Kibana is available for end users. If
+# `server.basePath` is configured this URL should end with the same basePath.
+server.publicBaseUrl: "https://localhost:5601/"
+
+# The maximum payload size in bytes for incoming server requests.
+#server.maxPayload: 1048576
+
+# The Kibana server's name. This is used for display purposes.
+#server.name: "your-hostname"
+
+# =================== System: Kibana Server (Optional) ===================
+# Enables SSL and paths to the PEM-format SSL certificate and SSL key files, respectively.
+# These settings enable SSL for outgoing requests from the Kibana server to the browser.
+server.ssl.enabled: false
+#server.ssl.certificate: /path/to/your/server.crt
+#server.ssl.key: /path/to/your/server.key
+
+# =================== System: Elasticsearch ===================
+# The URLs of the Elasticsearch instances to use for all your queries.
+elasticsearch.hosts: ["http://localhost:9200"]
+
+# If your Elasticsearch is protected with basic authentication, these settings provide
+# the username and password that the Kibana server uses to perform maintenance on the Kibana
+# index at startup. Your Kibana users still need to authenticate with Elasticsearch, which
+# is proxied through the Kibana server.
+elasticsearch.username: "kibana_system"
+elasticsearch.password: "123456789"
+
+# Kibana can also authenticate to Elasticsearch via "service account tokens".
+# Service account tokens are Bearer style tokens that replace the traditional username/password based configuration.
+# Use this token instead of a username/password.
+# elasticsearch.serviceAccountToken: "my_token"
+
+# Time in milliseconds to wait for Elasticsearch to respond to pings. Defaults to the value of
+# the elasticsearch.requestTimeout setting.
+#elasticsearch.pingTimeout: 1500
+
+# Time in milliseconds to wait for responses from the back end or Elasticsearch. This value
+# must be a positive integer.
+#elasticsearch.requestTimeout: 30000
+
+# The maximum number of sockets that can be used for communications with elasticsearch.
+# Defaults to `Infinity`.
+#elasticsearch.maxSockets: 1024
+
+# Specifies whether Kibana should use compression for communications with elasticsearch
+# Defaults to `false`.
+#elasticsearch.compression: false
+
+# List of Kibana client-side headers to send to Elasticsearch. To send *no* client-side
+# headers, set this value to [] (an empty list).
+#elasticsearch.requestHeadersWhitelist: [ authorization ]
+
+# Header names and values that are sent to Elasticsearch. Any custom headers cannot be overwritten
+# by client-side headers, regardless of the elasticsearch.requestHeadersWhitelist configuration.
+#elasticsearch.customHeaders: {}
+
+# Time in milliseconds for Elasticsearch to wait for responses from shards. Set to 0 to disable.
+#elasticsearch.shardTimeout: 30000
+
+# =================== System: Elasticsearch (Optional) ===================
+# These files are used to verify the identity of Kibana to Elasticsearch and are required when
+# xpack.security.http.ssl.client_authentication in Elasticsearch is set to required.
+elasticsearch.ssl.certificate: /etc/kibana/certs/elastic/elastic.crt
+elasticsearch.ssl.key: /etc/kibana/certs/elastic/elastic.key
+
+# Enables you to specify a path to the PEM file for the certificate
+# authority for your Elasticsearch instance.
+elasticsearch.ssl.certificateAuthorities: [ "/etc/kibana/certs/ca/ca.crt" ]
+
+# To disregard the validity of SSL certificates, change this setting's value to 'none'.
+#elasticsearch.ssl.verificationMode: full
+
+# =================== System: Logging ===================
+# Set the value of this setting to off to suppress all logging output, or to debug to log everything. Defaults to 'info'
+#logging.root.level: debug
+
+# Enables you to specify a file where Kibana stores log output.
+logging:
+  appenders:
+    file:
+      type: file
+      fileName: /var/log/kibana/kibana.log
+      layout:
+        type: json
+  root:
+    appenders:
+      - default
+      - file
+#  policy:
+#    type: size-limit
+#    size: 256mb
+#  strategy:
+#    type: numeric
+#    max: 10
+#  layout:
+#    type: json
+
+# Logs queries sent to Elasticsearch.
+#logging.loggers:
+#  - name: elasticsearch.query
+#    level: debug
+
+# Logs http responses.
+#logging.loggers:
+#  - name: http.server.response
+#    level: debug
+
+# Logs system usage information.
+#logging.loggers:
+#  - name: metrics.ops
+#    level: debug
+
+# Enables debug logging on the browser (dev console)
+#logging.browser.root:
+#  level: debug
+
+# =================== System: Other ===================
+# The path where Kibana stores persistent data not saved in Elasticsearch. Defaults to data
+#path.data: data
+
+# Specifies the path where Kibana creates the process ID file.
+pid.file: /run/kibana/kibana.pid
+
+# Set the interval in milliseconds to sample system and process performance
+# metrics. Minimum is 100ms. Defaults to 5000ms.
+#ops.interval: 5000
+
+# Specifies locale to be used for all localizable strings, dates and number formats.
+# Supported languages are the following: English (default) "en", Chinese "zh-CN", Japanese "ja-JP", French "fr-FR".
+#i18n.locale: "en"
+
+# =================== Frequently used (Optional)===================
+
+# =================== Saved Objects: Migrations ===================
+# Saved object migrations run at startup. If you run into migration-related issues, you might need to adjust these settings.
+
+# The number of documents migrated at a time.
+# If Kibana can't start up or upgrade due to an Elasticsearch `circuit_breaking_exception`,
+# use a smaller batchSize value to reduce the memory pressure. Defaults to 1000 objects per batch.
+#migrations.batchSize: 1000
+
+# The maximum payload size for indexing batches of upgraded saved objects.
+# To avoid migrations failing due to a 413 Request Entity Too Large response from Elasticsearch.
+# This value should be lower than or equal to your Elasticsearch cluster’s `http.max_content_length`
+# configuration option. Default: 100mb
+#migrations.maxBatchSizeBytes: 100mb
+
+# The number of times to retry temporary migration failures. Increase the setting
+# if migrations fail frequently with a message such as `Unable to complete the [...] step after
+# 15 attempts, terminating`. Defaults to 15
+#migrations.retryAttempts: 15
+
+# =================== Search Autocomplete ===================
+# Time in milliseconds to wait for autocomplete suggestions from Elasticsearch.
+# This value must be a whole number greater than zero. Defaults to 1000ms
+#unifiedSearch.autocomplete.valueSuggestions.timeout: 1000
+
+# Maximum number of documents loaded by each shard to generate autocomplete suggestions.
+# This value must be a whole number greater than zero. Defaults to 100_000
+#unifiedSearch.autocomplete.valueSuggestions.terminateAfter: 100000
+root@kibana:/etc/kibana#
+
+# it is not interactive, it is trying to start in backend
+root@kibana:/etc/kibana# systemctl start kibana
+root@kibana:/etc/kibana#
+root@kibana:/etc/kibana# systemctl status kibana
+● kibana.service - Kibana
+     Loaded: loaded (/usr/lib/systemd/system/kibana.service; disabled; preset: enabled)
+     Active: active (running) since Mon 2025-03-31 01:06:23 EDT; 1 day 21h ago
+       Docs: https://www.elastic.co
+   Main PID: 5292 (node)
+      Tasks: 11 (limit: 10061)
+     Memory: 288.6M (peak: 344.2M)
+        CPU: 1min 8.346s
+     CGroup: /system.slice/kibana.service
+             └─5292 /usr/share/kibana/bin/../node/bin/node /usr/share/kibana/bin/../src/cli/dist
+
+Mar 31 01:06:26 kibana kibana[5292]: Native global console methods have been overridden in production environment.
+Mar 31 01:06:29 kibana kibana[5292]: [2025-03-31T01:06:29.399-04:00][INFO ][root] Kibana is starting
+Mar 31 01:06:29 kibana kibana[5292]: [2025-03-31T01:06:29.607-04:00][INFO ][node] Kibana process configured with roles: [background_tasks, ui]
+Mar 31 01:06:45 kibana kibana[5292]: [2025-03-31T01:06:45.784-04:00][INFO ][plugins-service] The following plugins are disabled: "cloudChat,cloudExperiment>
+Mar 31 01:06:46 kibana kibana[5292]: [2025-03-31T01:06:45.964-04:00][INFO ][http.server.Preboot] http server running at http://localhost:5601
+Mar 31 01:06:46 kibana kibana[5292]: [2025-03-31T01:06:46.391-04:00][INFO ][plugins-system.preboot] Setting up [1] plugins: [interactiveSetup]
+Mar 31 01:06:46 kibana kibana[5292]: [2025-03-31T01:06:46.430-04:00][INFO ][preboot] "interactiveSetup" plugin is holding setup: Validating Elasticsearch c>
+Mar 31 01:06:46 kibana kibana[5292]: [2025-03-31T01:06:46.531-04:00][INFO ][root] Holding setup until preboot stage is completed.
+Mar 31 01:06:47 kibana kibana[5292]: i Kibana has not been configured.
+Mar 31 01:06:47 kibana kibana[5292]: Go to http://localhost:5601/?code=611852 to get started.
+lines 1-21/21 (END)
+
+
+### trouble shooting time: the kibana is not running on the browser
+root@kibana:/etc/kibana# cd /var/log/kibana/
+root@kibana:/var/log/kibana# ls
+kibana.log
+
+### elasticsearch is not being able to communicate with the kibana
+root@kibana:/var/log/kibana# more kibana.log |grep -v INFO
+{"service":{"node":{"roles":["background_tasks","ui"]}},"ecs":{"version":"8.11.0"},"@timestamp":"2025-04-01T22:52:36.793-04:00","message":"Unable to retrieve version information from Elasticsearch nodes. socket hang up - Local: 127.0.0.1:34408, Remote: 127.0.0.1:9200","log":{"level":"ERROR","logger":"elasticsearch-service"},"process":{"pid":8609,"uptime":161.305614067},"trace":{"id":"0517b877291ddc52998712097c9850a4"},"transaction":{"id":"6c35829336e39003"}}
+{"service":{"node":{"roles":["background_tasks","ui"]}},"ecs":{"version":"8.11.0"},"@timestamp":"2025-04-01T22:52:37.291-04:00","message":"Unable to retrieve version information from Elasticsearch nodes. socket hang up - Local: 127.0.0.1:34446, Remote: 127.0.0.1:9200","log":{"level":"ERROR","logger":"elasticsearch-service"},"process":{"pid":8609,"uptime":161.803699669},"trace":{"id":"0517b877291ddc52998712097c9850a4"},"transaction":{"id":"6c35829336e39003"}}
+{"service":{"node":{"roles":["background_tasks","ui"]}},"ecs":{"version":"8.11.0"},"@timestamp":"2025-04-01T22:52:37.789-04:00","message":"Unable to retrieve version information from Elasticsearch nodes. socket hang up - Local: 127.0.0.1:34498, Remote: 127.0.0.1:9200","log":{"level":"ERROR","logger":"elasticsearch-service"},"process":{"pid":8609,"uptime":162.301106377},"trace":{"id":"0517b877291ddc52998712097c9850a4"},"transaction":{"id":"6c35829336e39003"}}
+root@kibana:/var/log/kibana#
+
+### add replace in the kibana.yml file 
+Key Observations and Suggestions:
+Server Host Configuration:
+
+1. Currently, server.host is set to localhost, which means Kibana will only be accessible from the local machine. If you want to allow remote access to Kibana, you should change this to 0.0.0.0 or the specific IP address of your server.
+server.host: "0.0.0.0"
+
+2. Public Base URL:
+
+Your server.publicBaseUrl is set to https://localhost:5601/. This should ideally be the public URL at which users can access Kibana. If Kibana is accessed over HTTP or from a remote IP, you should adjust this URL to reflect that.
+
+Example if using HTTP and accessible externally:
+server.publicBaseUrl: "http://your-server-ip:5601/"
+
+### check if the versions are matching for kibana and elasticsearch:
+root@kibana:/etc/kibana/certs/elastic# /usr/share/elasticsearch/bin/elasticsearch --version
+Version: 8.14.1, Build: deb/93a57a1a76f556d8aee6a90d1a95b06187501310/2024-06-10T23:35:17.114581191Z, JVM: 22.0.1
+root@kibana:/etc/kibana/certs/elastic#
+
+
+root@kibana:/etc/kibana/certs/elastic# /usr/share/kibana/bin/kibana --version
+{"log.level":"info","@timestamp":"2025-04-02T03:10:32.999Z","log.logger":"elastic-apm-node","ecs.version":"8.10.0","agentVersion":"4.5.0","env":{"pid":9007,"proctitle":"/usr/share/kibana/bin/../node/bin/node","os":"linux 6.11.0-21-generic","arch":"x64","host":"kibana","timezone":"UTC-0400","runtime":"Node.js v20.13.1"},"config":{"active":{"source":"start","value":true},"breakdownMetrics":{"source":"start","value":false},"captureBody":{"source":"start","value":"off","commonName":"capture_body"},"captureHeaders":{"source":"start","value":false},"centralConfig":{"source":"start","value":false},"contextPropagationOnly":{"source":"start","value":true},"environment":{"source":"start","value":"production"},"globalLabels":{"source":"start","value":[["kibana_uuid","ece5f525-f465-4e96-9fd1-dddae1822d7a"],["git_rev","afbd904e868f2a48a2bbeb8ff20baee8d4aeb468"]],"sourceValue":{"kibana_uuid":"ece5f525-f465-4e96-9fd1-dddae1822d7a","git_rev":"afbd904e868f2a48a2bbeb8ff20baee8d4aeb468"}},"logLevel":{"source":"default","value":"info","commonName":"log_level"},"metricsInterval":{"source":"start","value":120,"sourceValue":"120s"},"serverUrl":{"source":"start","value":"https://kibana-cloud-apm.apm.us-east-1.aws.found.io/","commonName":"server_url"},"transactionSampleRate":{"source":"start","value":0.1,"commonName":"transaction_sample_rate"},"captureSpanStackTraces":{"source":"start","sourceValue":false},"secretToken":{"source":"start","value":"[REDACTED]","commonName":"secret_token"},"serviceName":{"source":"start","value":"kibana","commonName":"service_name"},"serviceVersion":{"source":"start","value":"8.14.1","commonName":"service_version"}},"activationMethod":"require","message":"Elastic APM Node.js Agent v4.5.0"}
+Kibana should not be run as root.  Use --allow-root to continue.
+
+
+root@kibana:/etc/kibana/certs/elastic# sudo -u kibana /usr/share/kibana/bin/kibana --version
+{"log.level":"info","@timestamp":"2025-04-02T03:12:02.015Z","log.logger":"elastic-apm-node","ecs.version":"8.10.0","agentVersion":"4.5.0","env":{"pid":9023,"proctitle":"/usr/share/kibana/bin/../node/bin/node","os":"linux 6.11.0-21-generic","arch":"x64","host":"kibana","timezone":"UTC-0400","runtime":"Node.js v20.13.1"},"config":{"active":{"source":"start","value":true},"breakdownMetrics":{"source":"start","value":false},"captureBody":{"source":"start","value":"off","commonName":"capture_body"},"captureHeaders":{"source":"start","value":false},"centralConfig":{"source":"start","value":false},"contextPropagationOnly":{"source":"start","value":true},"environment":{"source":"start","value":"production"},"globalLabels":{"source":"start","value":[["kibana_uuid","ece5f525-f465-4e96-9fd1-dddae1822d7a"],["git_rev","afbd904e868f2a48a2bbeb8ff20baee8d4aeb468"]],"sourceValue":{"kibana_uuid":"ece5f525-f465-4e96-9fd1-dddae1822d7a","git_rev":"afbd904e868f2a48a2bbeb8ff20baee8d4aeb468"}},"logLevel":{"source":"default","value":"info","commonName":"log_level"},"metricsInterval":{"source":"start","value":120,"sourceValue":"120s"},"serverUrl":{"source":"start","value":"https://kibana-cloud-apm.apm.us-east-1.aws.found.io/","commonName":"server_url"},"transactionSampleRate":{"source":"start","value":0.1,"commonName":"transaction_sample_rate"},"captureSpanStackTraces":{"source":"start","sourceValue":false},"secretToken":{"source":"start","value":"[REDACTED]","commonName":"secret_token"},"serviceName":{"source":"start","value":"kibana","commonName":"service_name"},"serviceVersion":{"source":"start","value":"8.14.1","commonName":"service_version"}},"activationMethod":"require","message":"Elastic APM Node.js Agent v4.5.0"}
+8.14.1
+root@kibana:/etc/kibana/certs/elastic#
+
+...
+# =================== System: Elasticsearch ===================
+# The URLs of the Elasticsearch instances to use for all your queries.
+elasticsearch.hosts: ["http://localhost:9200"] url needs to be https
+
+# if we are getting the errors for elasticsearch, so we have to look for elasticsearch related error possibilities
+### changes made: we have to provide https because we running with the self signed certificates
+# =================== System: Elasticsearch ===================
+# The URLs of the Elasticsearch instances to use for all your queries.
+elasticsearch.hosts: ["https://localhost:9200"]
+
+root@kibana:/etc/kibana/certs/elastic# systemctl stop kibana
+root@kibana:/etc/kibana/certs/elastic# systemctl start kibana
+
+### since we are running our certificates with the DNS:sys.fcc it is not able to connect with the localhost
+root@kibana:/etc/kibana/certs/elastic# more /var/log/kibana/kibana.log | grep -v INFO,WARN
+"1f7c507f3282ccac"}}
+{"service":{"node":{"roles":["background_tasks","ui"]}},"ecs":{"version":"8.11.0"},"@timestamp":"2025-04-01T23:23:31.462-04:00","message":"Server is NOT enabled","log":{"level":"INFO","logger":"plugins.assetManager"},"process":{"pid":9313,"uptime":44.035434505},"trace":{"id":"567594c9c6be49cf5694cea43190fa47"},"transaction":{"id":"1f7c507f3282ccac"}}
+{"service":{"node":{"roles":["background_tasks","ui"]}},"ecs":{"version":"8.11.0"},"@timestamp":"2025-04-01T23:23:32.908-04:00","message":"Unable to retrieve version information from Elasticsearch nodes. Hostname/IP does not match certificate's altnames: Host: localhost. is not in the cert's altnames: DNS:sys.fcc","log":{"level":"ERROR","logger":"elasticsearch-service"},"process":{"pid":9313,"uptime":45.48194476},"trace":{"id":"567594c9c6be49cf5694cea43190fa47"},"transaction":{"id":"1f7c507f3282ccac"}}
+{"service":{"node":{"roles":["background_tasks","ui"]}},"ecs":{"version":"8.11.0"},"@timestamp":"2025-04-01T23:23:35.619-04:00","message":"Browser executable: /usr/share/kibana/node_modules/@kbn/screenshotting-plugin/chromium/headless_shell-linux_x64/headless_shell","log":{"level":"INFO","logger":"plugins.screenshotting.chromium"},"process":{"pid":9313,"uptime":48.192699697},"trace":{"id":"567594c9c6be49cf5694cea43190fa47"},"transaction":{"id":"1f7c507f3282ccac"}}
+root@kibana:/etc/kibana/certs/elastic#
+
+
+
+### trouble shooting ends
+
+
+
