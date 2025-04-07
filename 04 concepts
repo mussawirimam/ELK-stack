@@ -39,4 +39,6 @@ both are going to contain the data only, which will be send by the end user
 
 
 
-
+elasticsearch port 9200
+transport port 9300
+kibana port 5601
