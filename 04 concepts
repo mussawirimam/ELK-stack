@@ -1,0 +1,42 @@
+Shards:
+primary
+replica
+
+index: is a information container where the documents/logs gets stored. 
+
+index rolling over:
+index name prefix will always be the same and suffix will change each time the index gets rolled over. Why? because we are going to rolling it! for what purpose? datalake, if we are not
+going to roll it, so all my data will be available in the same index and that will cause issue. It will create huge load and also will not delete the old indexes. 
+
+index template: 
+for indexes we will write the indexes template
+data type mapping:
+which fields will have what data type.
+
+
+component template: 
+you create once and use in any index settings. 
+
+Q: difference between the index template and component template?
+
+Enrich policies:
+
+Q: Datastreams and Indices, what is the difference? 
+index is a collection of shards where it directly stores information in shards
+datastream is like time series index stream, real time stream second by second or minute by minute. 
+
+index: 
+end user ---> index 
+                ----> shard1 
+                ----> shard2 
+data stream:
+end ---> usertime series index datastream
+                ----> backing index1 
+                ----> backing index2  
+                    ----> shard1 
+                    ----> shard1 
+both are going to contain the data only, which will be send by the end user
+
+
+
+
