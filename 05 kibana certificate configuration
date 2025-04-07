@@ -1,0 +1,78 @@
+# we learned the connection of elasticsearch to the kibana and the ssl binding to the kibana reaching to the elasticsearch self signed certificate and we are doing the practice stand alone cluster; not with multipe elasticsearch. 
+
+# how ssl gets created and how we assign it to the elastic.
+
+# we are going to add domain name and configure the certificates with kibana. 
+
+
+# when we install kibana, we get binaries with the kibana as well
+root@kibana:~# cd /usr/share/kibana/bin/
+root@kibana:/usr/share/kibana/bin# ls
+kibana  kibana-encryption-keys  kibana-health-gateway  kibana-keystore  kibana-plugin  kibana-setup  kibana-verification-code
+root@kibana:/usr/share/kibana/bin#
+
+### we will go with the elasticsearch bin to generate the certificates and keys
+root@kibana:/usr/share/kibana/bin# cd /usr/share/elasticsearch/bin/
+root@kibana:/usr/share/elasticsearch/bin# ls
+elasticsearch                          elasticsearch-env            elasticsearch-reconfigure-node  elasticsearch-sql-cli
+elasticsearch-certgen                  elasticsearch-env-from-file  elasticsearch-reset-password    elasticsearch-sql-cli-8.14.1.jar
+elasticsearch-certutil                 elasticsearch-geoip          elasticsearch-saml-metadata     elasticsearch-syskeygen
+elasticsearch-cli                      elasticsearch-keystore       elasticsearch-service-tokens    elasticsearch-users
+elasticsearch-create-enrollment-token  elasticsearch-node           elasticsearch-setup-passwords   systemd-entrypoint
+elasticsearch-croneval                 elasticsearch-plugin         elasticsearch-shard
+root@kibana:/usr/share/elasticsearch/bin#
+
+### we will use the same commands as to how we created certificate and key for the elasticsearch and we will modify the command to use it with kibana
+# if the kibana directory is not there then we have to create it
+# /usr/share/elasticsearch/bin/elasticsearch-certutil ca --pem --out /etc/kibana/certs/kibana/ca_kibana.zip
+
+root@kibana:/usr/share/elasticsearch/bin# ls /etc/kibana/certs/
+ca  elastic
+root@kibana:/usr/share/elasticsearch/bin#
+root@kibana:/etc/kibana/certs# cd /etc/kibana/certs/
+root@kibana:/etc/kibana/certs# mkdir kibana
+root@kibana:/etc/kibana/certs# ls
+ca  elastic  kibana
+root@kibana:/etc/kibana/certs#
+
+### our ca got generated
+root@kibana:/usr/share/elasticsearch/bin# /usr/share/elasticsearch/bin/elasticsearch-certutil ca --pem --out /etc/kibana/certs/kibana/ca_kibana.zip
+This tool assists you in the generation of X.509 certificates and certificate
+signing requests for use with SSL/TLS in the Elastic stack.
+
+The 'ca' mode generates a new 'certificate authority'
+This will create a new X.509 certificate and private key that can be used
+to sign certificate when running in 'cert' mode.
+
+Use the 'ca-dn' option if you wish to configure the 'distinguished name'
+of the certificate authority
+
+By default the 'ca' mode produces a single PKCS#12 output file which holds:
+    * The CA certificate
+    * The CA's private key
+
+If you elect to generate PEM format certificates (the -pem option), then the output will
+be a zip file containing individual files for the CA certificate and private key
+
+root@kibana:/usr/share/elasticsearch/bin#
+
+root@kibana:/usr/share/elasticsearch/bin# cd /etc/kibana/certs/kibana/
+root@kibana:/etc/kibana/certs/kibana# ls
+ca_kibana.zip
+root@kibana:/etc/kibana/certs/kibana#
+
+# unzip the ca_kibana to get the ca
+root@kibana:/etc/kibana/certs/kibana# unzip ca_kibana.zip
+Archive:  ca_kibana.zip
+   creating: ca/
+  inflating: ca/ca.crt
+  inflating: ca/ca.key
+root@kibana:/etc/kibana/certs/kibana# ls
+ca  ca_kibana.zip
+root@kibana:/etc/kibana/certs/kibana#
+
+root@kibana:/etc/kibana/certs/kibana# ls ca
+ca.crt  ca.key
+root@kibana:/etc/kibana/certs/kibana#
+
+### and we will require the ca.crt and ca.key to generate our certificates
