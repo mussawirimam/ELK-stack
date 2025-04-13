@@ -781,6 +781,7 @@ official document: https://www.elastic.co/blog/configuring-ssl-tls-and-https-to-
 previously we were running the elasticsearch with the certificates that elasticsearch came with: http.p12, http_ca.crt, and transport.p12...
 Now we will add our own self-signed certificates in the elasticsearch.yml file
 """
+### we are going to expose http endpoint outside, the endpoint will be used by the end-users so it needs to be secured
 ### NOTE: elk master node election process
 # QORUM METHOD: https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery-quorums.html
 
