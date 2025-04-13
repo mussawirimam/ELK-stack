@@ -772,6 +772,7 @@ drwxrwxr-x 2 elasticsearch elasticsearch  4096 Mar 25 23:41 elastic/
 root@kibana:/etc/elasticsearch/certs#
 
 
+------------------------------------------------------------------------------------------------------------------------------------
 
 ################# TO CONFIGURE THE CERTIFICATES IN ELASTICSEARCH #############
 """
