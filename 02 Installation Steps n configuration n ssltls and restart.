@@ -663,8 +663,8 @@ If you specify any of the following options:
     * -in (generate certificates from an input file)
 then the output will be be a zip file containing individual certificate/key files
 
-Enter password for certificate.zip :
-Enter password for certificate.zip :
+Enter password for certificate.zip :	# it shouldnt ask this prompt (I have fixed the issue) ignore this
+Enter password for certificate.zip :	# it shouldnt ask this prompt (I have fixed the issue) ignore this
 
 Certificates written to /etc/elasticsearch/certs/certificate.zip
 
@@ -774,6 +774,11 @@ root@kibana:/etc/elasticsearch/certs#
 
 
 ################# TO CONFIGURE THE CERTIFICATES IN ELASTICSEARCH #############
+"""
+IMPORTANT:
+previously we were running the elasticsearch with the certificates that elasticsearch came with: http.p12, http_ca.crt, and transport.p12...
+Now we will add our own self-signed certificates in the elasticsearch.yml file
+"""
 ### NOTE: elk master node election process
 # QORUM METHOD: https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery-quorums.html
 
