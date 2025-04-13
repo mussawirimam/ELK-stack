@@ -283,11 +283,11 @@ node.name: node-1            <------------------------ used at elasticsearch lev
 #
 # Path to directory where to store the data (separate multiple locations by comma):
 #
-path.data: /var/lib/elasticsearch
+path.data: /var/lib/elasticsearch	<-----------------------
 #
 # Path to log files:
 #
-path.logs: /var/log/elasticsearch
+path.logs: /var/log/elasticsearch 	<-----------------------
 #
 # ----------------------------------- Memory -----------------------------------
 #
@@ -311,7 +311,7 @@ path.logs: /var/log/elasticsearch
 # By default Elasticsearch listens for HTTP traffic on the first free port it
 # finds starting at 9200. Set a specific HTTP port here:
 #
-http.port: 9200
+http.port: 9200		<-----------------------
 #
 # For more information, consult the network module documentation.
 #
@@ -340,12 +340,12 @@ cluster.initial_master_nodes: ["node-1"]	<--------------- # this has to match th
 # generated to configure Elasticsearch security features on 22-02-2025 17:18:48
 #
 # --------------------------------------------------------------------------------
-
+### THIS SECTION IS ALSO VERY IMPORTANT WHEN SETTING UP THE CERTIFICATES ###
 # Enable security features
-xpack.security.enabled: true
+xpack.security.enabled: true	#<-----------------
 
-xpack.security.enrollment.enabled: true
-
+xpack.security.enrollment.enabled: true		#<-----------------
+### WE WILL ADD SELF SIGNED CERTIFICATES LATER 
 # Enable encryption for HTTP API client connections, such as Kibana, Logstash, and Agents
 xpack.security.http.ssl:	#<----------------- http ssl you see the certifcate is enabled with the self signed certificated
   enabled: true
@@ -354,13 +354,13 @@ xpack.security.http.ssl:	#<----------------- http ssl you see the certifcate is 
 # Enable encryption and mutual authentication between cluster nodes
 ### in older version of elasticsearch, the security features werent enabled by default but latest version will be configured with the self signed certificates.
 xpack.security.transport.ssl:		#<----------- transport ssl # elasticsearch work on two ports localhost:9200 http agent end user kibana etc and 9300 transport. For internal there will be different certificate and for the external it will have the different certiciates. # 9300 is used for transport layer (data exchange/communication) and 9200 is used for the application layer
-  enabled: true
-  verification_mode: certificate	
-  keystore.path: certs/transport.p12	
+  enabled: true		#<-----------------
+  verification_mode: certificate	#<-----------------
+  keystore.path: certs/transport.p12	#<-----------------
   truststore.path: certs/transport.p12		#<------------ truststore is the CA (certificate authority) who generate the certificate, who can recognize the certificates. 
 # Create a new cluster with the current node only
 # Additional nodes can still join the cluster later
-#cluster.initial_master_nodes: ["ubuntu-jammy"]	#<-------------- we will comment this because, we have uncommented the cluster master node above 
+#cluster.initial_master_nodes: ["ubuntu-jammy"]	#<-------------- we will comment this because, we have uncommented the cluster master node name above 
 
 # Allow HTTP API connections from anywhere
 # Connections are encrypted and require user authentication
@@ -372,6 +372,7 @@ http.host: 0.0.0.0	#<-------------- localhost ip
 
 #----------------------- END SECURITY AUTO CONFIGURATION -------------------------
 :wq!   
+
 root@ubuntu-jammy:/etc/elasticsearch#
 root@ubuntu-jammy:/etc/elasticsearch#
 
