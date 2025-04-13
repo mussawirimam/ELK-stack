@@ -360,7 +360,7 @@ xpack.security.transport.ssl:		#<----------- transport ssl # elasticsearch work 
   truststore.path: certs/transport.p12		#<------------ truststore is the CA (certificate authority) who generate the certificate, who can recognize the certificates. 
 # Create a new cluster with the current node only
 # Additional nodes can still join the cluster later
-#cluster.initial_master_nodes: ["ubuntu-jammy"]	#<-------------- we will comment this because, we have uncommented the cluster master node name above 
+#cluster.initial_master_nodes: ["ubuntu-jammy"]		#<-------------- we will comment this because, we have uncommented the cluster master node name above 
 
 # Allow HTTP API connections from anywhere
 # Connections are encrypted and require user authentication
@@ -919,3 +919,32 @@ then we will access our elasticsearch with the sys.fcc domain name
 ############## DEMO ENDS #################
 
 
+### Q: why would you delete this folder? dont do it but just for sake of question?
+Q: sudo rm -rf /var/lib/elasticsearch/*
+📁 What is /var/lib/ in Linux?
+/var/lib/ is a standard directory in Linux used to store persistent application data — the kind that changes as programs run.
+
+It's like the "workspace" for services that need to keep track of state, databases, user sessions, etc.
+
+📦 So what's /var/lib/elasticsearch/?
+For Elasticsearch, this directory stores the entire node's data, including:
+
+Subdirectory / File	What's in it
+nodes/	Node ID, cluster state, shard data
+indices/	All the actual index data (your documents, mappings, etc.)
+translog/	Transaction logs (used for recovery in case of crash)
+state-*.st	Metadata about cluster state, node state
+Think of it as Elasticsearch’s memory, database, and journal all rolled into one.
+
+🔄 Why is it important?
+Elasticsearch won’t work without this directory.
+
+If it's corrupted or doesn’t match your config (like different node name or discovery setup), Elasticsearch might fail to start or try to connect to ghost nodes (like what you're seeing).
+
+If you delete it, you wipe all data, and Elasticsearch will create a new clean state.
+
+✅ Summary
+Directory	Purpose
+/var/lib/elasticsearch/	Where Elasticsearch stores all of its persistent data — indices, cluster state, etc.
+Should I delete it?	Only if you’re okay losing all data and starting fresh (e.g., during dev or reset)
+Can I move or back it up?	Yes — you can archive it or point path.data to another location in elasticsearch.yml
