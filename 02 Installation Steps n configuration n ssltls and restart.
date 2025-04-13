@@ -948,3 +948,26 @@ Directory	Purpose
 /var/lib/elasticsearch/	Where Elasticsearch stores all of its persistent data — indices, cluster state, etc.
 Should I delete it?	Only if you’re okay losing all data and starting fresh (e.g., during dev or reset)
 Can I move or back it up?	Yes — you can archive it or point path.data to another location in elasticsearch.yml
+
+
+### curl needs -u username and -k,--insecure flag 
+root@matrix:/var/lib# curl -u elastic -X GET https://localhost:9200/ -k
+Enter host password for user 'elastic':
+{
+  "name" : "node-1",
+  "cluster_name" : "my_elk",
+  "cluster_uuid" : "XEUfksbvSYq7c0NYj7EEKQ",
+  "version" : {
+    "number" : "8.14.1",
+    "build_flavor" : "default",
+    "build_type" : "deb",
+    "build_hash" : "93a57a1a76f556d8aee6a90d1a95b06187501310",
+    "build_date" : "2024-06-10T23:35:17.114581191Z",
+    "build_snapshot" : false,
+    "lucene_version" : "9.10.0",
+    "minimum_wire_compatibility_version" : "7.17.0",
+    "minimum_index_compatibility_version" : "7.0.0"
+  },
+  "tagline" : "You Know, for Search"
+}
+root@matrix:/var/lib#
