@@ -105,7 +105,7 @@ Give permission and ownership to this certificate
 
 below command to generate certificate for elastic
 
-/usr/share/elasticsearch/bin/elasticsearch-certutil cert --out /etc/elasticsearch/certs/certificate.zip --name elastic --ca-cert /etc/elasticsearch/certs/ca/ca.crt --ca-key /etc/elasticsearch/certs/ca/ca.key --dns sys.fcc –pem
+/usr/share/elasticsearch/bin/elasticsearch-certutil cert --out /etc/elasticsearch/certs/certificate.zip --name elastic --ca-cert /etc/elasticsearch/certs/ca/ca.crt --ca-key /etc/elasticsearch/certs/ca/ca.key --dns sys.fcc -–pem
 
 go to /etc/elasticsearch/certs/
 unzip  /etc/elasticsearch/certs/ certificate.zip
@@ -605,7 +605,7 @@ root@ubuntu-jammy:/etc/elasticsearch/certs/ca#
 
 ### now we have to generate ca, certificated key and now we have to generate our certifcate and key from this ca certificated key.
 ### what this command is saying: hey elasticsearch certificate utility generate certificate, earlier we generated ca which is signing authority. Now we are generating certificate. 
-/usr/share/elasticsearch/bin/elasticsearch-certutil cert --out /etc/elasticsearch/certs/certificate.zip --name elastic --ca-cert /etc/elasticsearch/certs/ca/ca.crt --ca-key /etc/elasticsearch/certs/ca/ca.key --dns sys.fcc –pem
+/usr/share/elasticsearch/bin/elasticsearch-certutil cert --out /etc/elasticsearch/certs/certificate.zip --name elastic --ca-cert /etc/elasticsearch/certs/ca/ca.crt --ca-key /etc/elasticsearch/certs/ca/ca.key --dns sys.fcc -–pem
 
 ### go to the elasticsearch binary directory, then run the command from above:
 root@ubuntu-jammy:/etc/elasticsearch/certs/ca# cd /usr/share/elasticsearch/bin/
