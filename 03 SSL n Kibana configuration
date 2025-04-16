@@ -1,3 +1,6 @@
+IMPORTANT NOTE:
+### install the same version of the kibana as elasticsearch or elase there will be issues
+
 Continuing form 02 self signed certificate
 from previous file 02 is how you bind your public certificate as well
 # Enable encryption for HTTP API client connections, such as Kibana, Logstash, and Agents
