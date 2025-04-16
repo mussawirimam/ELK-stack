@@ -1,3 +1,4 @@
+# ignore this I am using this for arm64 installation and configuration https://www.elastic.co/docs/deploy-manage/deploy/self-managed/install-elasticsearch-from-archive-on-linux-macos
 import subprocess
 
 def run_command(command):
