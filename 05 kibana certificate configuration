@@ -1,10 +1,6 @@
-first step is to generate ca, then you generate certificates using ca
-
-
+#first step is to generate ca, then you generate certificates using ca
 # we learned the connection of elasticsearch to the kibana and the ssl binding to the kibana reaching to the elasticsearch self signed certificate and we are doing the practice stand alone cluster; not with multipe elasticsearch. 
-
 # how ssl gets created and how we assign it to the elastic.
-
 # we are going to add domain name and configure the certificates with kibana. 
 
 
@@ -38,7 +34,7 @@ root@kibana:/etc/kibana/certs# ls
 ca  elastic  kibana
 root@kibana:/etc/kibana/certs#
 
-### our ca got generated
+### we will create our ca using the elasticsearch-certutil
 root@kibana:/usr/share/elasticsearch/bin# /usr/share/elasticsearch/bin/elasticsearch-certutil ca --pem --out /etc/kibana/certs/kibana/ca_kibana.zip
 This tool assists you in the generation of X.509 certificates and certificate
 signing requests for use with SSL/TLS in the Elastic stack.
@@ -64,7 +60,7 @@ root@kibana:/etc/kibana/certs/kibana# ls
 ca_kibana.zip
 root@kibana:/etc/kibana/certs/kibana#
 
-# unzip the ca_kibana to get the ca
+### unzip the ca_kibana to get the ca
 root@kibana:/etc/kibana/certs/kibana# unzip ca_kibana.zip
 Archive:  ca_kibana.zip
    creating: ca/
@@ -78,10 +74,11 @@ root@kibana:/etc/kibana/certs/kibana# ls ca
 ca.crt  ca.key
 root@kibana:/etc/kibana/certs/kibana#
 
-### and we will require the ca.crt and ca.key to generate our certificates
+### and we will require the ca.crt and ca.key to generate our certificates using our ca
 # to generate certificate and we provided the path and name of the certificate
-/usr/share/elasticsearch/bin/elasticsearch-certutil cert --out /etc/kibana/certs/kibana/certificate.zip --name elastic --ca-cert /etc/kibana/certs/kibana/ca/ca.crt --ca-key /etc/kibana/certs/kibana/ca/ca.key --dns kibana.com –-pem
+#/usr/share/elasticsearch/bin/elasticsearch-certutil cert --out /etc/kibana/certs/kibana/certificate.zip --name elastic --ca-cert /etc/kibana/certs/kibana/ca/ca.crt --ca-key /etc/kibana/certs/kibana/ca/ca.key --dns kibana.com –-pem
 
+### I made a mistake here, instead of elastic --name should be kibana but I have changed the name of the file in below section but you can directly just change the --name kibana instead of elastic
 root@kibana:/etc/kibana/certs/kibana# /usr/share/elasticsearch/bin/elasticsearch-certutil cert --out /etc/kibana/certs/kibana/certificate.zip --name elastic --ca-cert /etc/kibana/certs/kibana/ca/ca.crt --ca-key /etc/kibana/certs/kibana/ca/ca.key --dns kibana.com --pem
 This tool assists you in the generation of X.509 certificates and certificate
 signing requests for use with SSL/TLS in the Elastic stack.
