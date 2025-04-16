@@ -926,6 +926,7 @@ Now we will restart the elasticsearch to implement the certificates
 then we will access our elasticsearch with the sys.fcc domain name
 """
 
+----------------------------------------------------------------------------------
 ######## making dns entry in \etc\hosts file. Mapping domain to localhost #########
 ### to make the fqdn with the domain name: If we have to access the elasticsearch with the certificate name, we will have to do the host entry.
 because we are working on the local environment, not on the internet environment so we have to do the host entry in windows
