@@ -925,9 +925,25 @@ we have implemeted the certificate configuration within the elasticsearch.yml fi
 Now we will restart the elasticsearch to implement the certificates
 then we will access our elasticsearch with the sys.fcc domain name
 """
+
+#### making dns entry in \etc\hosts file. Mapping domain to localhost ####
+if you are working on windows
+click start > type run > type drivers 
+	it will open system32 file
+click etc > hosts 
+open hosts file and map 
+
+# in the file add the ip address and domain
+add in \etc\hosts file ipaddress domainname
+
 ############## DEMO ENDS #################
 
 
+
+
+
+
+################# QUESTIONS #################
 ### Q: why would you delete this folder? dont do it but just for sake of question?
 Q: sudo rm -rf /var/lib/elasticsearch/*
 📁 What is /var/lib/ in Linux?
