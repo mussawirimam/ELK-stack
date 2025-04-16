@@ -926,15 +926,45 @@ Now we will restart the elasticsearch to implement the certificates
 then we will access our elasticsearch with the sys.fcc domain name
 """
 
-#### making dns entry in \etc\hosts file. Mapping domain to localhost ####
-if you are working on windows
-click start > type run > type drivers 
-	it will open system32 file
-click etc > hosts 
-open hosts file and map 
+######## making dns entry in \etc\hosts file. Mapping domain to localhost #########
+### to make the fqdn with the domain name: If we have to access the elasticsearch with the certificate name, we will have to do the host entry.
+because we are working on the local environment, not on the internet environment so we have to do the host entry in windows
 
-# in the file add the ip address and domain
-add in \etc\hosts file ipaddress domainname
+STEPS:
+1. open run program on your window
+  a. type drivers, it will open this location: C:\Windows\System32\drivers. Click on etc > open hosts
+it should look similar to this:
+# Copyright (c) 1993-2009 Microsoft Corp.
+#
+# This is a sample HOSTS file used by Microsoft TCP/IP for Windows.
+#
+# This file contains the mappings of IP addresses to host names. Each
+# entry should be kept on an individual line. The IP address should
+# be placed in the first column followed by the corresponding host name.
+# The IP address and the host name should be separated by at least one
+# space.
+#
+# Additionally, comments (such as these) may be inserted on individual
+# lines or following the machine name denoted by a '#' symbol.
+#
+# For example:
+#
+#      102.54.94.97     rhino.acme.com          # source server
+#       38.25.63.10     x.acme.com              # x client host
+
+# localhost name resolution is handled within DNS itself.
+#	127.0.0.1       localhost
+#	::1             localhost
+2. add your ip address of your vm/guest machine below and the domain name
+# localhost name resolution is handled within DNS itself.
+#	127.0.0.1       localhost
+#	::1             localhost
+	192.xxx.xxx.xxx	sys.fcc    <-------------------------------------------------
+3. close the file
+
+### we are doing host entry step because we are working in the local environment. Because in local environment we have to configure the dns, and the hosts file we are making the entry for local dns with the ip mapped to the domain name
+
+
 
 ############## DEMO ENDS #################
 
