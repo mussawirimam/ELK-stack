@@ -304,6 +304,12 @@ root@kibana:/etc/elasticsearch/certs/elastic#
 # username and pass
 # cert and key config in kibana.yml file. 
 
+########### IMPORTANT ########### 
+### CREATE A USER NAME AND PASSWORD ###
+[root@localhost kibana]# curl -X POST "https://localhost:9200/_security/user/kibana_system/_password" -u elastic:BMV=YdeAn-QtVm5xageh -H "Content-Type: application/json" -d '{"password": "123456789"}' -k
+{}
+[root@localhost kibana]#
+
 ------------------------------------------------------------------------------------
 ######## INITIAL CONFIG SETUP FOR KIBANA.YML ############
 ------------------------------------------------------------------------------------
@@ -358,8 +364,8 @@ elasticsearch.hosts: ["http://localhost:9200"]
 # the username and password that the Kibana server uses to perform maintenance on the Kibana
 # index at startup. Your Kibana users still need to authenticate with Elasticsearch, which
 # is proxied through the Kibana server.
-elasticsearch.username: "kibana_system"	#<-------------------------------------- username
-elasticsearch.password: "pass"		#<-------------------------------------- we will add the superuser password of elasticsearch
+elasticsearch.username: "kibana_system"	#<-------------------------------------- we will add username we generated from above command
+elasticsearch.password: "123456789"	#<-------------------------------------- we will add the password we generated from above command
 
 # Kibana can also authenticate to Elasticsearch via "service account tokens".
 # Service account tokens are Bearer style tokens that replace the traditional username/password based configuration.
