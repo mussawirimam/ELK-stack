@@ -18,7 +18,7 @@ To create new user name and password:
 #curl -X POST "https://localhost:9200/_security/user/kibana_system/_password" -u elastic:cENFFOQ_4GUDyU-poCts -H "Content-Type: application/json" -d '{"password": "123456789"}' -k
 
 Elsatic auth roles https://www.elastic.co/guide/en/elasticsearch/reference/current/built-in-roles.html
-
+########## Creating User Name and password ##########
 ### id and password was created successfully with empty response in the bracket 
 # username for kibana: kibana_system
 # password: 123456789
