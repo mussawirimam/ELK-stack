@@ -346,6 +346,23 @@ Apr 16 21:12:43 localhost.localdomain systemd[1]: Failed to start Kibana.     <-
 [root@localhost kibana]#
 
 ################################ trouble shooting time: the kibana is not running on the browser ##################################
+################ 3 FIXES ###################
+
+### there are three fixes I found.
+### 1. add the sys.fcc in the kibana.yml file:
+elasticsearch.hosts: ["https://sys.fcc:9200"] 
+### 2. if you are working within the vm then use server.host: "0.0.0.0" instead of server.host: "localhost" if it's local host netstat -tunalp|grep 5601 will be listening to 127.0.0.1 which will not have access from outside
+### 3. make sure sys.fcc is mapped in /etc/hosts both on local host machine and the vitual machine:
+vim /etc/hosts
+localhost sys.fcc 127.0.0.1 sys.fcc
+
+in your pc also do host entry
+
+C:\Windows\System32\drivers\etc\hosts
+localhost sys.fcc 127.0.0.1 sys.fcc
+
+################ 3 FIXES ENDS ###################
+
 root@kibana:/etc/kibana# cd /var/log/kibana/
 root@kibana:/var/log/kibana# ls
 kibana.log
