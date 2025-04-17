@@ -505,7 +505,27 @@ root@kibana:/etc/kibana#
 ######## INITIAL CONFIG SETUP FOR KIBANA.YML ENDS ############
 
 
-
+=== on browser ===
+### testing logging with new kibana_system user and kibana_system password
+username: kibana_system
+password: 123456789
+{
+  "name" : "node-1",
+  "cluster_name" : "my-elk",
+  "cluster_uuid" : "Jnx_FwCvRAmuLfGUv09CqQ",
+  "version" : {
+    "number" : "9.0.0",
+    "build_flavor" : "default",
+    "build_type" : "rpm",
+    "build_hash" : "112859b85d50de2a7e63f73c8fc70b99eea24291",
+    "build_date" : "2025-04-08T15:13:46.049795831Z",
+    "build_snapshot" : false,
+    "lucene_version" : "10.1.0",
+    "minimum_wire_compatibility_version" : "8.18.0",
+    "minimum_index_compatibility_version" : "8.0.0"
+  },
+  "tagline" : "You Know, for Search"
+}
 
 
 
