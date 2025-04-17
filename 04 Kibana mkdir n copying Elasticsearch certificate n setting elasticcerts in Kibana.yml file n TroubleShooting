@@ -324,6 +324,23 @@ lines 1-21/21 (END)
 Created symlink /etc/systemd/system/multi-user.target.wants/kibana.service → /usr/lib/systemd/system/kibana.service.
 [root@localhost kibana]#
 
+[root@localhost kibana]# systemctl status kibana.service
+× kibana.service - Kibana
+     Loaded: loaded (/usr/lib/systemd/system/kibana.service; enabled; preset: disabled)
+     Active: failed (Result: exit-code) since Wed 2025-04-16 21:12:43 EDT; 3min 21s ago
+   Duration: 2.483s
+       Docs: https://www.elastic.co
+   Main PID: 10968 (code=exited, status=1/FAILURE)
+        CPU: 2.781s
+
+Apr 16 21:12:43 localhost.localdomain systemd[1]: kibana.service: Scheduled restart job, restart counter is at 3.
+Apr 16 21:12:43 localhost.localdomain systemd[1]: Stopped Kibana.
+Apr 16 21:12:43 localhost.localdomain systemd[1]: kibana.service: Consumed 2.781s CPU time.
+Apr 16 21:12:43 localhost.localdomain systemd[1]: kibana.service: Start request repeated too quickly.
+Apr 16 21:12:43 localhost.localdomain systemd[1]: kibana.service: Failed with result 'exit-code'.     <------------------------
+Apr 16 21:12:43 localhost.localdomain systemd[1]: Failed to start Kibana.     <---------------------------
+[root@localhost kibana]#
+
 ################################ trouble shooting time: the kibana is not running on the browser ##################################
 root@kibana:/etc/kibana# cd /var/log/kibana/
 root@kibana:/var/log/kibana# ls
