@@ -14,9 +14,8 @@ in postman POST https://192.xxx.xxx.xxx:9200/_security/user/kibana_system/_passw
 
 To create new user name and password:
 # change the password to the one your system generated.
-curl -X POST "http://localhost:9200/_security/user/kibana_system/_password" -u elastic:cENFFOQ_4GUDyU-poCts -H "Content-Type: application/json" -d '{"password": "123456789"}'
-
-curl -X POST "https://localhost:9200/_security/user/kibana_system/_password" -u elastic:cENFFOQ_4GUDyU-poCts -H "Content-Type: application/json" -d '{"password": "123456789"}' -k
+#curl -X POST "http://localhost:9200/_security/user/kibana_system/_password" -u elastic:cENFFOQ_4GUDyU-poCts -H "Content-Type: application/json" -d '{"password": "123456789"}'
+#curl -X POST "https://localhost:9200/_security/user/kibana_system/_password" -u elastic:cENFFOQ_4GUDyU-poCts -H "Content-Type: application/json" -d '{"password": "123456789"}' -k
 
 Elsatic auth roles https://www.elastic.co/guide/en/elasticsearch/reference/current/built-in-roles.html
 
@@ -53,9 +52,15 @@ drwxr-sr-x   2 root kibana  4096 Apr  1 22:23 certs/
 -rw-rw-r--   1 root kibana   447 Jun 10  2024 node.options
 root@kibana:/etc/kibana#
 
+[root@localhost kibana]# cd certs/
+[root@localhost certs]# pwd
+/etc/kibana/certs
+[root@localhost certs]# 
+
 ### now we have to copy our certificates to certs location within /etc/kibana/certs. We are copying elasticsearch certificates. 
-root@kibana:/etc/kibana/certs# cp /etc/elasticsearch/certs/
+root@kibana:/etc/kibana/certs# ls /etc/elasticsearch/certs/
 ca/              ca_elastic.zip   certificate.zip  elastic/         http_ca.crt      http.p12         transport.p12
+
 root@kibana:/etc/kibana/certs# cp -r /etc/elasticsearch/certs/ca .
 root@kibana:/etc/kibana/certs# ll
 total 12
@@ -70,21 +75,31 @@ drwxr-s--- 3 root kibana 4096 Apr  1 22:23 ../
 drwxr-sr-x 2 root kibana 4096 Apr  1 22:25 ca/
 drwxr-sr-x 2 root kibana 4096 Apr  1 22:25 elastic/
 
-root@kibana:/etc/kibana/certs# ls -R
+### good thing is that the user previledges is kibana  
+[root@localhost certs]#  ls -Rl
 .:
-ca  elastic
+total 0
+drwxr-sr-x. 2 root kibana 34 Apr 16 21:03 ca
+drwxr-sr-x. 2 root kibana 44 Apr 16 21:04 elastic
 
 ./ca:
-ca.crt  ca.key
+total 8
+-rwxr-xr-x. 1 root kibana 1220 Apr 16 21:03 ca.crt
+-rwxr-xr-x. 1 root kibana 1675 Apr 16 21:03 ca.key
 
 ./elastic:
-elastic.crt  elastic.key
-root@kibana:/etc/kibana/certs#
+total 8
+-rwxr-xr-x. 1 root kibana 1176 Apr 16 21:04 elastic.crt
+-rwxr-xr-x. 1 root kibana 1675 Apr 16 21:04 elastic.key
+[root@localhost certs]#
+------------------------------------------------------------------------------------------
+
 
 ### we have to configure this /etc/kibana/certs/elastic certificate and key and also the certificate authroity ca within the kibana.yml file 
 #if our certificate was public, then we wouldnt give the elastic ca
 # in some cases we will be doing ca configuration in organization as well but they will be provided to you whoever is managing ssl 
 
+### ca, crt and key needs to be added in the kibana.yml file that you just copied
 
 root@kibana:/etc/kibana/certs# cd -
 /etc/kibana
@@ -176,12 +191,12 @@ elasticsearch.password: "123456789"
 # =================== System: Elasticsearch (Optional) ===================
 # These files are used to verify the identity of Kibana to Elasticsearch and are required when
 # xpack.security.http.ssl.client_authentication in Elasticsearch is set to required.
-elasticsearch.ssl.certificate: /etc/kibana/certs/elastic/elastic.crt
-elasticsearch.ssl.key: /etc/kibana/certs/elastic/elastic.key
+elasticsearch.ssl.certificate: /etc/kibana/certs/elastic/elastic.crt     #<-------------------------
+elasticsearch.ssl.key: /etc/kibana/certs/elastic/elastic.key             #<-------------------------
 
 # Enables you to specify a path to the PEM file for the certificate
 # authority for your Elasticsearch instance.
-elasticsearch.ssl.certificateAuthorities: [ "/etc/kibana/certs/ca/ca.crt" ]
+elasticsearch.ssl.certificateAuthorities: [ "/etc/kibana/certs/ca/ca.crt" ]     #<-------------------------
 
 # To disregard the validity of SSL certificates, change this setting's value to 'none'.
 #elasticsearch.ssl.verificationMode: full
@@ -276,7 +291,9 @@ pid.file: /run/kibana/kibana.pid
 #unifiedSearch.autocomplete.valueSuggestions.terminateAfter: 100000
 root@kibana:/etc/kibana#
 
-# it is not interactive, it is trying to start in backend
+------------------------------------------------------------------------------------------------
+### now we can start the kibana service
+# it is not interactive, it is trying to start in backend (you will not see the output on the console)
 root@kibana:/etc/kibana# systemctl start kibana
 root@kibana:/etc/kibana#
 root@kibana:/etc/kibana# systemctl status kibana
@@ -303,6 +320,9 @@ Mar 31 01:06:47 kibana kibana[5292]: i Kibana has not been configured.
 Mar 31 01:06:47 kibana kibana[5292]: Go to http://localhost:5601/?code=611852 to get started.
 lines 1-21/21 (END)
 
+[root@localhost kibana]# systemctl enable kibana.service
+Created symlink /etc/systemd/system/multi-user.target.wants/kibana.service → /usr/lib/systemd/system/kibana.service.
+[root@localhost kibana]#
 
 ################################ trouble shooting time: the kibana is not running on the browser ##################################
 root@kibana:/etc/kibana# cd /var/log/kibana/
