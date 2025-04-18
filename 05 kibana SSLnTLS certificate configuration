@@ -7,7 +7,7 @@
 # how ssl gets created and how we assign it to the elastic.
 # we are going to add domain name and configure the certificates with kibana. 
 
-
+###################### KIBANA SSL/TLS CERTIFICATE GENERATION AND CONFIGURATION ######################
 # when we install kibana, we get binaries with the kibana as well
 root@kibana:~# cd /usr/share/kibana/bin/
 root@kibana:/usr/share/kibana/bin# ls
@@ -25,6 +25,10 @@ elasticsearch-create-enrollment-token  elasticsearch-node           elasticsearc
 elasticsearch-croneval                 elasticsearch-plugin         elasticsearch-shard
 root@kibana:/usr/share/elasticsearch/bin#
 
+root@matrix:/usr/share/elasticsearch/bin# ls /etc/kibana/certs/
+ca  elastic
+root@matrix:/usr/share/elasticsearch/bin#
+
 ### we will use the same commands as to how we created certificate and key for the elasticsearch and we will modify the command to use it with kibana
 # if the kibana directory is not there then we have to create it
 # /usr/share/elasticsearch/bin/elasticsearch-certutil ca --pem --out /etc/kibana/certs/kibana/ca_kibana.zip
@@ -38,6 +42,7 @@ root@kibana:/etc/kibana/certs# ls
 ca  elastic  kibana
 root@kibana:/etc/kibana/certs#
 
+=== generating ca certificates ===
 ### we will create our ca using the elasticsearch-certutil
 root@kibana:/usr/share/elasticsearch/bin# /usr/share/elasticsearch/bin/elasticsearch-certutil ca --pem --out /etc/kibana/certs/kibana/ca_kibana.zip
 This tool assists you in the generation of X.509 certificates and certificate
@@ -78,8 +83,10 @@ root@kibana:/etc/kibana/certs/kibana# ls ca
 ca.crt  ca.key
 root@kibana:/etc/kibana/certs/kibana#
 
+=== generating ca.crt and ca.key to create our certificates  ===
 ### and we will require the ca.crt and ca.key to generate our certificates using our ca
 # to generate certificate and we provided the path and name of the certificate
+### change the name to kibana ### small mistake I made   <------------------------------------------------------
 #/usr/share/elasticsearch/bin/elasticsearch-certutil cert --out /etc/kibana/certs/kibana/certificate.zip --name elastic --ca-cert /etc/kibana/certs/kibana/ca/ca.crt --ca-key /etc/kibana/certs/kibana/ca/ca.key --dns kibana.com –-pem
 
 ### I made a mistake here, instead of elastic --name should be kibana but I have changed the name of the file in below section but you can directly just change the --name kibana instead of elastic
