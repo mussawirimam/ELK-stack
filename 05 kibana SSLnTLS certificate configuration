@@ -174,4 +174,23 @@ root@kibana:/etc/kibana/certs/kibana/kibana# ls
 kibana.crt  kibana.key
 root@kibana:/etc/kibana/certs/kibana/kibana#
 
-### 
+# list of files that should be in your /etc/kibana/certs directory
+
+root@matrix:/etc/kibana/certs/kibana# ls -Rl
+.:
+total 16
+drwxr-sr-x 2 root kibana 4096 Apr 18 11:07 ca
+-rw------- 1 root kibana 2516 Apr 18 11:07 ca_kibana.zip
+-rw------- 1 root kibana 2558 Apr 18 11:11 certificate.zip
+drwxr-sr-x 2 root kibana 4096 Apr 18 11:11 kibana
+
+./ca:
+total 8
+-rw-r--r-- 1 root kibana 1200 Apr 18 11:07 ca.crt
+-rw-r--r-- 1 root kibana 1675 Apr 18 11:07 ca.key
+
+./kibana:
+total 8
+-rw-r--r-- 1 root kibana 1176 Apr 18 11:11 kibana.crt
+-rw-r--r-- 1 root kibana 1679 Apr 18 11:11 kibana.key
+root@matrix:/etc/kibana/certs/kibana#
