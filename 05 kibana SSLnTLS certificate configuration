@@ -200,3 +200,6 @@ root@matrix:/etc/kibana/certs/kibana#
 ### file paths that we need to add in the kibana.yml ssl
 /etc/kibana/certs/kibana/kibana/kibana.crt
 /etc/kibana/certs/kibana/kibana/kibana.key
+
+=== configuring kibana.yml for kibana certificate ===
+
