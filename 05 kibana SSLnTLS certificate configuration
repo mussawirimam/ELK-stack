@@ -1,3 +1,7 @@
+### continuing on kibana: how ssl gets created and we assign it to the elastic and those configuration to kibana
+### and generating ssl for kibana. Right now we dont have domain name for the kibana, because we dont have the certificate for this particular kibana service, and that is why we are using kibana on http.
+# side note: first spin up elasticsearch, and then kibana. 
+
 #first step is to generate ca, then you generate certificates using ca
 # we learned the connection of elasticsearch to the kibana and the ssl binding to the kibana reaching to the elasticsearch self signed certificate and we are doing the practice stand alone cluster; not with multipe elasticsearch. 
 # how ssl gets created and how we assign it to the elastic.
