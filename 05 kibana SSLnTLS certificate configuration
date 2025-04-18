@@ -1,3 +1,5 @@
+### official documentation for setting up the ssl
+https://www.elastic.co/blog/configuring-ssl-tls-and-https-to-secure-elasticsearch-kibana-beats-and-logstash
 ### continuing on kibana: how ssl gets created and we assign it to the elastic and those configuration to kibana
 ### and generating ssl for kibana. Right now we dont have domain name for the kibana, because we dont have the certificate for this particular kibana service, and that is why we are using kibana on http.
 # side note: first spin up elasticsearch, and then kibana. 
@@ -194,3 +196,7 @@ total 8
 -rw-r--r-- 1 root kibana 1176 Apr 18 11:11 kibana.crt
 -rw-r--r-- 1 root kibana 1679 Apr 18 11:11 kibana.key
 root@matrix:/etc/kibana/certs/kibana#
+
+### file paths that we need to add in the kibana.yml ssl
+/etc/kibana/certs/kibana/kibana/kibana.crt
+/etc/kibana/certs/kibana/kibana/kibana.key
