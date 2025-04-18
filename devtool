@@ -25,7 +25,7 @@ GET /my-index/_search?q="rocky mountain"
 
 
 
-
+#### 
 POST test_index/_doc/test_doc
 {
   "total": 2,
@@ -33,4 +33,53 @@ POST test_index/_doc/test_doc
   "failed": 0
 }
 
+###output
+{
+  "_index": "test_index",
+  "_id": "test_doc",
+  "_version": 1,
+  "result": "created",
+  "_shards": {
+    "total": 2,
+    "successful": 1,
+    "failed": 0
+  },
+  "_seq_no": 0,
+  "_primary_term": 1
+}
+
+###
 GET test_index/_search
+
+###output
+{
+  "took": 5,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 1,
+      "relation": "eq"
+    },
+    "max_score": 1,
+    "hits": [
+      {
+        "_index": "test_index",
+        "_id": "test_doc",
+        "_score": 1,
+        "_source": {
+          "total": 2,
+          "succesful": 1,
+          "failed": 0
+        }
+      }
+    ]
+  }
+}
+
+
