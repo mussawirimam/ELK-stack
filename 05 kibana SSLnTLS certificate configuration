@@ -540,5 +540,27 @@ root@matrix:/etc/kibana#
 server.ssl.enabled: true
 server.ssl.certificate: /etc/kibana/certs/kibana/kibana/kibana.crt
 server.ssl.key: /etc/kibana/certs/kibana/kibana/kibana.key
-elasticsearch.ssl.certificateAuthorities: [ "/etc/kibana/certs/kibana/ca/ca.crt" ]   <------------------------------------ this was the issue
+server.ssl.certificateAuthorities: [ "/etc/kibana/certs/kibana/ca/ca.crt" ]   <------------------------------------ this was the issue
+
+root@matrix:/etc/kibana# systemctl start kibana
+
+root@matrix:/etc/kibana# systemctl status kibana.service
+● kibana.service - Kibana
+     Loaded: loaded (/lib/systemd/system/kibana.service; enabled; vendor preset: enabled)
+     Active: active (running) since Fri 2025-04-18 21:30:09 EDT; 5s ago
+       Docs: https://www.elastic.co
+   Main PID: 5061 (node)
+      Tasks: 11 (limit: 9359)
+     Memory: 339.6M
+     CGroup: /system.slice/kibana.service
+             └─5061 /usr/share/kibana/bin/../node/bin/node /usr/share/kibana/bin/../src/cli/dist
+
+Apr 18 21:30:09 matrix systemd[1]: Started Kibana.
+Apr 18 21:30:09 matrix kibana[5061]: Kibana is currently running with legacy OpenSSL providers enabled! For details and instructions on how to disable see >
+Apr 18 21:30:09 matrix kibana[5061]: {"log.level":"info","@timestamp":"2025-04-19T01:30:09.744Z","log.logger":"elastic-apm-node","ecs.version":"8.10.0","ag>
+Apr 18 21:30:09 matrix kibana[5061]: Native global console methods have been overridden in production environment.
+Apr 18 21:30:10 matrix kibana[5061]: [2025-04-18T21:30:10.898-04:00][INFO ][root] Kibana is starting
+Apr 18 21:30:10 matrix kibana[5061]: [2025-04-18T21:30:10.949-04:00][INFO ][node] Kibana process configured with roles: [background_tasks, ui]
+lines 1-16/16 (END)
+
 ####################### TROUBLE SHOOTING ENDS ##########################
