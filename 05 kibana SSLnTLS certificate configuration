@@ -201,7 +201,7 @@ root@matrix:/etc/kibana/certs/kibana#
 /etc/kibana/certs/kibana/kibana/kibana.crt
 /etc/kibana/certs/kibana/kibana/kibana.key
 
-==================== ADDING CERTIFICATES IN KIBANA.YML FILE ====================
+==================== ADDING CERTIFICATES IN KIBANA.YML FILE for self signed certificate ====================
 ### add the certificate and ca in kibana.yml file 
 
 root@matrix:/etc/kibana/certs/kibana/kibana# cat /etc/kibana/kibana.yml
