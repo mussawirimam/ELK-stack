@@ -230,7 +230,7 @@ server.host: "0.0.0.0"
 
 # Specifies the public URL at which Kibana is available for end users. If
 # `server.basePath` is configured this URL should end with the same basePath.
-server.publicBaseUrl: "http://kibana.com:5601"                        <---------------------------------------   host name needs to be changed from hostname to domainname
+server.publicBaseUrl: "https://kibana.com:5601"                        <---------------------------------------   host name needs to be changed from hostname to domainname
 
 # The maximum payload size in bytes for incoming server requests.
 #server.maxPayload: 1048576
@@ -244,7 +244,7 @@ server.publicBaseUrl: "http://kibana.com:5601"                        <---------
 server.ssl.enabled: true                                                      <-----------------------------------------------------
 server.ssl.certificate: /etc/kibana/certs/kibana/kibana/kibana.crt            <-----------------------------------------------------
 server.ssl.key: /etc/kibana/certs/kibana/kibana/kibana.key                    <-----------------------------------------------------
-elasticsearch.ssl.certificateAuthorities: [ "/etc/kibana/certs/ca/ca.crt" ]   <-----------------------------------------------------
+elasticsearch.ssl.certificateAuthorities: [ "/etc/kibana/certs/ca/ca.crt" ]   <----------------------------------------------------- # I made mistake here (look into troubleshooting section below
 
 # =================== System: Elasticsearch ===================
 # The URLs of the Elasticsearch instances to use for all your queries.
