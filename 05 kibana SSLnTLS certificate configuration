@@ -487,3 +487,58 @@ Apr 18 21:12:07 matrix systemd[1]: Failed to start Kibana.
 root@matrix:/etc/kibana#
 
 ######################## TROUBLESHOOTING   ########################
+root@matrix:/etc/kibana# sudo -u kibana /usr/share/kibana/bin/kibana --config /etc/kibana/kibana.yml
+...
+":"server_url"},"transactionSampleRate":{"source":"start","value":0.1,"commonName":"transaction_sample_rate"},"captureSpanStackTraces":{"source":"start","sourceValue":false},"secretToken":{"source":"start","value":"[REDACTED]","commonName":"secret_token"},"serviceName":{"source":"start","value":"kibana","commonName":"service_name"},"serviceVersion":{"source":"start","value":"8.14.1","commonName":"service_version"}},"activationMethod":"require","message":"Elastic APM Node.js Agent v4.5.0"}
+Kibana should not be run as root.  Use --allow-root to continue.
+root@matrix:/etc/kibana# sudo -u kibana /usr/share/kibana/bin/kibana --config /etc/kibana/kibana.yml
+{"log.level":"info","@timestamp":"2025-04-19T01:23:54.620Z","log.logger":"elastic-apm-node","ecs.version":"8.10.0","agentVersion":"4.5.0","env":{"pid":4940,"proctitle":"/usr/share/kibana/bin/../node/bin/node","os":"linux 5.15.167.4-microsoft-standard-WSL2","arch":"x64","host":"matrix","timezone":"UTC-0400","runtime":"Node.js v20.13.1"},"config":{"active":{"source":"start","value":true},"breakdownMetrics":{"source":"start","value":false},"captureBody":{"source":"start","value":"off","commonName":"capture_body"},"captureHeaders":{"source":"start","value":false},"centralConfig":{"source":"start","value":false},"contextPropagationOnly":{"source":"start","value":true},"environment":{"source":"start","value":"production"},"globalLabels":{"source":"start","value":[["kibana_uuid","a7f0fb43-1c1d-435f-8228-caa14549274d"],["git_rev","afbd904e868f2a48a2bbeb8ff20baee8d4aeb468"]],"sourceValue":{"kibana_uuid":"a7f0fb43-1c1d-435f-8228-caa14549274d","git_rev":"afbd904e868f2a48a2bbeb8ff20baee8d4aeb468"}},"logLevel":{"source":"default","value":"info","commonName":"log_level"},"metricsInterval":{"source":"start","value":120,"sourceValue":"120s"},"serverUrl":{"source":"start","value":"https://kibana-cloud-apm.apm.us-east-1.aws.found.io/","commonName":"server_url"},"transactionSampleRate":{"source":"start","value":0.1,"commonName":"transaction_sample_rate"},"captureSpanStackTraces":{"source":"start","sourceValue":false},"secretToken":{"source":"start","value":"[REDACTED]","commonName":"secret_token"},"serviceName":{"source":"start","value":"kibana","commonName":"service_name"},"serviceVersion":{"source":"start","value":"8.14.1","commonName":"service_version"}},"activationMethod":"require","message":"Elastic APM Node.js Agent v4.5.0"}
+FATAL CLI ERROR YAMLException: duplicated mapping key at line 99, column 1:
+    elasticsearch.ssl.certificateAut ...
+    ^
+    at generateError (/usr/share/kibana/node_modules/js-yaml/lib/js-yaml/loader.js:167:10)
+    at throwError (/usr/share/kibana/node_modules/js-yaml/lib/js-yaml/loader.js:173:9)
+    at storeMappingPair (/usr/share/kibana/node_modules/js-yaml/lib/js-yaml/loader.js:335:7)
+    at readBlockMapping (/usr/share/kibana/node_modules/js-yaml/lib/js-yaml/loader.js:1098:9)
+    at composeNode (/usr/share/kibana/node_modules/js-yaml/lib/js-yaml/loader.js:1359:12)
+    at readDocument (/usr/share/kibana/node_modules/js-yaml/lib/js-yaml/loader.js:1525:3)
+    at loadDocuments (/usr/share/kibana/node_modules/js-yaml/lib/js-yaml/loader.js:1588:5)
+    at load (/usr/share/kibana/node_modules/js-yaml/lib/js-yaml/loader.js:1614:19)
+    at safeLoad (/usr/share/kibana/node_modules/js-yaml/lib/js-yaml/loader.js:1637:10)
+    at readYaml (/usr/share/kibana/node_modules/@kbn/config/src/raw/read_config.js:21:47)
+    at getConfigFromFiles (/usr/share/kibana/node_modules/@kbn/config/src/raw/read_config.js:75:18)
+    at getServerlessModeFromCfg (/usr/share/kibana/src/cli/serve/compile_config_stack.js:70:49)
+    at compileConfigStack (/usr/share/kibana/src/cli/serve/compile_config_stack.js:53:64)
+    at Command.<anonymous> (/usr/share/kibana/src/cli/serve/serve.js:203:66)
+    at Command.<anonymous> (/usr/share/kibana/src/cli/command.js:91:20)
+    at Command.listener (/usr/share/kibana/node_modules/commander/index.js:370:29)
+    at Command.emit (node:events:519:28)
+    at Command.parseArgs (/usr/share/kibana/node_modules/commander/index.js:892:12)
+    at Command.parse (/usr/share/kibana/node_modules/commander/index.js:642:21)
+    at Object.<anonymous> (/usr/share/kibana/src/cli/cli.js:46:9)
+    at Module._compile (node:internal/modules/cjs/loader:1358:14)
+    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1416:10)
+    at Module.load (node:internal/modules/cjs/loader:1208:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1024:12)
+    at Module.require (node:internal/modules/cjs/loader:1233:19)
+    at Module.Hook._require.Module.require (/usr/share/kibana/node_modules/require-in-the-middle/index.js:188:39)
+    at Module.Hook._require.Module.require (/usr/share/kibana/node_modules/require-in-the-middle/index.js:188:39)
+    at require (node:internal/modules/helpers:179:18)
+    at Object.<anonymous> (/usr/share/kibana/src/cli/dist.js:15:1)
+    at Module._compile (node:internal/modules/cjs/loader:1358:14)
+    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1416:10)
+    at Module.load (node:internal/modules/cjs/loader:1208:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1024:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:174:12)
+    at node:internal/main/run_main_module:28:49
+root@matrix:/etc/kibana#
+
+##################### RESOLVED ######################
+# =================== System: Kibana Server (Optional) ===================
+# Enables SSL and paths to the PEM-format SSL certificate and SSL key files, respectively.
+# These settings enable SSL for outgoing requests from the Kibana server to the browser.
+server.ssl.enabled: true
+server.ssl.certificate: /etc/kibana/certs/kibana/kibana/kibana.crt
+server.ssl.key: /etc/kibana/certs/kibana/kibana/kibana.key
+elasticsearch.ssl.certificateAuthorities: [ "/etc/kibana/certs/kibana/ca/ca.crt" ]   <------------------------------------ this was the issue
+####################### TROUBLE SHOOTING ENDS ##########################
