@@ -564,3 +564,88 @@ Apr 18 21:30:10 matrix kibana[5061]: [2025-04-18T21:30:10.949-04:00][INFO ][node
 lines 1-16/16 (END)
 
 ####################### TROUBLE SHOOTING ENDS ##########################
+### CONCEPT OF TOKEN ###
+Token is somekey which can be temporary or permanent. It is another way of communicating with the elasticsearch; either you communicate with the elasticsearch with those token or either
+you configure those tokens for kibana to communicate with the elasticsearch
+
+### On generating service token
+### this is the executable file through which we can generate token
+root@matrix:/usr/share/elasticsearch/bin# ls elasticsearch-service-tokens
+elasticsearch-service-tokens
+root@matrix:/usr/share/elasticsearch/bin#
+
+### through kibana we can generate token as well
+Go to stack management > under security tab click roles > click Create API key 
+
+#SIDE NOTE:
+in i.t we have multiple ways of interacting with the program, one with gui and another with the CLI. Even at the gui level, the gui is running the CLI commands in order for task to be finished. 
+
+### the location where the token is generated, there will be file created if the token is generated. 
+root@matrix:/etc/elasticsearch# ls
+certs                              elasticsearch.keystore  jvm.options    log4j2.properties  roles.yml  users_roles
+elasticsearch-plugins.example.yml  elasticsearch.yml       jvm.options.d  role_mapping.yml   users
+root@matrix:/etc/elasticsearch#
+
+### generating token on cli
+# gives you a decrypted token
+# with the command ./elasticsearch-service-tokens create with user elastic in folden kibana and create kibana_token is a name
+root@matrix:/usr/share/elasticsearch/bin# ./elasticsearch-service-tokens create elastic/kibana kibana_token
+SERVICE_TOKEN elastic/kibana/kibana_token = AAEAAWVsYXN0aWMva2liYW5hL2tpYmFuYV90b2tlbjptdFBsMEVNNlNCUzFOaGROZlUwbUtR
+root@matrix:/usr/share/elasticsearch/bin#
+
+
+### notice there is a service_tokens file generated
+### the token file is encrypted
+root@matrix:~# cd /etc/elasticsearch/
+root@matrix:/etc/elasticsearch# ls
+certs                              elasticsearch.yml  log4j2.properties  service_tokens   <--------------
+elasticsearch-plugins.example.yml  jvm.options        role_mapping.yml   users
+elasticsearch.keystore             jvm.options.d      roles.yml          users_roles
+root@matrix:/etc/elasticsearch#
+
+right now it doesnt have previeledges, give it previleges
+oot@matrix:/etc/elasticsearch# chmod 755 service_tokens
+root@matrix:/etc/elasticsearch# ll
+total 68
+drwxrwsr-x  4 elasticsearch elasticsearch  4096 Apr 22 22:26 ./
+drwxr-xr-x 85 root          root           4096 Apr 22 22:28 ../
+drwxrwxr-x  4 elasticsearch elasticsearch  4096 Apr 13 18:20 certs/
+-rwxrwxr-x  1 elasticsearch elasticsearch  1042 Jun 10  2024 elasticsearch-plugins.example.yml*
+-rwxrwxr-x  1 elasticsearch elasticsearch   536 Apr 13 02:50 elasticsearch.keystore*
+-rwxrwxr-x  1 elasticsearch elasticsearch  4198 Apr 17 16:20 elasticsearch.yml*
+-rwxrwxr-x  1 elasticsearch elasticsearch  2781 Jun 10  2024 jvm.options*
+drwxrwsr-x  2 elasticsearch elasticsearch  4096 Jun 10  2024 jvm.options.d/
+-rwxrwxr-x  1 elasticsearch elasticsearch 17969 Jun 10  2024 log4j2.properties*
+-rwxrwxr-x  1 elasticsearch elasticsearch   473 Jun 10  2024 role_mapping.yml*
+-rwxrwxr-x  1 elasticsearch elasticsearch   197 Jun 10  2024 roles.yml*
+-rwxr-xr-x  1 root          elasticsearch   140 Apr 22 22:26 service_tokens*
+-rwxrwxr-x  1 elasticsearch elasticsearch     0 Jun 10  2024 users*
+-rwxrwxr-x  1 elasticsearch elasticsearch     0 Jun 10  2024 users_roles*
+root@matrix:/etc/elasticsearch#
+
+### give user permission to it to 
+root@matrix:/etc/elasticsearch# chown elasticsearch:elasticsearch service_tokens
+root@matrix:/etc/elasticsearch# ll
+-rwxr-xr-x  1 elasticsearch elasticsearch   140 Apr 22 22:26 service_tokens*
+
+### why we use creating token ?
+###if you noticed that in kibana.yml file, we gave plain text password and this is highly not recommended. This is where you will provide the tokens.
+root@matrix:/etc/kibana# vi /etc/kibana/kibana.yml
+
+# the username and password that the Kibana server uses to perform maintenance on the Kibana
+# If your Elasticsearch is protected with basic authentication, these settings provide
+# the username and password that the Kibana server uses to perform maintenance on the Kibana
+# index at startup. Your Kibana users still need to authenticate with Elasticsearch, which
+# is proxied through the Kibana server.
+elasticsearch.username: "kibana_system"
+elasticsearch.password: "123456789"   <----------------------------------------------------------------------- # after adding you can comment the password
+
+# Kibana can also authenticate to Elasticsearch via "service account tokens".
+# Service account tokens are Bearer style tokens that replace the traditional username/password based configuration.
+# Use this token instead of a username/password.
+ elasticsearch.serviceAccountToken: "my_token"   <------------------------------------------------------------------- this is where we will add our tokens
+### and you can comment the password
+### you can use keystore function as well
+
+
+
