@@ -1,6 +1,4 @@
-### before steps:
-# you would generate ca, and crt and keys certificates and then add them in your configuration for self-signed certificate. 
-#root@matrix:/etc/elasticsearch# cat elasticsearch.yml
+root@matrix:/etc/elasticsearch# cat elasticsearch.yml
 # ======================== Elasticsearch Configuration =========================
 #
 # NOTE: Elasticsearch comes with reasonable defaults for most settings.
@@ -57,6 +55,7 @@ path.logs: /var/log/elasticsearch
 # address here to expose this node on the network:
 #
 #network.host: 192.168.0.1
+#network.host: 0.0.0.0
 #
 # By default Elasticsearch listens for HTTP traffic on the first free port it
 # finds starting at 9200. Set a specific HTTP port here:
