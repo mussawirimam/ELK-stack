@@ -1,3 +1,6 @@
+OFFICIAL DOCUMENTATION FOR KEYSTORE:
+https://www.elastic.co/docs/reference/elasticsearch/command-line-tools/elasticsearch-keystore
+OFFICIAL DOCUMENTATION FOR SSL:
 ### official documentation for setting up the ssl
 https://www.elastic.co/blog/configuring-ssl-tls-and-https-to-secure-elasticsearch-kibana-beats-and-logstash
 ### continuing on kibana: how ssl gets created and we assign it to the elastic and those configuration to kibana
