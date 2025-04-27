@@ -2,6 +2,8 @@
 ### install the docker from convinience script
 ### install docker compoose apt-install docker-compose -y
 ### use this for testing purpose only.
+### to run this docker compose, simply type:
+# docker-compose up or in podman: podman-compose up
 #docker compose file:
 #vi compose.yaml:
 
