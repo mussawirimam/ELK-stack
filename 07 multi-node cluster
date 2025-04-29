@@ -1,0 +1,6 @@
+we will create 3 elasticsearch and one kibana server
+we will follow same steps for installation but we have to start the elasticsearch sequentially.
+If you start 1st server needs to be the master and then following 2nd elasticsearch and 3rd elasticsearch node needs to be start via systemctl
+To make less mistakes, try to install sequentially as well and save all of their passwords in one file
+the configuration will be different from how you did configuration on the single node cluster. 
+Environment: aws
