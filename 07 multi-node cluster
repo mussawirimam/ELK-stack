@@ -10,10 +10,10 @@ on aws:
 2. unders security group > in-bound > under type tab add 
 Type		Protocol 		Port Range 		Source 		
 Custom TCP		TCP		9300		CUSTOM		0.0.0.0/0
-SSH		TCP		22		CUSTOM		0.0.0.0/0
-ALL ICMP IPV4		ICMP		ALL		CUSTOM		0.0.0.0/0
+SSH		TCP		          22		CUSTOM		0.0.0.0/0
+ALL ICMP IPV4	ICMP		ALL		CUSTOM		0.0.0.0/0
 CUSTOM TCP		TCP		9200		CUSTOM		0.0.0.0/0
-ALL TCP		TCP		0-65535		CUSTOM		0.0.0.0/0
+ALL TCP		    TCP		0-65535	CUSTOM		0.0.0.0/0
 
 
 
