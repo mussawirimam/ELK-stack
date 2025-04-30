@@ -34,7 +34,10 @@ node.name: node-1  <--------------------------- to node-2 and node-3 on each ser
 4. start the elasticsearch systemctl start elasticsearch sequentially, on node-1 first check the /var/log/elasticsearch/future.log
 5. start node-2 and node-3 as well
 6. curl 
-
+7. add entry in /etc/hosts on local machine
+10.211.55.11    sys.fcc
+add entry in on remote machine
+10.211.55.11    sys.fcc
 ------------------------------------------------
 cd /usr/share/elasticsearch/bin/
 ./elasticsearch-certutil ca --pem --out /etc/elasticsearch/certs/ca_elastic.zip
