@@ -4,3 +4,37 @@ If you start 1st server needs to be the master and then following 2nd elasticsea
 To make less mistakes, try to install sequentially as well and save all of their passwords in one file
 the configuration will be different from how you did configuration on the single node cluster. 
 Environment: aws
+
+
+1. install elasticsearch on 3 nodes
+2. configure the elasticsearch.yml file with node-1, node-2, and node-3
+3. create a ca, crt and key pem files 
+  a. copy same files to node 2 and 3 as well. 
+
+cd /usr/share/elasticsearch/bin/
+./elasticsearch-certutil ca --pem --out /etc/elasticsearch/certs/ca_elastic.zip
+cd /etc/elasticsearch/
+ls
+cd certs/
+ls
+chown -R elasticsearch:elasticsearch *
+ll
+chmod 755 *
+ll
+
+cd /usr/share/elasticsearch/bin/
+
+unzip ca_elastic.zip
+/usr/share/elasticsearch/bin/elasticsearch-certutil cert --out /etc/elasticsearch/certs/certificate.zip --name elastic --ca-cert /etc/elasticsearch/certs/ca/ca.crt --ca-key /etc/elasticsearch/certs/ca/ca.key --dns sys.fcc --pem
+cd -
+unzip certificate.zip
+
+cd elastic/
+root@elk:/etc/elasticsearch/certs/elastic# ls
+elastic.crt  elastic.key
+root@elk:/etc/elasticsearch/certs/elastic# pwd
+/etc/elasticsearch/certs/elastic
+root@elk:/etc/elasticsearch/certs/elastic#
+
+root@elk:/etc/elasticsearch# chown -R elasticsearch:elasticsearch *
+
