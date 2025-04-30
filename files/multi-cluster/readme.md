@@ -36,3 +36,6 @@ root@elk:~# curl -u elastic:N=kyzqR1JWHwFUj=frQo https://10.211.55.11:9200/_cat/
 10.211.55.13 20 88 2 0.07 0.04 0.01 cdfhilmrstw - node-3
 root@elk:~# curl -u elastic:N=kyzqR1JWHwFUj=frQo https://10.211.55.11:9200/_cat/master -k
 H9_-E2DnQCWx0dU8LK1v6w 10.211.55.12 10.211.55.12 node-2
+
+root@elk:~# curl -u elastic:N=kyzqR1JWHwFUj=frQo https://10.211.55.11:9200/_cluster/health -k
+{"cluster_name":"future","status":"green","timed_out":false,"number_of_nodes":3,"number_of_data_nodes":3,"active_primary_shards":3,"active_shards":6,"relocating_shards":0,"initializing_shards":0,"unassigned_shards":0,"unassigned_primary_shards":0,"delayed_unassigned_shards":0,"number_of_pending_tasks":0,"number_of_in_flight_fetch":0,"task_max_waiting_in_queue_millis":0,"active_shards_percent_as_number":100.0}root@elk:~#
