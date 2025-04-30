@@ -66,8 +66,11 @@ root@elk:/etc/elasticsearch/certs/elastic#
 root@elk:/etc/elasticsearch# chown -R elasticsearch:elasticsearch *
 chmod 755 *
 
+scp -r /etc/elasticsearch/certs/ca elk@10.211.55.12:/home/elk/
+scp -r /etc/elasticsearch/certs/elastic elk@10.211.55.12:/home/elk/
 
 
+sed -n '/^.*(#|$)/p' elasticsearch.yml
 
 root@elk:/etc/elasticsearch/certs/elastic# ls
 elastic.crt  elastic.key
@@ -92,3 +95,36 @@ xpack.security.transport.ssl:
   certificate: /etc/elasticsearch/certs/elastic/elastic.crt
   certificate_authorities: ["/etc/elasticsearch/certs/ca/ca.crt"]
 
+
+
+
+
+
+astic.co/guide/en/elasticsearch/reference/8.18/discovery-troubleshooting.html
+[2025-04-30T16:04:09,328][WARN ][o.e.d.PeerFinder         ] [node-1] address [10.211.55.12:9300], node [unknown] discovery result: [][10.211.55.12:9300] connect_exception: Failed execution: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: /10.211.55.12:9300: Connection refused: /10.211.55.12:9300: Connection refused; for summary, see logs from org.elasticsearch.cluster.coordination.ClusterFormationFailureHelper; for troubleshooting guidance, see https://www.elastic.co/guide/en/elasticsearch/reference/8.18/discovery-troubleshooting.html
+[2025-04-30T16:04:09,329][WARN ][o.e.d.PeerFinder         ] [node-1] address [10.211.55.13:9300], node [unknown] discovery result: [][10.211.55.13:9300] connect_exception: Failed execution: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: /10.211.55.13:9300: Connection refused: /10.211.55.13:9300: Connection refused; for summary, see logs from org.elasticsearch.cluster.coordination.ClusterFormationFailureHelper; for troubleshooting guidance, see https://www.elastic.co/guide/en/elasticsearch/reference/8.18/discovery-troubleshooting.html
+[2025-04-30T16:04:10,330][WARN ][o.e.d.PeerFinder         ] [node-1] address [10.211.55.12:9300], node [unknown] discovery result: [][10.211.55.12:9300] connect_exception: Failed execution: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: /10.211.55.12:9300: Connection refused: /10.211.55.12:9300: Connection refused; for summary, see logs from org.elasticsearch.cluster.coordination.ClusterFormationFailureHelper; for troubleshooting guidance, see https://www.elastic.co/guide/en/elasticsearch/reference/8.18/discovery-troubleshooting.html
+[2025-04-30T16:04:10,330][WARN ][o.e.d.PeerFinder         ] [node-1] address [10.211.55.13:9300], node [unknown] discovery result: [][10.211.55.13:9300] connect_exception: Failed execution: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: /10.211.55.13:9300: Connection refused: /10.211.55.13:9300: Connection refused; for summary, see logs from org.elasticsearch.cluster.coordination.ClusterFormationFailureHelper; for troubleshooting guidance, see https://www.elastic.co/guide/en/elasticsearch/reference/8.18/discovery-troubleshooting.html
+[2025-04-30T16:04:10,790][INFO ][o.e.c.c.Coordinator      ] [node-1] setting initial configuration to VotingConfiguration{H9_-E2DnQCWx0dU8LK1v6w,bgomvfOqSIadUvBHnyIxSA,{bootstrap-placeholder}-node-3}
+[2025-04-30T16:04:10,831][INFO ][o.e.c.c.CoordinationState] [node-1] cluster UUID set to [4My-u659RGKy3_KEWB8Qug]
+[2025-04-30T16:04:10,838][INFO ][o.e.c.s.ClusterApplierService] [node-1] master node changed {previous [], current [{node-2}{H9_-E2DnQCWx0dU8LK1v6w}{VrByJ7qzTs2WJandDEG5wQ}{node-2}{10.211.55.12}{10.211.55.12:9300}{cdfhilmrstw}{8.18.0}{7000099-8525000}]}, added {{node-2}{H9_-E2DnQCWx0dU8LK1v6w}{VrByJ7qzTs2WJandDEG5wQ}{node-2}{10.211.55.12}{10.211.55.12:9300}{cdfhilmrstw}{8.18.0}{7000099-8525000}}, term: 1, version: 1, reason: ApplyCommitRequest{term=1, version=1, sourceNode={node-2}{H9_-E2DnQCWx0dU8LK1v6w}{VrByJ7qzTs2WJandDEG5wQ}{node-2}{10.211.55.12}{10.211.55.12:9300}{cdfhilmrstw}{8.18.0}{7000099-8525000}{ml.allocated_processors_double=2.0, ml.max_jvm_size=4152360960, ml.config_version=12.0.0, transform.config_version=10.0.0, xpack.installed=true, ml.machine_memory=8304943104, ml.allocated_processors=2}}
+[2025-04-30T16:04:11,385][INFO ][o.e.x.s.a.TokenService   ] [node-1] refresh keys
+[2025-04-30T16:04:11,414][INFO ][o.e.x.s.a.TokenService   ] [node-1] refreshed keys
+[2025-04-30T16:04:12,500][INFO ][o.e.x.s.a.Realms         ] [node-1] license mode is [basic], currently licensed security realms are [reserved/reserved,file/default_file,native/default_native]
+[2025-04-30T16:04:12,501][INFO ][o.e.l.ClusterStateLicenseService] [node-1] license [783cff00-6afb-4b64-9025-fedc8480e3d3] mode [basic] - valid
+[2025-04-30T16:04:12,639][INFO ][o.e.h.n.s.HealthNodeTaskExecutor] [node-1] Node [{node-1}{bgomvfOqSIadUvBHnyIxSA}] is selected as the current health node.
+[2025-04-30T16:04:13,058][INFO ][o.e.x.s.s.SecurityMigrationExecutor] [node-1] Security migration not needed. Setting current version to: [2]
+[2025-04-30T16:05:16,806][INFO ][o.e.c.s.ClusterApplierService] [node-1] added {{node-3}{X-aZqmMqTlSsw3Bj4kVQ1Q}{XWa3zmJsSwmJqfMn52masg}{node-3}{10.211.55.13}{10.211.55.13:9300}{cdfhilmrstw}{8.18.0}{7000099-8525000}}, term: 1, version: 84, reason: ApplyCommitRequest{term=1, version=84, sourceNode={node-2}{H9_-E2DnQCWx0dU8LK1v6w}{VrByJ7qzTs2WJandDEG5wQ}{node-2}{10.211.55.12}{10.211.55.12:9300}{cdfhilmrstw}{8.18.0}{7000099-8525000}{ml.allocated_processors_double=2.0, ml.max_jvm_size=4152360960, ml.config_version=12.0.0, transform.config_version=10.0.0, xpack.installed=true, ml.machine_memory=8304943104, ml.allocated_processors=2}}
+
+   36  tail -f /var/log/elasticsearch/future.log
+   37  ifconfig
+   41  cat elkpass1.txt
+   42  curl -u elastic:N=kyzqR1JWHwFUj=frQo https://10.211.55.11:9200 -k
+   43  curl -u elastic:N=kyzqR1JWHwFUj=frQo https://10.211.55.11:9200/_cat -k
+   44  curl -u elastic:N=kyzqR1JWHwFUj=frQo https://10.211.55.11:9200/_cat/nodes -k
+   45  curl -u elastic:N=kyzqR1JWHwFUj=frQo https://10.211.55.11:9200/_cat/master -k
+   46  history
+   47  curl cheat.sh/scp
+   48  curl -u elastic:N=kyzqR1JWHwFUj=frQo https://10.211.55.11:9200/_cat/health -k
+   49  curl -u elastic:N=kyzqR1JWHwFUj=frQo https://10.211.55.11:9200/_cluster/health -k
+   50  history
