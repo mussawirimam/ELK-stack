@@ -16,28 +16,44 @@ CUSTOM TCP		TCP		9200		CUSTOM		0.0.0.0/0
 ALL TCP		    TCP		0-65535	CUSTOM		0.0.0.0/0
 
 
+1. install elasticsearch on 3 nodes ( go to installation notes )
+2. configure the elasticsearch.yml file with node-1, node-2, and node-3 : github https://github.com/mussawirimam/ELK-stack/tree/main/files/multi-cluster
+3. create a ca, crt and key pem files   : https://github.com/mussawirimam/ELK-stack/blob/main/02%20Installation%20Steps%20n%20configuration%20n%20ssltls%20and%20restart
+  a. copy same cert files to node 2 and 3 as well and change the node.name in elasticsearch.yml file: 
+# ------------------------------------ Node ------------------------------------
+#
+# Use a descriptive name for the node:
+#
+node.name: node-1  <--------------------------- to node-2 and node-3 on each servers in elasticsearch.yml file
+#
+# Add custom attributes to the node:
+#
+#node.attr.rack: r1
+#
+-----------------------------------------------------------------------------------------------------------------------
+4. start the elasticsearch systemctl start elasticsearch sequentially, on node-1 first check the /var/log/elasticsearch/future.log
+5. start node-2 and node-3 as well
+6. curl 
 
-1. install elasticsearch on 3 nodes
-2. configure the elasticsearch.yml file with node-1, node-2, and node-3
-3. create a ca, crt and key pem files 
-  a. copy same files to node 2 and 3 as well. 
-
+------------------------------------------------
 cd /usr/share/elasticsearch/bin/
 ./elasticsearch-certutil ca --pem --out /etc/elasticsearch/certs/ca_elastic.zip
-cd /etc/elasticsearch/
+cd /etc/elasticsearch/certs
 ls
-cd certs/
-ls
+cd ..
+ll
 chown -R elasticsearch:elasticsearch *
 ll
 chmod 755 *
 ll
 
 cd /usr/share/elasticsearch/bin/
-
+cd /etc/elasticsearch/certs
 unzip ca_elastic.zip
-/usr/share/elasticsearch/bin/elasticsearch-certutil cert --out /etc/elasticsearch/certs/certificate.zip --name elastic --ca-cert /etc/elasticsearch/certs/ca/ca.crt --ca-key /etc/elasticsearch/certs/ca/ca.key --dns sys.fcc --pem
-cd -
+
+cd /usr/share/elasticsearch/bin/
+./elasticsearch-certutil cert --out /etc/elasticsearch/certs/certificate.zip --name elastic --ca-cert /etc/elasticsearch/certs/ca/ca.crt --ca-key /etc/elasticsearch/certs/ca/ca.key --dns sys.fcc --pem
+cd /etc/elasticsearch/certs
 unzip certificate.zip
 
 cd elastic/
@@ -48,7 +64,7 @@ root@elk:/etc/elasticsearch/certs/elastic# pwd
 root@elk:/etc/elasticsearch/certs/elastic#
 
 root@elk:/etc/elasticsearch# chown -R elasticsearch:elasticsearch *
-
+chmod 755 *
 
 
 
