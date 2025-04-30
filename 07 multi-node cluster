@@ -5,6 +5,10 @@ To make less mistakes, try to install sequentially as well and save all of their
 the configuration will be different from how you did configuration on the single node cluster. 
 Environment: aws
 
+on aws:
+1. create 3 ec2 instance with default vpc
+2. in-bound > 
+
 
 1. install elasticsearch on 3 nodes
 2. configure the elasticsearch.yml file with node-1, node-2, and node-3
@@ -37,4 +41,31 @@ root@elk:/etc/elasticsearch/certs/elastic# pwd
 root@elk:/etc/elasticsearch/certs/elastic#
 
 root@elk:/etc/elasticsearch# chown -R elasticsearch:elasticsearch *
+
+
+
+
+
+root@elk:/etc/elasticsearch/certs/elastic# ls
+elastic.crt  elastic.key
+root@elk:/etc/elasticsearch/certs/elastic# pwd
+/etc/elasticsearch/certs/elastic
+root@elk:/etc/elasticsearch/certs/elastic#
+
+/etc/elasticsearch/certs/elastic/elastic.crt
+/etc/elasticsearch/certs/elastic/elastic.key
+
+xpack.security.http.ssl:
+  enabled: true
+  key: /etc/elasticsearch/certs/elastic/elastic.key
+  certificate: /etc/elasticsearch/certs/elastic/elastic.crt
+  certificate_authorities: ["/etc/elasticsearch/certs/ca/ca.crt"]
+
+# Enable encryption and mutual authentication between cluster nodes
+xpack.security.transport.ssl:
+  enabled: true
+  verification_mode: certificate
+  key: /etc/elasticsearch/certs/elastic/elastic.key
+  certificate: /etc/elasticsearch/certs/elastic/elastic.crt
+  certificate_authorities: ["/etc/elasticsearch/certs/ca/ca.crt"]
 
