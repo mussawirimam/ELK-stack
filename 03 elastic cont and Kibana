@@ -305,6 +305,7 @@ root@kibana:/etc/elasticsearch/certs/elastic#
 # cert and key config in kibana.yml file. 
 
 ########### IMPORTANT ########### 
+### because you cannot start the kibana service with the elastic super-user, you have to create a user and add that in the kibana.yml file and then start the kibana service with the systemctl start kibana.service
 ### CREATE A USER NAME AND PASSWORD ###
 [root@localhost kibana]# curl -X POST "https://localhost:9200/_security/user/kibana_system/_password" -u elastic:BMV=YdeAn-QtVm5xageh -H "Content-Type: application/json" -d '{"password": "123456789"}' -k
 {}
