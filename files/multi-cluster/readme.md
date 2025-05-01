@@ -116,17 +116,17 @@ root@elk:/usr/share/kibana/bin#
 \# The URLs of the Elasticsearch instances to use for all your queries.
 elasticsearch.hosts: ["https://sys.fcc:9200"]
 
-# If your Elasticsearch is protected with basic authentication, these settings provide
-# the username and password that the Kibana server uses to perform maintenance on the Kibana
-# index at startup. Your Kibana users still need to authenticate with Elasticsearch, which
-# is proxied through the Kibana server.
+\# If your Elasticsearch is protected with basic authentication, these settings provide
+\# the username and password that the Kibana server uses to perform maintenance on the Kibana
+\# index at startup. Your Kibana users still need to authenticate with Elasticsearch, which
+\# is proxied through the Kibana server.
 elasticsearch.username: "kibana_system" <--------------------
 elasticsearch.password: "123456789"  <--------------------
 
-# Kibana can also authenticate to Elasticsearch via "service account tokens".
-# Service account tokens are Bearer style tokens that replace the traditional username/password based configuration.
-# Use this token instead of a username/password.
-# elasticsearch.serviceAccountToken: "my_token"
+\# Kibana can also authenticate to Elasticsearch via "service account tokens".
+\# Service account tokens are Bearer style tokens that replace the traditional username/password based configuration.
+\# Use this token instead of a username/password.
+\# elasticsearch.serviceAccountToken: "my_token"
 
 ### now start 
 systemctl start kibana
