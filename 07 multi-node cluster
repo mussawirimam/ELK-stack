@@ -249,7 +249,14 @@ Native global console methods have been overridden in production environment.
 [2025-05-01T20:07:31.379+00:00][INFO ][plugins-service] The following plugins are disabled: "cloudChat,cloudExperiments,cloudFullStory,profilingDataAccess,profiling,securitySolutionServerless,serverless,serverlessObservability,serverlessSearch".
 
 \u001b[37m\u001b[41m FATAL \u001b[49m\u001b[39m Error: Port 5601 is already in use. Another instance of Kibana may be running!
-
 root@elk:/etc/kibana#
 
+root@elk:~# telnet localhost 5601
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+
+
 follow the kibana file in multi-cluster for kibana.yml file configuration
+
+
