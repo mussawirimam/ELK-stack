@@ -113,7 +113,7 @@ root@elk:/usr/share/kibana/bin# curl -X POST "https://localhost:9200/_security/u
 root@elk:/usr/share/kibana/bin#
 
 # =================== System: Elasticsearch ===================
-# The URLs of the Elasticsearch instances to use for all your queries.
+\# The URLs of the Elasticsearch instances to use for all your queries.
 elasticsearch.hosts: ["https://sys.fcc:9200"]
 
 # If your Elasticsearch is protected with basic authentication, these settings provide
