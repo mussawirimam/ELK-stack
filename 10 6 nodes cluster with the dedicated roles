@@ -1,0 +1,32 @@
+We will create 6 nodes now and install elasticsearch and copy the certs and copy the configuration elasticsearch.yml file in all 3 master nodes
+# we will be working with 3 roles: master, cordinator, and datanodes.
+
+node1 master 10.211.55.11  node.roles: [ master ]
+node2 master 10.211.55.12  node.roles: [ master ]
+node3 master 10.211.55.13  node.roles: [ master ]
+
+node4 cordinator 10.211.55.22
+
+node5 datanode 10.211.55.23
+node6 datanode 10.211.55.24
+
+right now we are not using these nodes 
+ML
+Ingest
+
+### to setup the roles
+https://www.elastic.co/docs/deploy-manage/distributed-architecture/clusters-nodes-shards/node-roles
+### there are multiple nodes that you can set in your elasticsearch.yml file to tell your cluster what roles they are going to server. 
+Set node roles
+You define a node’s roles by setting node.roles in elasticsearch.yml. If you set node.roles, the node is only assigned the roles you specify. If you don’t set node.roles, the node is assigned the following roles:
+master
+data
+data_content
+data_hot
+data_warm
+data_cold
+data_frozen
+ingest
+ml
+remote_cluster_client
+transform
