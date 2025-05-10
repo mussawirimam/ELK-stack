@@ -5,7 +5,7 @@ node1 master 10.211.55.11  node.roles: [ master ]
 node2 master 10.211.55.12  node.roles: [ master ]
 node3 master 10.211.55.13  node.roles: [ master ]
 
-node4 cordinator 10.211.55.22
+node4 cordinator 10.211.55.22  node.roles: [ cordinator ]
 
 node5 datanode 10.211.55.23
 node6 datanode 10.211.55.24
@@ -30,3 +30,15 @@ ingest
 ml
 remote_cluster_client
 transform
+
+### we will add this role within this sectio of the elasticsearch.yml file
+vi elasticsearch.yml
+# ---------------------------------- Cluster -----------------------------------
+#
+# Use a descriptive name for your cluster:
+#
+cluster.name: future
+nodes.roles: [ master ]
+#
+# ------------------------------------ Node ------------------------------------
+:wq!
