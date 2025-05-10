@@ -42,3 +42,52 @@ nodes.roles: [ master ]
 #
 # ------------------------------------ Node ------------------------------------
 :wq!
+
+
+### change the permissions look at the 02 ELK installation doc
+# then start the elasticsearch service
+# in my case it failed
+
+#### trouble shoot
+░░ A start job for unit elasticsearch.service has begun execution.
+░░
+░░ The job identifier is 140604.
+May 10 17:53:07 elk systemd-entrypoint[21970]: OpenJDK 64-Bit Server VM warning: Unable to get SVE vector length on this system. Disabling SVE. Specify -XX:UseSVE=0>
+May 10 17:53:07 elk systemd-entrypoint[21970]: org.elasticsearch.common.settings.SettingsException: Failed to load settings from [elasticsearch.yml]
+May 10 17:53:07 elk systemd-entrypoint[21970]:         at org.elasticsearch.common.settings.Settings$Builder.loadFromStream(Settings.java:1272)
+May 10 17:53:07 elk systemd-entrypoint[21970]:         at org.elasticsearch.node.InternalSettingsPreparer.loadConfigWithSubstitutions(InternalSettingsPreparer.java:>
+May 10 17:53:07 elk systemd-entrypoint[21970]:         at org.elasticsearch.node.InternalSettingsPreparer.prepareEnvironment(InternalSettingsPreparer.java:53)
+May 10 17:53:07 elk systemd-entrypoint[21970]:         at org.elasticsearch.common.cli.EnvironmentAwareCommand.createEnv(EnvironmentAwareCommand.java:105)
+May 10 17:53:07 elk systemd-entrypoint[21970]:         at org.elasticsearch.common.cli.EnvironmentAwareCommand.execute(EnvironmentAwareCommand.java:55)
+May 10 17:53:07 elk systemd-entrypoint[21970]:         at org.elasticsearch.cli.Command.mainWithoutErrorHandling(Command.java:101)
+May 10 17:53:07 elk systemd-entrypoint[21970]:         at org.elasticsearch.cli.Command.main(Command.java:54)
+May 10 17:53:07 elk systemd-entrypoint[21970]:         at org.elasticsearch.launcher.CliToolLauncher.main(CliToolLauncher.java:65)
+May 10 17:53:07 elk systemd-entrypoint[21970]: Caused by: org.elasticsearch.common.ParsingException: Failed to parse object: expecting token of type [START_OBJECT] >
+May 10 17:53:07 elk systemd-entrypoint[21970]:         at org.elasticsearch.common.xcontent.XContentParserUtils.parsingException(XContentParserUtils.java:92)
+May 10 17:53:07 elk systemd-entrypoint[21970]:         at org.elasticsearch.common.xcontent.XContentParserUtils.ensureExpectedToken(XContentParserUtils.java:71)
+May 10 17:53:07 elk systemd-entrypoint[21970]:         at org.elasticsearch.common.settings.Settings.fromXContent(Settings.java:756)
+May 10 17:53:07 elk systemd-entrypoint[21970]:         at org.elasticsearch.common.settings.Settings$Builder.loadFromStream(Settings.java:1268)
+May 10 17:53:07 elk systemd-entrypoint[21970]:         ... 7 more
+May 10 17:53:07 elk systemd[1]: elasticsearch.service: Main process exited, code=exited, status=70/SOFTWARE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░
+░░ An ExecStart= process belonging to unit elasticsearch.service has exited.
+░░
+░░ The process' exit code is 'exited' and its exit status is 70.
+May 10 17:53:07 elk systemd[1]: elasticsearch.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░
+░░ The unit elasticsearch.service has entered the 'failed' state with result 'exit-code'.
+May 10 17:53:07 elk systemd[1]: Failed to start elasticsearch.service - Elasticsearch.
+░░ Subject: A start job for unit elasticsearch.service has failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░
+░░ A start job for unit elasticsearch.service has finished with a failure.
+░░
+░░ The job identifier is 140604 and the job result is failed.
+### trouble shoot ends
