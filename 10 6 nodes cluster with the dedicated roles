@@ -5,10 +5,10 @@ node1 master 10.211.55.11  node.roles: [ master ]
 node2 master 10.211.55.12  node.roles: [ master ]
 node3 master 10.211.55.13  node.roles: [ master ]
 
-node4 cordinator 10.211.55.22  node.roles: [ cordinator ]
-
+node4 datanode 10.211.55.22  
 node5 datanode 10.211.55.23
-node6 datanode 10.211.55.24
+
+node6 cordinator 10.211.55.24 node.roles: [ cordinator ]
 
 right now we are not using these nodes 
 ML
