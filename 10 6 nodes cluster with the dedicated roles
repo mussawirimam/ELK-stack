@@ -48,3 +48,17 @@ nodes.roles: [ master ]
 # then start the elasticsearch service
 ### you will get error because, there is no data node available. Since there is no data node to store data, you will then you will not be able to interact with anything since first 3 nodes are master only. 
 
+check the /var/log/elasticsearch/future.log
+and in there you will see two things
+1st is the master election will happen and discovered from the first node on which you have turned on the elasticsearch service
+then on others you will see that the index does not exist because we havent added the data node. 
+WARN:
+[2025-05-11T20:17:21,720][WARN ][o.e.c.c.ClusterFormationFailureHelper] [node-1]
+master not discovered yet, this node has not previously joined a bootstrapped clu
+ster, and this node must discover master-eligible nodes [node-1, node-2, node-3]
+to bootstrap a cluster: have discovered [{node-1}{jMN27zUkR-i3T9KQrLCwBA}{0j5IvmO
+TT4aIjN5Jh4exjA}{node-1}{10.211.55.11}{10.211.55.11:9300}{cdfhilmrstw}{8.18.1}{70
+00099-8525000}]; discovery will continue...
+
+INFO:
+[2025-05-11T20:17:24,866][INFO ][o.e.x.s.s.SecurityIndexManager] [node-2] security index does not exist, creating [.security-7] with alias [.security]
