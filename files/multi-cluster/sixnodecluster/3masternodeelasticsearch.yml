@@ -1,6 +1,7 @@
 ### change the ip addresses of the master nodes
 ### on each master change the nodes.name
 ### you will have to generate the certificate on one master and copy that to all cluster certs and give the right permissions
+### copy the certs files to the /etc/elastic directory and give the right permissions to the directory
 #root@elk:/etc/elasticsearch# cat elasticsearch.yml
 # ======================== Elasticsearch Configuration =========================
 #
