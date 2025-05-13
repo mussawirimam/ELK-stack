@@ -98,4 +98,16 @@ node.roles: [] <----------------
 #
 # ----------------------------------- Paths ------------------------------------
 
-3rd we wont touch any thing else in the elasticsearch.yml file
+3rd we wont touch any thing else in the elasticsearch.yml file for last 3 nodes # we have changed the node.name and node.roles for each nodes
+
+### to reset the password in case: ./elasticsearch-reset-password -i -u elastic --url https://localhost:9200
+### as you see all the nodes are listed below
+=== on browser ==
+https://x.x.x.11:9200/_cat/nodes
+
+10.211.55.24 21 98 4 0.09 0.09 0.04 -           - node-6
+10.211.55.23 21 99 1 0.05 0.19 0.16 d           - node-4
+10.211.55.22 20 99 1 0.12 0.17 0.12 d           - node-5
+10.211.55.12 48 93 1 0.05 0.05 0.01 cdfhilmrstw * node-2
+10.211.55.13 16 96 1 0.01 0.09 0.05 cdfhilmrstw - node-3
+10.211.55.11 44 95 0 0.00 0.03 0.00 cdfhilmrstw - node-1
