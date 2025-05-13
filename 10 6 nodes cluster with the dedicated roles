@@ -62,3 +62,8 @@ TT4aIjN5Jh4exjA}{node-1}{10.211.55.11}{10.211.55.11:9300}{cdfhilmrstw}{8.18.1}{7
 
 INFO:
 [2025-05-11T20:17:24,866][INFO ][o.e.x.s.s.SecurityIndexManager] [node-2] security index does not exist, creating [.security-7] with alias [.security]
+
+
+
+#############
+Next, we have to copy the same cert files that you generated from the first node..., copy it to the last 3 servers as well on your 2 data nodes and a cordinator node as well. 
