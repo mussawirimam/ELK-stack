@@ -67,3 +67,8 @@ INFO:
 
 #############
 Next, we have to copy the same cert files that you generated from the first node..., copy it to the last 3 servers as well on your 2 data nodes and a cordinator node as well. 
+
+n elasticsearch elasticsearch.yml file
+2nd we will change the node names to 4,5,6
+and give the node roles to each 
+3rd we wont touch any thing else in the elasticsearch.yml file
