@@ -70,5 +70,32 @@ Next, we have to copy the same cert files that you generated from the first node
 
 n elasticsearch elasticsearch.yml file
 2nd we will change the node names to 4,5,6
-and give the node roles to each 
+and give the node roles to each
+### node 4 and 5 are data nodes
+# ------------------------------------ Node ------------------------------------
+#
+# Use a descriptive name for the node:
+#
+node.name: node-4
+node.roles: [ data ]    <---------------------
+#
+# Add custom attributes to the node:
+#
+#node.attr.rack: r1
+#
+# ----------------------------------- Paths ------------------------------------
+### node 6 is coordinator node
+# ------------------------------------ Node ------------------------------------
+#
+# Use a descriptive name for the node:
+#
+node.name: node-6
+node.roles: [] <----------------
+#
+# Add custom attributes to the node:
+#
+#node.attr.rack: r1
+#
+# ----------------------------------- Paths ------------------------------------
+
 3rd we wont touch any thing else in the elasticsearch.yml file
