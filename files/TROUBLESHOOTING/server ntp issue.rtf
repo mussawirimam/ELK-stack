@@ -1,0 +1,1417 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\froman\fcharset0 Times-Roman;\f2\froman\fcharset0 Times-Bold;
+\f3\fmodern\fcharset0 Courier;\f4\fnil\fcharset0 HelveticaNeue;\f5\froman\fcharset0 Times-Italic;
+\f6\fmodern\fcharset0 Courier-Bold;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red109\green109\blue109;\red0\green0\blue0;
+\red179\green179\blue179;\red0\green0\blue233;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;\cssrgb\c50196\c50196\c50196;\cssrgb\c0\c0\c0\c84706;
+\cssrgb\c75294\c75294\c75294;\cssrgb\c0\c0\c93333;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}}{\leveltext\leveltemplateid1\'01\'00;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listname ;}\listid1}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 TROUBLESHOOTING: APT NOT WORKING (ISSUE IS NTP)\
+root@elk5:~# systemctl status elasticserach\
+Unit elasticserach.service could not be found.\
+root@elk5:~# cd /etc/elasticsearch/\
+root@elk5:/etc/elasticsearch# ls\
+certs                              elasticsearch.yml  log4j2.properties  users\
+elasticsearch.keystore             jvm.options        role_mapping.yml   users_roles\
+elasticsearch-plugins.example.yml  jvm.options.d      roles.yml\
+root@elk5:/etc/elasticsearch# ll\
+total 64\
+drwxr-s---   4 root          elasticsearch  4096 May  9 07:33 ./\
+drwxr-xr-x 101 root          root           4096 May  9 06:50 ../\
+drwxr-xr-x   4 elasticsearch elasticsearch  4096 May  8 17:02 certs/\
+-rwxr-xr-x   1 elasticsearch elasticsearch   536 May  8 14:47 elasticsearch.keystore*\
+-rwxr-xr-x   1 elasticsearch elasticsearch  1042 Apr 30 05:11 elasticsearch-plugins.example.yml*\
+-rwxr-xr-x   1 elasticsearch elasticsearch  4344 May  9 07:33 elasticsearch.yml*\
+-rwxr-xr-x   1 elasticsearch elasticsearch  3074 Apr 30 05:11 jvm.options*\
+drwxr-sr-x   2 elasticsearch elasticsearch  4096 Apr 30 05:12 jvm.options.d/\
+-rwxr-xr-x   1 elasticsearch elasticsearch 18897 Apr 30 05:11 log4j2.properties*\
+-rwxr-xr-x   1 elasticsearch elasticsearch   473 Apr 30 05:11 role_mapping.yml*\
+-rwxr-xr-x   1 elasticsearch elasticsearch   197 Apr 30 05:11 roles.yml*\
+-rwxr-xr-x   1 elasticsearch elasticsearch     0 Apr 30 05:11 users*\
+-rwxr-xr-x   1 elasticsearch elasticsearch     0 Apr 30 05:11 users_roles*\
+root@elk5:/etc/elasticsearch# systemctl start elasticsearch\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; disabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.4G\
+        CPU: 33min 41.507s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; disabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.4G\
+        CPU: 33min 41.524s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; disabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.4G\
+        CPU: 33min 41.536s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; disabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.4G\
+        CPU: 33min 41.539s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; disabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.4G\
+        CPU: 33min 41.541s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; disabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.4G\
+        CPU: 33min 41.542s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; disabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.4G\
+        CPU: 33min 41.544s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; disabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.4G\
+        CPU: 33min 41.547s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; disabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.4G\
+        CPU: 33min 41.548s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; disabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.4G\
+        CPU: 33min 41.551s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; disabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.4G\
+        CPU: 33min 41.554s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; disabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.4G\
+        CPU: 33min 41.554s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; disabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.4G\
+        CPU: 33min 41.558s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl enable elasticsearch\
+Created symlink /etc/systemd/system/multi-user.target.wants/elasticsearch.service \uc0\u8594  /lib/systemd/system/elasticsearch.service.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; enabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.3G\
+        CPU: 33min 41.979s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; enabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.3G\
+        CPU: 33min 42.121s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; enabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.3G\
+        CPU: 33min 42.158s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; enabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.3G\
+        CPU: 33min 42.159s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; enabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.3G\
+        CPU: 33min 42.162s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; enabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.3G\
+        CPU: 33min 42.165s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; enabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.3G\
+        CPU: 33min 42.169s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; enabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.3G\
+        CPU: 33min 42.172s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; enabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.3G\
+        CPU: 33min 42.174s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; enabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.3G\
+        CPU: 33min 42.182s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; enabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.3G\
+        CPU: 33min 42.183s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; enabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.3G\
+        CPU: 33min 42.185s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# systemctl status elasticsearch\
+\uc0\u9679  elasticsearch.service - Elasticsearch\
+     Loaded: loaded (/lib/systemd/system/elasticsearch.service; enabled; vendor preset: enabled)\
+     Active: active (running) since Fri 2025-05-09 07:34:39 CDT; 2 days ago\
+       Docs: https://www.elastic.co\
+   Main PID: 6528 (java)\
+      Tasks: 93 (limit: 2235)\
+     Memory: 1.3G\
+        CPU: 33min 42.186s\
+     CGroup: /system.slice/elasticsearch.service\
+             \uc0\u9500 \u9472 6528 /usr/share/elasticsearch/jdk/bin/java -Xms4m -Xmx64m -XX:+UseSerialGC -Dcli.n>\
+             \uc0\u9500 \u9472 6586 /usr/share/elasticsearch/jdk/bin/java -Des.networkaddress.cache.ttl=60 -Des.n>\
+             \uc0\u9492 \u9472 6606 /usr/share/elasticsearch/modules/x-pack-ml/platform/linux-aarch64/bin/control>\
+\
+May 09 07:34:23 elk5 systemd[1]: Starting Elasticsearch...\
+May 09 07:34:23 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:25 elk5 systemd-entrypoint[6528]: OpenJDK 64-Bit Server VM warning: Unable to get SV>\
+May 09 07:34:39 elk5 systemd[1]: Started Elasticsearch.\
+root@elk5:/etc/elasticsearch# ls /home/\
+elk  vagrant\
+root@elk5:/etc/elasticsearch# ls /home/elk/\
+root@elk5:/etc/elasticsearch# ls /home/vagrant/\
+root@elk5:/etc/elasticsearch# ls -al /home/vagrant/\
+total 36\
+drwxr-x--- 4 vagrant vagrant 4096 May  8 14:40 .\
+drwxr-xr-x 4 root    root    4096 May  9 06:49 ..\
+-rw------- 1 vagrant vagrant  109 May  9 14:32 .bash_history\
+-rw-r--r-- 1 vagrant vagrant  220 Jan  6  2022 .bash_logout\
+-rw-r--r-- 1 vagrant vagrant 3771 Jan  6  2022 .bashrc\
+drwx------ 2 vagrant vagrant 4096 Feb 20 15:07 .cache\
+-rw-r--r-- 1 vagrant vagrant    6 Feb 20 15:07 .prlctl_version\
+-rw-r--r-- 1 vagrant vagrant  807 Jan  6  2022 .profile\
+drwx------ 2 vagrant vagrant 4096 May  8 13:56 .ssh\
+-rw-r--r-- 1 vagrant vagrant    0 Feb 20 15:07 .sudo_as_admin_successful\
+root@elk5:/etc/elasticsearch# ls\
+certs                   elasticsearch-plugins.example.yml  jvm.options    log4j2.properties  roles.yml  users_roles\
+elasticsearch.keystore  elasticsearch.yml                  jvm.options.d  role_mapping.yml   users\
+root@elk5:/etc/elasticsearch# ping 10.211.55.26\
+PING 10.211.55.26 (10.211.55.26) 56(84) bytes of data.\
+64 bytes from 10.211.55.26: icmp_seq=1 ttl=64 time=1.13 ms\
+64 bytes from 10.211.55.26: icmp_seq=2 ttl=64 time=0.227 ms\
+64 bytes from 10.211.55.26: icmp_seq=3 ttl=64 time=0.582 ms\
+^C\
+--- 10.211.55.26 ping statistics ---\
+3 packets transmitted, 3 received, 0% packet loss, time 2008ms\
+rtt min/avg/max/mdev = 0.227/0.645/1.128/0.370 ms\
+root@elk5:/etc/elasticsearch# scp elasticsearch.yml elk@10.211.55.26:/home/elk\
+The authenticity of host '10.211.55.26 (10.211.55.26)' can't be established.\
+ED25519 key fingerprint is SHA256:tc7TkA0+TybXuwr3ALfTFJgRfuvn+jnBocRm2UELoKo.\
+This host key is known by the following other names/addresses:\
+    ~/.ssh/known_hosts:4: [hashed name]\
+Are you sure you want to continue connecting (yes/no/[fingerprint])? y\
+Please type 'yes', 'no' or the fingerprint: yes\
+Warning: Permanently added '10.211.55.26' (ED25519) to the list of known hosts.\
+elk@10.211.55.26's password:\
+elasticsearch.yml                                                                                           100% 4344    11.8MB/s   00:00\
+root@elk5:/etc/elasticsearch# ls\
+certs                   elasticsearch-plugins.example.yml  jvm.options    log4j2.properties  roles.yml  users_roles\
+elasticsearch.keystore  elasticsearch.yml                  jvm.options.d  role_mapping.yml   users\
+root@elk5:/etc/elasticsearch# scp elasticsearch.y^C elk@10.211.55.26:/home/elk\
+root@elk5:/etc/elasticsearch# ^C\
+root@elk5:/etc/elasticsearch# ls\
+certs                   elasticsearch-plugins.example.yml  jvm.options    log4j2.properties  roles.yml  users_roles\
+elasticsearch.keystore  elasticsearch.yml                  jvm.options.d  role_mapping.yml   users\
+root@elk5:/etc/elasticsearch# cd certs/\
+root@elk5:/etc/elasticsearch/certs# ls\
+ca  ca_elastic.zip  certificate.zip  elastic  http_ca.crt  http.p12  transport.p12\
+root@elk5:/etc/elasticsearch/certs# cd ..\
+root@elk5:/etc/elasticsearch# scp -r certs/ elk@10.211.55.26:/home/elk\
+elk@10.211.55.26's password:\
+http_ca.crt                                                                                                 100% 1939     2.9MB/s   00:00\
+ca_elastic.zip                                                                                              100% 2537     4.8MB/s   00:00\
+certificate.zip                                                                                             100% 2579     8.2MB/s   00:00\
+elastic.crt                                                                                                 100% 1172     3.8MB/s   00:00\
+elastic.key                                                                                                 100% 1679     6.5MB/s   00:00\
+transport.p12                                                                                               100% 5838    22.4MB/s   00:00\
+http.p12                                                                                                    100%   10KB  37.0MB/s   00:00\
+ca.crt                                                                                                      100% 1220     7.3MB/s   00:00\
+ca.key                                                                                                      100% 1675     8.1MB/s   00:00\
+root@elk5:/etc/elasticsearch# cat elasticsearch.yml\
+# ======================== Elasticsearch Configuration =========================\
+#\
+# NOTE: Elasticsearch comes with reasonable defaults for most settings.\
+#       Before you set out to tweak and tune the configuration, make sure you\
+#       understand what are you trying to accomplish and the consequences.\
+#\
+# The primary way of configuring a node is via this file. This template lists\
+# the most important settings you may want to configure for a production cluster.\
+#\
+# Please consult the documentation for further information on configuration options:\
+# https://www.elastic.co/guide/en/elasticsearch/reference/index.html\
+#\
+# ---------------------------------- Cluster -----------------------------------\
+#\
+# Use a descriptive name for your cluster:\
+#\
+cluster.name: future\
+#\
+# ------------------------------------ Node ------------------------------------\
+#\
+# Use a descriptive name for the node:\
+#\
+node.name: node-5\
+node.roles: [ data ]\
+#\
+# Add custom attributes to the node:\
+#\
+#node.attr.rack: r1\
+#\
+# ----------------------------------- Paths ------------------------------------\
+#\
+# Path to directory where to store the data (separate multiple locations by comma):\
+#\
+path.data: /var/lib/elasticsearch\
+#\
+# Path to log files:\
+#\
+path.logs: /var/log/elasticsearch\
+#\
+# ----------------------------------- Memory -----------------------------------\
+#\
+# Lock the memory on startup:\
+#\
+#bootstrap.memory_lock: true\
+#\
+# Make sure that the heap size is set to about half the memory available\
+# on the system and that the owner of the process is allowed to use this\
+# limit.\
+#\
+# Elasticsearch performs poorly when the system is swapping the memory.\
+#\
+# ---------------------------------- Network -----------------------------------\
+#\
+# By default Elasticsearch is only accessible on localhost. Set a different\
+# address here to expose this node on the network:\
+#\
+network.host: 0.0.0.0\
+#\
+# By default Elasticsearch listens for HTTP traffic on the first free port it\
+# finds starting at 9200. Set a specific HTTP port here:\
+#\
+http.port: 9200\
+#\
+# For more information, consult the network module documentation.\
+#\
+# --------------------------------- Discovery ----------------------------------\
+#\
+# Pass an initial list of hosts to perform discovery when this node is started:\
+# The default list of hosts is ["127.0.0.1", "[::1]"]\
+discovery.seed_hosts: ["10.211.55.11", "10.211.55.12", "10.211.55.13"]\
+#\
+# Bootstrap the cluster using an initial set of master-eligible nodes:\
+#\
+cluster.initial_master_nodes: ["node-1", "node-2","node-3"]\
+#\
+# For more information, consult the discovery and cluster formation module documentation.\
+#\
+# ---------------------------------- Various -----------------------------------\
+#\
+# Allow wildcard deletion of indices:\
+#\
+#action.destructive_requires_name: false\
+\
+#----------------------- BEGIN SECURITY AUTO CONFIGURATION -----------------------\
+#\
+# The following settings, TLS certificates, and keys have been automatically\
+# generated to configure Elasticsearch security features on 17-02-2025 15:43:16\
+#\
+# --------------------------------------------------------------------------------\
+\
+# Enable security features\
+xpack.security.enabled: true\
+\
+xpack.security.enrollment.enabled: true\
+\
+# Enable encryption for HTTP API client connections, such as Kibana, Logstash, and Agents\
+xpack.security.http.ssl:\
+  enabled: true\
+  key: /etc/elasticsearch/certs/elastic/elastic.key\
+  certificate: /etc/elasticsearch/certs/elastic/elastic.crt\
+  certificate_authorities: ["/etc/elasticsearch/certs/ca/ca.crt"]\
+\
+# Enable encryption and mutual authentication between cluster nodes\
+xpack.security.transport.ssl:\
+  enabled: true\
+  verification_mode: certificate\
+  key: /etc/elasticsearch/certs/elastic/elastic.key\
+  certificate: /etc/elasticsearch/certs/elastic/elastic.crt\
+  certificate_authorities: ["/etc/elasticsearch/certs/ca/ca.crt"]\
+# Create a new cluster with the current node only\
+# Additional nodes can still join the cluster later\
+#cluster.initial_master_nodes: ["ip-172-31-23-238"]\
+\
+# Allow HTTP API connections from anywhere\
+# Connections are encrypted and require user authentication\
+http.host: 0.0.0.0\
+\
+# Allow other nodes to join the cluster from anywhere\
+# Connections are encrypted and mutually authenticated\
+#transport.host: 0.0.0.0\
+\
+#----------------------- END SECURITY AUTO CONFIGURATION -------------------------\
+root@elk5:/etc/elasticsearch# systemctl stop elasticsearch\
+root@elk5:/etc/elasticsearch# systemctl start elasticsearch\
+root@elk5:/etc/elasticsearch# ll\
+total 64\
+drwxr-s---   4 root          elasticsearch  4096 May  9 07:33 ./\
+drwxr-xr-x 101 root          root           4096 May  9 06:50 ../\
+drwxr-xr-x   4 elasticsearch elasticsearch  4096 May  8 17:02 certs/\
+-rwxr-xr-x   1 elasticsearch elasticsearch   536 May  8 14:47 elasticsearch.keystore*\
+-rwxr-xr-x   1 elasticsearch elasticsearch  1042 Apr 30 05:11 elasticsearch-plugins.example.yml*\
+-rwxr-xr-x   1 elasticsearch elasticsearch  4344 May  9 07:33 elasticsearch.yml*\
+-rwxr-xr-x   1 elasticsearch elasticsearch  3074 Apr 30 05:11 jvm.options*\
+drwxr-sr-x   2 elasticsearch elasticsearch  4096 Apr 30 05:12 jvm.options.d/\
+-rwxr-xr-x   1 elasticsearch elasticsearch 18897 Apr 30 05:11 log4j2.properties*\
+-rwxr-xr-x   1 elasticsearch elasticsearch   473 Apr 30 05:11 role_mapping.yml*\
+-rwxr-xr-x   1 elasticsearch elasticsearch   197 Apr 30 05:11 roles.yml*\
+-rwxr-xr-x   1 elasticsearch elasticsearch     0 Apr 30 05:11 users*\
+-rwxr-xr-x   1 elasticsearch elasticsearch     0 Apr 30 05:11 users_roles*\
+root@elk5:/etc/elasticsearch# ll certs/\
+total 48\
+drwxr-xr-x 4 elasticsearch elasticsearch  4096 May  8 17:02 ./\
+drwxr-s--- 4 root          elasticsearch  4096 May  9 07:33 ../\
+drwxr-xr-x 2 elasticsearch elasticsearch  4096 May  8 17:02 ca/\
+-rwxr-xr-x 1 elasticsearch elasticsearch  2537 May  8 17:02 ca_elastic.zip*\
+-rwxr-xr-x 1 elasticsearch elasticsearch  2579 May  8 17:02 certificate.zip*\
+drwxr-xr-x 2 elasticsearch elasticsearch  4096 May  8 17:02 elastic/\
+-rwxr-xr-x 1 elasticsearch elasticsearch  1939 May  8 17:02 http_ca.crt*\
+-rwxr-xr-x 1 elasticsearch elasticsearch 10093 May  8 17:02 http.p12*\
+-rwxr-xr-x 1 elasticsearch elasticsearch  5838 May  8 17:02 transport.p12*\
+root@elk5:/etc/elasticsearch# ls certs/\
+ca  ca_elastic.zip  certificate.zip  elastic  http_ca.crt  http.p12  transport.p12\
+root@elk5:/etc/elasticsearch# ls\
+certs                   elasticsearch-plugins.example.yml  jvm.options    log4j2.properties  roles.yml  users_roles\
+elasticsearch.keystore  elasticsearch.yml                  jvm.options.d  role_mapping.yml   users\
+root@elk5:/etc/elasticsearch# chmod -R 666 /etc/elasticsearch/ *\
+root@elk5:/etc/elasticsearch# ll\
+total 64\
+drw-rwSrw-   4 root          elasticsearch  4096 May  9 07:33 ./\
+drwxr-xr-x 101 root          root           4096 May  9 06:50 ../\
+drw-rw-rw-   4 elasticsearch elasticsearch  4096 May  8 17:02 certs/\
+-rw-rw-rw-   1 elasticsearch elasticsearch   536 May  8 14:47 elasticsearch.keystore\
+-rw-rw-rw-   1 elasticsearch elasticsearch  1042 Apr 30 05:11 elasticsearch-plugins.example.yml\
+-rw-rw-rw-   1 elasticsearch elasticsearch  4344 May  9 07:33 elasticsearch.yml\
+-rw-rw-rw-   1 elasticsearch elasticsearch  3074 Apr 30 05:11 jvm.options\
+drw-rwSrw-   2 elasticsearch elasticsearch  4096 Apr 30 05:12 jvm.options.d/\
+-rw-rw-rw-   1 elasticsearch elasticsearch 18897 Apr 30 05:11 log4j2.properties\
+-rw-rw-rw-   1 elasticsearch elasticsearch   473 Apr 30 05:11 role_mapping.yml\
+-rw-rw-rw-   1 elasticsearch elasticsearch   197 Apr 30 05:11 roles.yml\
+-rw-rw-rw-   1 elasticsearch elasticsearch     0 Apr 30 05:11 users\
+-rw-rw-rw-   1 elasticsearch elasticsearch     0 Apr 30 05:11 users_roles\
+root@elk5:/etc/elasticsearch# chmod -R 755 /etc/elasticsearch/ *\
+root@elk5:/etc/elasticsearch# ll\
+total 64\
+drwxr-sr-x   4 root          elasticsearch  4096 May  9 07:33 ./\
+drwxr-xr-x 101 root          root           4096 May  9 06:50 ../\
+drwxr-xr-x   4 elasticsearch elasticsearch  4096 May  8 17:02 certs/\
+-rwxr-xr-x   1 elasticsearch elasticsearch   536 May  8 14:47 elasticsearch.keystore*\
+-rwxr-xr-x   1 elasticsearch elasticsearch  1042 Apr 30 05:11 elasticsearch-plugins.example.yml*\
+-rwxr-xr-x   1 elasticsearch elasticsearch  4344 May  9 07:33 elasticsearch.yml*\
+-rwxr-xr-x   1 elasticsearch elasticsearch  3074 Apr 30 05:11 jvm.options*\
+drwxr-sr-x   2 elasticsearch elasticsearch  4096 Apr 30 05:12 jvm.options.d/\
+-rwxr-xr-x   1 elasticsearch elasticsearch 18897 Apr 30 05:11 log4j2.properties*\
+-rwxr-xr-x   1 elasticsearch elasticsearch   473 Apr 30 05:11 role_mapping.yml*\
+-rwxr-xr-x   1 elasticsearch elasticsearch   197 Apr 30 05:11 roles.yml*\
+-rwxr-xr-x   1 elasticsearch elasticsearch     0 Apr 30 05:11 users*\
+-rwxr-xr-x   1 elasticsearch elasticsearch     0 Apr 30 05:11 users_roles*\
+root@elk5:/etc/elasticsearch# cd ..\
+root@elk5:/etc# ls\
+adduser.conf                   debian_version  hosts            logrotate.d          nsswitch.conf     resolv.conf        sysctl.d\
+alternatives                   default         hosts.allow      lsb-release          opt               rmt                systemd\
+apparmor                       deluser.conf    hosts.deny       lvm                  os-release        rpc                terminfo\
+apparmor.d                     depmod.d        init.d           machine-id           overlayroot.conf  rsyslog.conf       timezone\
+apport                         dhcp            initramfs-tools  magic                PackageKit        rsyslog.d          tmpfiles.d\
+apt                            dpkg            inputrc          magic.mime           pam.conf          screenrc           ubuntu-advantage\
+bash.bashrc                    e2scrub.conf    iproute2         mailname             pam.d             security           ucf.conf\
+bash_completion.d              elasticsearch   iscsi            manpath.config       passwd            selinux            udev\
+bindresvport.blacklist         environment     issue            mdadm                passwd-           sensors3.conf      udisks2\
+binfmt.d                       environment.d   issue.net        mime.types           perl              sensors.d          ufw\
+byobu                          ethertypes      java-17-openjdk  mke2fs.conf          pki               services           update-manager\
+ca-certificates                fonts           kernel           ModemManager         pm                shadow             update-motd.d\
+ca-certificates.conf           fstab           landscape        modprobe.d           polkit-1          shadow-            usb_modeswitch.conf\
+ca-certificates.conf.dpkg-old  fuse.conf       ldap             modules              pollinate         shells             usb_modeswitch.d\
+cloud                          fwupd           ld.so.cache      modules-load.d       profile           skel               vim\
+console-setup                  gai.conf        ld.so.conf       mtab                 profile.d         sos                vmware-tools\
+cron.d                         groff           ld.so.conf.d     multipath            protocols         ssh                vtrgb\
+cron.daily                     group           legal            multipath.conf       python3           ssl                wgetrc\
+cron.hourly                    group-          libaudit.conf    nanorc               python3.10        subgid             X11\
+cron.monthly                   grub.d          libblockdev      needrestart          rc0.d             subgid-            xattr.conf\
+crontab                        gshadow         libnl-3          netconfig            rc1.d             subuid             xdg\
+cron.weekly                    gshadow-        locale.alias     netplan              rc2.d             subuid-\
+cryptsetup-initramfs           gss             locale.gen       network              rc3.d             sudo.conf\
+crypttab                       gtk-2.0         localtime        networkd-dispatcher  rc4.d             sudoers\
+dbus-1                         hdparm.conf     logcheck         networks             rc5.d             sudoers.d\
+dconf                          host.conf       login.defs       newt                 rc6.d             sudo_logsrvd.conf\
+debconf.conf                   hostname        logrotate.conf   nftables.conf        rcS.d             sysctl.conf\
+root@elk5:/etc# cd  -\
+/etc/elasticsearch\
+root@elk5:/etc/elasticsearch# ls\
+certs                   elasticsearch-plugins.example.yml  jvm.options    log4j2.properties  roles.yml  users_roles\
+elasticsearch.keystore  elasticsearch.yml                  jvm.options.d  role_mapping.yml   users\
+root@elk5:/etc/elasticsearch# cd ..\
+root@elk5:/etc# ls\
+adduser.conf                   debian_version  hosts            logrotate.d          nsswitch.conf     resolv.conf        sysctl.d\
+alternatives                   default         hosts.allow      lsb-release          opt               rmt                systemd\
+apparmor                       deluser.conf    hosts.deny       lvm                  os-release        rpc                terminfo\
+apparmor.d                     depmod.d        init.d           machine-id           overlayroot.conf  rsyslog.conf       timezone\
+apport                         dhcp            initramfs-tools  magic                PackageKit        rsyslog.d          tmpfiles.d\
+apt                            dpkg            inputrc          magic.mime           pam.conf          screenrc           ubuntu-advantage\
+bash.bashrc                    e2scrub.conf    iproute2         mailname             pam.d             security           ucf.conf\
+bash_completion.d              elasticsearch   iscsi            manpath.config       passwd            selinux            udev\
+bindresvport.blacklist         environment     issue            mdadm                passwd-           sensors3.conf      udisks2\
+binfmt.d                       environment.d   issue.net        mime.types           perl              sensors.d          ufw\
+byobu                          ethertypes      java-17-openjdk  mke2fs.conf          pki               services           update-manager\
+ca-certificates                fonts           kernel           ModemManager         pm                shadow             update-motd.d\
+ca-certificates.conf           fstab           landscape        modprobe.d           polkit-1          shadow-            usb_modeswitch.conf\
+ca-certificates.conf.dpkg-old  fuse.conf       ldap             modules              pollinate         shells             usb_modeswitch.d\
+cloud                          fwupd           ld.so.cache      modules-load.d       profile           skel               vim\
+console-setup                  gai.conf        ld.so.conf       mtab                 profile.d         sos                vmware-tools\
+cron.d                         groff           ld.so.conf.d     multipath            protocols         ssh                vtrgb\
+cron.daily                     group           legal            multipath.conf       python3           ssl                wgetrc\
+cron.hourly                    group-          libaudit.conf    nanorc               python3.10        subgid             X11\
+cron.monthly                   grub.d          libblockdev      needrestart          rc0.d             subgid-            xattr.conf\
+crontab                        gshadow         libnl-3          netconfig            rc1.d             subuid             xdg\
+cron.weekly                    gshadow-        locale.alias     netplan              rc2.d             subuid-\
+cryptsetup-initramfs           gss             locale.gen       network              rc3.d             sudo.conf\
+crypttab                       gtk-2.0         localtime        networkd-dispatcher  rc4.d             sudoers\
+dbus-1                         hdparm.conf     logcheck         networks             rc5.d             sudoers.d\
+dconf                          host.conf       login.defs       newt                 rc6.d             sudo_logsrvd.conf\
+debconf.conf                   hostname        logrotate.conf   nftables.conf        rcS.d             sysctl.conf\
+root@elk5:/etc# apt remove elasticsearch -y\
+Reading package lists... Done\
+Building dependency tree... Done\
+Reading state information... Done\
+The following packages will be REMOVED:\
+  elasticsearch\
+0 upgraded, 0 newly installed, 1 to remove and 3 not upgraded.\
+After this operation, 789 MB disk space will be freed.\
+(Reading database ... 103178 files and directories currently installed.)\
+Removing elasticsearch (8.18.1) ...\
+Stopping elasticsearch service... OK\
+Deleting log directory... OK\
+root@elk5:/etc# apt install -y elasticsearch=8.18.1\
+Reading package lists... Done\
+Building dependency tree... Done\
+Reading state information... Done\
+The following NEW packages will be installed:\
+  elasticsearch\
+0 upgraded, 1 newly installed, 0 to remove and 3 not upgraded.\
+Need to get 494 MB of archives.\
+After this operation, 789 MB of additional disk space will be used.\
+Ign:1 https://artifacts.elastic.co/packages/8.x/apt stable/main arm64 elasticsearch arm64 8.18.1\
+Ign:1 https://artifacts.elastic.co/packages/8.x/apt stable/main arm64 elasticsearch arm64 8.18.1\
+Ign:1 https://artifacts.elastic.co/packages/8.x/apt stable/main arm64 elasticsearch arm64 8.18.1\
+Err:1 https://artifacts.elastic.co/packages/8.x/apt stable/main arm64 elasticsearch arm64 8.18.1\
+  Certificate verification failed: The certificate is NOT trusted. The certificate chain uses not yet valid certificate.  Could not handshake: Error in the certificate verification. [IP: 34.120.127.130 443]\
+E: Failed to fetch https://artifacts.elastic.co/packages/8.x/apt/pool/main/e/elasticsearch/elasticsearch-8.18.1-arm64.deb  Certificate verification failed: The certificate is NOT trusted. The certificate chain uses not yet valid certificate.  Could not handshake: Error in the certificate verification. [IP: 34.120.127.130 443]\
+E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?\
+root@elk5:/etc# apt-get update\
+Hit:1 http://ports.ubuntu.com/ubuntu-ports jammy InRelease\
+Ign:2 https://artifacts.elastic.co/packages/8.x/apt stable InRelease\
+Get:3 http://ports.ubuntu.com/ubuntu-ports jammy-updates InRelease [128 kB]\
+Get:4 http://ports.ubuntu.com/ubuntu-ports jammy-backports InRelease [127 kB]\
+Get:5 http://ports.ubuntu.com/ubuntu-ports jammy-security InRelease [129 kB]\
+Ign:2 https://artifacts.elastic.co/packages/8.x/apt stable InRelease\
+Ign:2 https://artifacts.elastic.co/packages/8.x/apt stable InRelease\
+Err:2 https://artifacts.elastic.co/packages/8.x/apt stable InRelease\
+  Certificate verification failed: The certificate is NOT trusted. The certificate chain uses not yet valid certificate.  Could not handshake: Error in the certificate verification. [IP: 34.120.127.130 443]\
+Reading package lists... Done\
+E: Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-updates/InRelease is not valid yet (invalid for another 15d 2h 58min 58s). Updates for this repository will not be applied.\
+E: Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-backports/InRelease is not valid yet (invalid for another 15d 0h 11min 44s). Updates for this repository will not be applied.\
+E: Release file for http://ports.ubuntu.com/ubuntu-ports/dists/jammy-security/InRelease is not valid yet (invalid for another 15d 3h 48min 52s). Updates for this repository will not be applied.\
+root@elk5:/etc# apt install -y elasticsearch=8.18.1 --fix-missing?\
+E: Command line option --fix-missing? is not understood in combination with the other options\
+root@elk5:/etc# apt-get update --fix-missing?\
+E: Command line option --fix-missing? is not understood in combination with the other options\
+root@elk5:/etc# apt install -y elasticsearch=8.18.1 --fix-missing?\
+E: Command line option --fix-missing? is not understood in combination with the other options\
+root@elk5:/etc# apt install -y elasticsearch=8.18.1\
+Reading package lists... Done\
+Building dependency tree... Done\
+Reading state information... Done\
+The following NEW packages will be installed:\
+  elasticsearch\
+0 upgraded, 1 newly installed, 0 to remove and 3 not upgraded.\
+Need to get 494 MB of archives.\
+After this operation, 789 MB of additional disk space will be used.\
+Ign:1 https://artifacts.elastic.co/packages/8.x/apt stable/main arm64 elasticsearch arm64 8.18.1\
+Ign:1 https://artifacts.elastic.co/packages/8.x/apt stable/main arm64 elasticsearch arm64 8.18.1\
+Ign:1 https://artifacts.elastic.co/packages/8.x/apt stable/main arm64 elasticsearch arm64 8.18.1\
+Err:1 https://artifacts.elastic.co/packages/8.x/apt stable/main arm64 elasticsearch arm64 8.18.1\
+  Certificate verification failed: The certificate is NOT trusted. The certificate chain uses not yet valid certificate.  Could not handshake: Error in the certificate verification. [IP: 34.120.127.130 443]\
+E: Failed to fetch https://artifacts.elastic.co/packages/8.x/apt/pool/main/e/elasticsearch/elasticsearch-8.18.1-arm64.deb  Certificate verification failed: The certificate is NOT trusted. The certificate chain uses not yet valid certificate.  Could not handshake: Error in the certificate verification. [IP: 34.120.127.130 443]\
+E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?\
+root@elk5:/etc# date\
+Sun May 11 02:38:09 PM CDT 2025\
+root@elk5:/etc# timedatectl set-timezone America/New_York\
+^[[A^[[Aroot@elkdate^C\
+root@elk5:/etc# ^C\
+root@elk5:/etc# ^C\
+root@elk5:/etc# timedatectl set-timezone America/New_York\
+root@elk5:/etc# date\
+Sun May 11 03:38:37 PM EDT 2025\
+root@elk5:/etc# timedatectl set-timezone America/New_York\
+root@elk5:/etc# timedatectl set-timezone America/New_York\
+root@elk5:/etc# timedatectl set-timezone America/New_York\
+^C\
+root@elk5:/etc# ntpdate time.google.com\
+-bash: ntpdate: command not found\
+root@elk5:/etc# apt install ntp -y\
+Reading package lists... Done\
+Building dependency tree... Done\
+Reading state information... Done\
+The following additional packages will be installed:\
+  libevent-pthreads-2.1-7 libopts25 sntp\
+Suggested packages:\
+  ntp-doc\
+The following packages will be REMOVED:\
+  systemd-timesyncd\
+The following NEW packages will be installed:\
+  libevent-pthreads-2.1-7 libopts25 ntp sntp\
+0 upgraded, 4 newly installed, 1 to remove and 3 not upgraded.\
+Need to get 852 kB of archives.\
+After this operation, 2,279 kB of additional disk space will be used.\
+Get:1 http://ports.ubuntu.com/ubuntu-ports jammy/main arm64 libevent-pthreads-2.1-7 arm64 2.1.12-stable-1build3 [7,588 B]\
+Get:2 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 libopts25 arm64 1:5.18.16-4 [55.8 kB]\
+Get:3 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 ntp arm64 1:4.2.8p15+dfsg-1ubuntu2 [721 kB]\
+Get:4 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 sntp arm64 1:4.2.8p15+dfsg-1ubuntu2 [67.4 kB]\
+Fetched 852 kB in 1s (890 kB/s)\
+(Reading database ... 101647 files and directories currently installed.)\
+Removing systemd-timesyncd (249.11-0ubuntu3.15) ...\
+Selecting previously unselected package libevent-pthreads-2.1-7:arm64.\
+(Reading database ... 101633 files and directories currently installed.)\
+Preparing to unpack .../libevent-pthreads-2.1-7_2.1.12-stable-1build3_arm64.deb ...\
+Unpacking libevent-pthreads-2.1-7:arm64 (2.1.12-stable-1build3) ...\
+Selecting previously unselected package libopts25:arm64.\
+Preparing to unpack .../libopts25_1%3a5.18.16-4_arm64.deb ...\
+Unpacking libopts25:arm64 (1:5.18.16-4) ...\
+Selecting previously unselected package ntp.\
+Preparing to unpack .../ntp_1%3a4.2.8p15+dfsg-1ubuntu2_arm64.deb ...\
+Unpacking ntp (1:4.2.8p15+dfsg-1ubuntu2) ...\
+Selecting previously unselected package sntp.\
+Preparing to unpack .../sntp_1%3a4.2.8p15+dfsg-1ubuntu2_arm64.deb ...\
+Unpacking sntp (1:4.2.8p15+dfsg-1ubuntu2) ...\
+Setting up libopts25:arm64 (1:5.18.16-4) ...\
+Setting up ntp (1:4.2.8p15+dfsg-1ubuntu2) ...\
+Created symlink /etc/systemd/system/network-pre.target.wants/ntp-systemd-netif.path \uc0\u8594  /lib/systemd/system/ntp-systemd-netif.path.\
+Created symlink /etc/systemd/system/multi-user.target.wants/ntp.service \uc0\u8594  /lib/systemd/system/ntp.service.\
+ntp-systemd-netif.service is a disabled or a static unit, not starting it.\
+Setting up libevent-pthreads-2.1-7:arm64 (2.1.12-stable-1build3) ...\
+Setting up sntp (1:4.2.8p15+dfsg-1ubuntu2) ...\
+Processing triggers for man-db (2.10.2-1) ...\
+Processing triggers for dbus (1.12.20-2ubuntu4.1) ...\
+Processing triggers for libc-bin (2.35-0ubuntu3.9) ...\
+Scanning processes...\
+Scanning linux images...\
+\
+Running kernel seems to be up-to-date.\
+\
+No services need to be restarted.\
+\
+No containers need to be restarted.\
+\
+No user sessions are running outdated binaries.\
+\
+No VM guests are running outdated hypervisor (qemu) binaries on this host.\
+root@elk5:/etc# ntpdate time.google.com\
+-bash: ntpdate: command not found\
+root@elk5:/etc# apt install ntpdate -y\
+ntpdate time.google.com\
+Reading package lists... Done\
+Building dependency tree... Done\
+Reading state information... Done\
+The following NEW packages will be installed:\
+  ntpdate\
+0 upgraded, 1 newly installed, 0 to remove and 3 not upgraded.\
+Need to get 51.5 kB of archives.\
+After this operation, 178 kB of additional disk space will be used.\
+Get:1 http://ports.ubuntu.com/ubuntu-ports jammy/universe arm64 ntpdate arm64 1:4.2.8p15+dfsg-1ubuntu2 [51.5 kB]\
+Fetched 51.5 kB in 0s (282 kB/s)\
+Selecting previously unselected package ntpdate.\
+(Reading database ... 101715 files and directories currently installed.)\
+Preparing to unpack .../ntpdate_1%3a4.2.8p15+dfsg-1ubuntu2_arm64.deb ...\
+Unpacking ntpdate (1:4.2.8p15+dfsg-1ubuntu2) ...\
+Setting up ntpdate (1:4.2.8p15+dfsg-1ubuntu2) ...\
+Processing triggers for man-db (2.10.2-1) ...\
+Scanning processes...\
+Scanning linux images...\
+\
+Running kernel seems to be up-to-date.\
+\
+No services need to be restarted.\
+\
+No containers need to be restarted.\
+\
+No user sessions are running outdated binaries.\
+\
+No VM guests are running outdated hypervisor (qemu) binaries on this host.\
+26 May 20:37:29 ntpdate[11157]: the NTP socket is in use, exiting\
+root@elk5:/etc# timedatectl set-ntp true\
+Failed to set ntp: NTP not supported\
+root@elk5:/etc# timedatectl set-ntp true\
+Failed to set ntp: NTP not supported\
+root@elk5:/etc# timedatectl\
+               Local time: Mon 2025-05-26 20:37:59 EDT\
+           Universal time: Tue 2025-05-27 00:37:59 UTC\
+                 RTC time: Tue 2025-05-27 00:37:59\
+                Time zone: America/New_York (EDT, -0400)\
+System clock synchronized: no\
+              NTP service: n/a\
+          RTC in local TZ: no\
+root@elk5:/etc# apt install -y elasticsearch=8.18.1\
+Reading package lists... Done\
+Building dependency tree... Done\
+Reading state information... Done\
+The following NEW packages will be installed:\
+  elasticsearch\
+0 upgraded, 1 newly installed, 0 to remove and 3 not upgraded.\
+Need to get 494 MB of archives.\
+After this operation, 789 MB of additional disk space will be used.\
+Get:1 https://artifacts.elastic.co/packages/8.x/apt stable/main arm64 elasticsearch arm64 8.18.1 [494 MB]\
+Fetched 494 MB in 28s (17.7 MB/s)\
+Selecting previously unselected package elasticsearch.\
+(Reading database ... 101727 files and directories currently installed.)\
+Preparing to unpack .../elasticsearch_8.18.1_arm64.deb ...\
+Unpacking elasticsearch (8.18.1) ...\
+Setting up elasticsearch (8.18.1) ...\
+OpenJDK 64-Bit Server VM warning: Unable to get SVE vector length on this system. Disabling SVE. Specify -XX:UseSVE=0 to shun this warning.\
+OpenJDK 64-Bit Server VM warning: Unable to get SVE vector length on this system. Disabling SVE. Specify -XX:UseSVE=0 to shun this warning.\
+Scanning processes...\
+Scanning linux images...\
+\
+Running kernel seems to be up-to-date.\
+\
+No services need to be restarted.\
+\
+No containers need to be restarted.\
+\
+No user sessions are running outdated binaries.\
+\
+No VM guests are running outdated hypervisor (qemu) binaries on this host.\
+root@elk5:/etc#\
+\
+\
+\
+\
+TROUBLE SHOOTING STEPS:\
+\pard\pardeftab720\partightenfactor0
+
+\f1 \cf0 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 n:1 https://artifacts.elastic.co/packages/8.x/apt stable/main arm64 elasticsearch arm64 8.18.1 Ign:1 https://artifacts.elastic.co/packages/8.x/apt stable/main arm64 elasticsearch arm64 8.18.1 Ign:1 https://artifacts.elastic.co/packages/8.x/apt stable/main arm64 elasticsearch arm64 8.18.1 Err:1 https://artifacts.elastic.co/packages/8.x/apt stable/main arm64 elasticsearch arm64 8.18.1 Certificate verification failed: The certificate is NOT trusted. The certificate chain uses not yet valid certificate. Could not handshake: Error in the certificate verification. [IP: 34.120.127.130 443] E: Failed to fetch https://artifacts.elastic.co/packages/8.x/apt/pool/main/e/elasticsearch/elasticsearch-8.18.1-arm64.deb Certificate verification failed: The certificate is NOT trusted. The certificate chain uses not yet valid certificate. Could not handshake: Error in the certificate verification. [IP: 34.120.127.130 443] E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing? root@elk5:/etc#\
+\
+\pard\pardeftab720\sa419\partightenfactor0
+
+\f2\b\fs18 \cf0 ChatGPT said:\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\b0\fs24 \cf0 The error you're getting:\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f3\fs26 \cf0 Certificate verification failed: The certificate is NOT trusted. The certificate chain uses not yet valid certificate.
+\f1\fs24 \
+means your 
+\f2\b system clock is incorrect
+\f1\b0  \'97 it's likely 
+\f2\b behind the current date
+\f1\b0 .\
+TLS/SSL relies heavily on valid timestamps, and if your system date is wrong (e.g. still in the past), even valid certs appear as "not yet valid."\
+\pard\pardeftab720\partightenfactor0
+\cf3 \strokec3 \
+\pard\pardeftab720\sa280\partightenfactor0
+
+\f2\b\fs28 \cf0 \strokec2 \uc0\u9989  Fix in 3 Steps:\
+\pard\pardeftab720\sa319\partightenfactor0
+
+\fs24 \cf0 \strokec2 1. Check your system date:\
+\pard\pardeftab720\partightenfactor0
+
+\f3\b0\fs26 \cf0 \strokec2 bash\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 CopyEdit
+\f3\fs26 \cf0 \cb1 \strokec2 \
+date\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\fs24 \cf0 \strokec2 If it's showing an older date (e.g. 2024 or early 2025), that\'92s your issue.\
+\pard\pardeftab720\partightenfactor0
+\cf3 \strokec3 \
+\pard\pardeftab720\sa319\partightenfactor0
+
+\f2\b \cf0 \strokec2 2. Sync system time (one-time fix):\
+\pard\pardeftab720\partightenfactor0
+
+\f3\b0\fs26 \cf0 \strokec2 bash\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 CopyEdit
+\f3\fs26 \cf0 \cb1 \strokec2 \
+ntpdate time.google.com\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\fs24 \cf0 \strokec2 If 
+\f3\fs26 ntpdate
+\f1\fs24  isn\'92t installed:\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf0 \strokec2 bash\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 CopyEdit
+\f3\fs26 \cf0 \cb1 \strokec2 \
+apt install ntpdate -y\
+ntpdate time.google.com\
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs24 \cf3 \strokec3 \
+\pard\pardeftab720\sa319\partightenfactor0
+
+\f2\b \cf0 \strokec2 3. Enable automatic time sync (permanent fix):\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\b0 \cf0 If using 
+\f3\fs26 systemd
+\f1\fs24 :\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf0 \strokec2 bash\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 CopyEdit
+\f3\fs26 \cf0 \cb1 \strokec2 \
+timedatectl set-ntp true\
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs24 \cf3 \strokec3 \
+\pard\pardeftab720\sa240\partightenfactor0
+\cf0 \strokec2 Once that\'92s done, try again:\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf0 \strokec2 bash\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 CopyEdit
+\f3\fs26 \cf0 \cb1 \strokec2 \
+apt-get update\
+apt-get install elasticsearch\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\fs24 \cf0 \strokec2 Let me know the 
+\f3\fs26 date
+\f1\fs24  output if it still fails \'97 I\'92ll guide accordingly.\
+\pard\pardeftab720\qc\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 4o\cb1 \
+\pard\pardeftab720\sa332\partightenfactor0
+
+\f2\b\fs20 \cf0 \strokec2 You said:\
+\pard\pardeftab720\partightenfactor0
+
+\f1\b0\fs24 \cf0 root@elk5:/etc# date Sun May 11 02:38:09 PM CDT 2025 root@elk5:/etc# im in est\
+\
+\pard\pardeftab720\sa419\partightenfactor0
+
+\f2\b\fs18 \cf0 ChatGPT said:\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\b0\fs24 \cf0 Got it \'97 your system clock shows:\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f2\b \cf0 Sun May 11 02:38:09 PM CDT 2025
+\f1\b0 \
+But you're in 
+\f2\b EST (Eastern Standard Time)
+\f1\b0 , not 
+\f2\b CDT (Central Daylight Time)
+\f1\b0 . More importantly, 
+\f2\b May 11, 2025 is in the past
+\f1\b0  \'97 today is 
+\f2\b May 26, 2025
+\f1\b0 .\
+This is what's breaking the TLS handshake when hitting 
+\f3\fs26 https://artifacts.elastic.co/
+\f1\fs24  \'97 it thinks certificates are not valid 
+\f5\i yet
+\f1\i0 .\
+\pard\pardeftab720\partightenfactor0
+\cf3 \strokec3 \
+\pard\pardeftab720\sa280\partightenfactor0
+
+\f2\b\fs28 \cf0 \strokec2 \uc0\u9989  Fix the Timezone + Sync the Clock:\
+\pard\pardeftab720\sa319\partightenfactor0
+
+\fs24 \cf0 \strokec2 1. Set the correct timezone (EST / New York):\
+\pard\pardeftab720\partightenfactor0
+
+\f3\b0\fs26 \cf0 \strokec2 bash\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 CopyEdit
+\f3\fs26 \cf0 \cb1 \strokec2 \
+timedatectl set-timezone America/New_York\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\fs24 \cf0 \strokec2 You can verify:\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf0 \strokec2 bash\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 CopyEdit
+\f3\fs26 \cf0 \cb1 \strokec2 \
+timedatectl\
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs24 \cf3 \strokec3 \
+\pard\pardeftab720\sa319\partightenfactor0
+
+\f2\b \cf0 \strokec2 2. Sync your system clock:\
+\pard\pardeftab720\partightenfactor0
+
+\f3\b0\fs26 \cf0 \strokec2 bash\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 CopyEdit
+\f3\fs26 \cf0 \cb1 \strokec2 \
+ntpdate time.google.com\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\fs24 \cf0 \strokec2 If that fails, install it first:\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf0 \strokec2 bash\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 CopyEdit
+\f3\fs26 \cf0 \cb1 \strokec2 \
+apt install ntpdate -y\
+ntpdate time.google.com\
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs24 \cf3 \strokec3 \
+\pard\pardeftab720\sa319\partightenfactor0
+
+\f2\b \cf0 \strokec2 3. Enable auto time sync:\
+\pard\pardeftab720\partightenfactor0
+
+\f3\b0\fs26 \cf0 \strokec2 bash\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 CopyEdit
+\f3\fs26 \cf0 \cb1 \strokec2 \
+timedatectl set-ntp true\
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs24 \cf3 \strokec3 \
+\pard\pardeftab720\sa240\partightenfactor0
+\cf0 \strokec2 After this, confirm your time is correct:\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf0 \strokec2 bash\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 CopyEdit
+\f3\fs26 \cf0 \cb1 \strokec2 \
+date\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\fs24 \cf0 \strokec2 Then try installing again:\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf0 \strokec2 bash\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 CopyEdit
+\f3\fs26 \cf0 \cb1 \strokec2 \
+apt-get update\
+apt-get install elasticsearch\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\fs24 \cf0 \strokec2 Let me know what 
+\f3\fs26 date
+\f1\fs24  shows after fixing it.\
+\pard\pardeftab720\qc\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 4o\cb1 \
+\pard\pardeftab720\sa332\partightenfactor0
+
+\f2\b\fs20 \cf0 \strokec2 You said:\
+\pard\pardeftab720\partightenfactor0
+
+\f1\b0\fs24 \cf0 No VM guests are running outdated hypervisor (qemu) binaries on this host. 26 May 20:37:29 ntpdate[11157]: the NTP socket is in use, exiting root@elk5:/etc# timedatectl set-ntp true Failed to set ntp: NTP not supported root@elk5:/etc# timedatectl set-ntp true Failed to set ntp: NTP not supported root@elk5:/etc#\
+\
+\pard\pardeftab720\sa419\partightenfactor0
+
+\f2\b\fs18 \cf0 ChatGPT said:\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\b0\fs24 \cf0 Thanks \'97 it looks like:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720\sa240\partightenfactor0
+\ls1\ilvl0\cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	1	}\expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Your 
+\f2\b system clock is incorrect
+\f1\b0 , causing TLS failures.\
+\ls1\ilvl0\kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	2	}\expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 You're 
+\f2\b unable to sync time using 
+\f6\fs26 timedatectl
+\f2\fs24  or 
+\f6\fs26 ntpdate
+\f1\b0\fs24  due to missing NTP support or a conflicting service.\
+\pard\pardeftab720\partightenfactor0
+\cf3 \strokec3 \
+\pard\pardeftab720\sa280\partightenfactor0
+
+\f2\b\fs28 \cf0 \strokec2 \uc0\u9989  Fix Plan (Manual Time Sync on VM / minimal environment):\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\b0\fs24 \cf0 \strokec2 Since this is a VM and 
+\f3\fs26 timedatectl
+\f1\fs24  with NTP isn't working, let\'92s fix it manually:\
+\pard\pardeftab720\partightenfactor0
+\cf3 \strokec3 \
+\pard\pardeftab720\sa280\partightenfactor0
+
+\f2\b\fs28 \cf0 \strokec2 1. Set date/time manually\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\b0\fs24 \cf0 \strokec2 Check current time in 
+\f2\b EST
+\f1\b0 :\uc0\u8232 \u8594  Right now, it should be close to:\u8232 
+\f3\fs26 Mon May 26 21:38:xx EDT 2025
+\f1\fs24 \uc0\u8232 (You can confirm this on {\field{\*\fldinst{HYPERLINK "https://time.is/"}}{\fldrslt \cf6 \ul \ulc6 \strokec6 time.is}})\
+Now set it manually:\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf0 \strokec2 bash\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 CopyEdit
+\f3\fs26 \cf0 \cb1 \strokec2 \
+date -s "2025-05-26 21:38:00"\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\fs24 \cf0 \strokec2 Adjust time to a few seconds ahead of your current time so it's accepted.\
+Then verify:\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf0 \strokec2 bash\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 CopyEdit
+\f3\fs26 \cf0 \cb1 \strokec2 \
+date\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\fs24 \cf0 \strokec2 Make sure it shows today\'92s 
+\f2\b correct date and time in EST
+\f1\b0 .\
+\pard\pardeftab720\partightenfactor0
+\cf3 \strokec3 \
+\pard\pardeftab720\sa280\partightenfactor0
+
+\f2\b\fs28 \cf0 \strokec2 2. Fix the timezone (if needed)\
+\pard\pardeftab720\partightenfactor0
+
+\f3\b0\fs26 \cf0 bash\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 CopyEdit
+\f3\fs26 \cf0 \cb1 \strokec2 \
+ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\fs24 \cf0 \strokec2 Then:\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs26 \cf0 \strokec2 bash\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 CopyEdit
+\f3\fs26 \cf0 \cb1 \strokec2 \
+date\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f1\fs24 \cf0 \strokec2 It should now say 
+\f3\fs26 EDT
+\f1\fs24  instead of 
+\f3\fs26 CDT
+\f1\fs24 .\
+\pard\pardeftab720\partightenfactor0
+\cf3 \strokec3 \
+\pard\pardeftab720\sa280\partightenfactor0
+
+\f2\b\fs28 \cf0 \strokec2 3. Try the install again\
+\pard\pardeftab720\partightenfactor0
+
+\f3\b0\fs26 \cf0 bash\
+\pard\pardeftab720\partightenfactor0
+
+\f4\fs22 \cf4 \cb5 \strokec4 CopyEdit
+\f3\fs26 \cf0 \cb1 \strokec2 \
+apt-get update\
+apt-get install elasticsearch\
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs24 \cf3 \strokec3 \
+\pard\pardeftab720\sa240\partightenfactor0
+\cf0 \strokec2 Let me know if you want to permanently enable automatic NTP sync \'97 I can walk you through installing 
+\f3\fs26 chrony
+\f1\fs24  or 
+\f3\fs26 systemd-timesyncd
+\f1\fs24  next.\
+\
+COMMANDS:\
+  266  apt install -y elasticsearch=8.18.1\
+  267  date\
+  268  timedatectl set-timezone America/New_York\
+  269  date\
+  270  timedatectl set-timezone America/New_York\
+  271  ntpdate time.google.com\
+  272  apt install ntp -y\
+  273  ntpdate time.google.com\
+  274  apt install ntpdate -y\
+  275  ntpdate time.google.com\
+  276  timedatectl set-ntp true\
+  277  timedatectl\
+After that your that}
