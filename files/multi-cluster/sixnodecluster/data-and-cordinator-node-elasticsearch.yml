@@ -1,3 +1,11 @@
+############################## IMPORTANT STEPS HOW I ACHIEVED THIS
+# FIRST: copy the ca, crt, key (the cert directory from the master node on node1)
+# SECOND: scp into the node4 which is the datanode
+# THIRD: scp or copy this elasticsearch.yml file on the node4
+# FOURTH: give appropprite permissions I just give chmod -R 755 * /etc/elasticsearch/ *
+# FIFTH: give appropprite permissions I just give chown -R elasticsearch:elasticsearch /etc/elasticsearch/ *
+# SIXTH: start elasticsearch systemctl start elasticsearch
+
 ### this file is an example for the data nodes you will change the node.name and node.roles
 ### for data nodes keep it same for the node.roles like node.roles: [ data ]
 ### for coordinator keep the node.roles empty like node.roles: []
