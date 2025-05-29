@@ -3,6 +3,7 @@
 ### you will have to generate the certificate on one master and copy that to all cluster certs and give the right permissions
 ### copy the certs files to the /etc/elastic directory and give the right permissions to the directory
 #root@elk:/etc/elasticsearch# cat elasticsearch.yml
+
 # ======================== Elasticsearch Configuration =========================
 #
 # NOTE: Elasticsearch comes with reasonable defaults for most settings.
@@ -26,6 +27,7 @@ cluster.name: future
 # Use a descriptive name for the node:
 #
 node.name: node-1
+node.roles: [ master ]
 #
 # Add custom attributes to the node:
 #
@@ -124,4 +126,3 @@ http.host: 0.0.0.0
 #transport.host: 0.0.0.0
 
 #----------------------- END SECURITY AUTO CONFIGURATION -------------------------
-#root@elk:/etc/elasticsearch#
