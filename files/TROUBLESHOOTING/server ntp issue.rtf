@@ -1415,3 +1415,18 @@ COMMANDS:\
   276  timedatectl set-ntp true\
   277  timedatectl\
 After that your that}
+
+SCRIPT THAT FIXES THE OFFLINE NODES: 
+root@elk4:/home/elk# cat history.sh
+#!/bin/bash
+date
+timedatectl set-timezone America/New_York
+date
+timedatectl set-timezone America/New_York
+ntpdate time.google.com
+apt install ntp -y
+ntpdate time.google.com
+apt install ntpdate -y
+ntpdate time.google.com
+timedatectl set-ntp true
+timedatectl
