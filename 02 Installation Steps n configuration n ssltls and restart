@@ -1,4 +1,18 @@
 # ignore this I am using this for arm64 installation and configuration https://www.elastic.co/docs/deploy-manage/deploy/self-managed/install-elasticsearch-from-archive-on-linux-macos
+3
+#### INSTALLTION SHELL SCRIPT:
+#########################
+root@elk:~# cat install.sh
+#!/bin/bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y openjdk-17-jdk
+java -version
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
+sudo apt update
+sudo apt install -y elasticsearch=8.18.1
+########################
+
 import subprocess
 
 def run_command(command):
