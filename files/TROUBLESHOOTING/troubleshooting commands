@@ -1,0 +1,23 @@
+curl -u elastic:'CnvFJ9Gw3ilQpNy*shnL' -k -X GET "https://10.211.55.11:9200/_cat/shards?h=index,shard,prirep,state,unassigned.reason,node"
+------------------------------------------------------------------------------------------------------------------------------------------------
+"nassigned.reason,node"assigned.reason,node"
+.internal.alerts-observability.uptime.alerts-default-000001        0 p UNASSIGNED CLUSTER_RECOVERED
+.internal.alerts-observability.uptime.alerts-default-000001        0 r UNASSIGNED REPLICA_ADDED
+.ds-.kibana-event-log-ds-2025.05.16-000001                         0 p UNASSIGNED CLUSTER_RECOVERED
+.ds-.kibana-event-log-ds-2025.05.16-000001                         0 r UNASSIGNED REPLICA_ADDED
+.apm-custom-link                                                   0 r STARTED                      node-5
+.apm-custom-link                                                   0 p STARTED                      node-4
+.internal.alerts-observability.apm.alerts-default-000001           0 p UNASSIGNED CLUSTER_RECOVERED
+.internal.alerts-observability.apm.alerts-default-000001           0 r UNASSIGNED REPLICA_ADDED"
+
+/usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic
+------------------------------------------------------------------------
+"Password for the [elastic] user successfully reset.
+New value: *06V16owLt8v7meHt4Lo
+root@elk:~#
+
+
+*06V16owLt8v7meHt4Lo"
+
+elasticsearch-node repurpose
+------------------------------------------------------------------------
