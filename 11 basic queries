@@ -114,4 +114,12 @@ GET my_index/_search?
   }
 }
 
+### bulk method is used to add multiple documents indexed in one shot
+POST _bulk
+{ "index": { "_index": "my_index", "_id": "1" } }
+{ "name": "Alice", "age": 25 }
+{ "index": { "_index": "my_index", "_id": "2" } }
+{ "name": "Bob", "age": 28 }
+
+
 
