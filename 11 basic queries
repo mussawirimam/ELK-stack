@@ -1,0 +1,117 @@
+# Welcome to the Dev Tools Console!
+#
+# You can use Console to explore the Elasticsearch API. See the Elasticsearch API reference to learn more:
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/rest-apis.html
+#
+# Here are a few examples to get you started.
+
+
+# Create an index
+PUT /my-index
+
+
+# Add a document to my-index
+POST /my-index/_doc
+{
+    "id": "park_rocky-mountain",
+    "title": "Rocky Mountain",
+    "description": "Bisected north to south by the Continental Divide, this portion of the Rockies has ecosystems varying from over 150 riparian lakes to montane and subalpine forests to treeless alpine tundra."
+}
+
+
+# Perform a search in my-index
+GET /my-index/_search?q="rocky mountain"
+
+
+
+
+### scroll method 
+GET testing/_search?scroll=1m
+{
+  "size": 10000,
+  "query": {
+    "match_all": {}
+  }
+}
+
+### scroll id
+POST /_search/scroll
+{
+  "scroll": "1m",
+  "scroll_id": "FGluY2x1ZGVfY29udGV4dF91dWlkDXF1ZXJ5QW5kRmV0Y2gBFm5XVTdmMkJLU1dhT2hjV3BwWTZKUWcAAAAAAA5v0xZXanhrY0VzLVJldS1HRlNYRmNiZUxn"
+}
+
+### Getting all the documents from the index
+GET _cat/indices/my_index
+GET my_index/_search
+
+### adding document 
+POST my_index/_doc/1
+{
+  "name": "Shiva Doe",
+  "age": 10,
+  "city": "New York"
+}
+
+### getting index document
+GET my_index/_doc/2
+
+### updating the document in index
+POST my_index/_update/1
+{
+  "doc": {
+    "age": 31
+  }
+}
+
+### to delete one document you will have to specify the id
+DELETE my_index/_doc/1
+
+### to find a particular keyword field in document from an index
+GET my_index/_search?q=name:John
+
+### DSL query example
+GET my_index/_search
+{
+  "query": {
+    "match": {
+      "name": "New York"
+    }
+  }
+}
+
+# match dsl
+GET my_index/_search?
+{
+  "query": {
+     "match": {
+    "name": "shiva"
+    }
+  }
+}
+
+# term dsl
+GET my_index/_search?
+{
+  "query": {
+    "term": {
+      "name": {
+        "value": "shiva"
+      }
+    }
+  }
+}
+
+# multiple terms dsl
+GET my_index/_search?
+{
+  "query": {
+    "term": {
+      "FIELD": {
+        "value": "VALUE"
+      }
+    }
+  }
+}
+
+
