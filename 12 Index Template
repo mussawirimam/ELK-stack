@@ -12,7 +12,7 @@ stack management > under kibaana, Data Views > click on the index to see the fie
 
 ON INDEX TEMPLATE
 ------------------
-
+example if you have multiple indexes starting with logs, you can apply the index template and create a dataview upon which all the seperate indexes with simiar naming convention, you will be able to see in one dataview to manage and search them. 
 logs-123
 logs-456
 logs-789
