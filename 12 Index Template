@@ -1,0 +1,44 @@
+creating index pattern:
+go to stack management > under kibana, Data Views > click on Create Data view and add the index name and index pattern
+
+
+documents exists within the index and index is viewed through the data view:
+document > index > dataview  
+
+to view the mapping datatypes for the fields:
+stack management > under kibaana, Data Views > click on the index to see the fields mapping
+
+
+
+ON INDEX TEMPLATE
+------------------
+
+logs-123
+logs-456
+logs-789
+
+
+
+### whichever logs that gets started with the logs-(xyz)*, the index template will be applied to those indexes
+### any index starting with the log-(xyz)*, will be considered to be apply the template below 
+PUT _index_template/testing_temp
+{
+  "index_patterns": ["logs-*"], 
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 1
+    },
+    "mappings": {
+      "properties": {
+        "timestamp": {
+          "type": "date"
+        },
+        "message": {
+          "type": "text"
+        },
+        "status_code": {
+          "type": "integer"
+        }
+      }
+    }
