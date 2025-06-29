@@ -1,3 +1,6 @@
+NOTE: by default when you put an index in the elasticsearch, it applies ECS ( Elasticsearch Comman Schema )
+on ECS: ECS is a standardized field naming convention developed by Elastic to bring uniformity to data across different sources like logs, metrics, traces, etc.
+
 creating index pattern:
 go to stack management > under kibana, Data Views > click on Create Data view and add the index name and index pattern
 
@@ -21,6 +24,7 @@ logs-789
 
 ### whichever logs that gets started with the logs-(xyz)*, the index template will be applied to those indexes
 ### any index starting with the log-(xyz)*, will be considered to be apply the template below 
+### you are also mapping the fields with this index template to the field and its DataType
 PUT _index_template/testing_temp
 {
   "index_patterns": ["logs-*"], 
@@ -42,3 +46,17 @@ PUT _index_template/testing_temp
         }
       }
     }
+
+
+### now we are posting the index and document which index template will find the pattern and apply the settings and mappings to it
+POST logs-2024-03/_doc/1
+{
+  "timestamp": "2025-03-04T12:00:00",
+  "message": "User logged in successfully",
+  "status_code": 200
+}
+
+
+
+
+
