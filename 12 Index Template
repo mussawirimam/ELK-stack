@@ -1,5 +1,10 @@
 NOTE: by default when you put an index in the elasticsearch, it applies ECS ( Elasticsearch Comman Schema )
 on ECS: ECS is a standardized field naming convention developed by Elastic to bring uniformity to data across different sources like logs, metrics, traces, etc.
+which in turn applies default DATATYPES to the filed 
+
+- to specify custom DATATYPES, you will have to create custom fields for you documents that are coming in the index. 
+Q: why DATATYPE is important? it is for the search reasons and tokenization. E.g text is not aggregatable but the keywords are.
+
 
 creating index pattern:
 go to stack management > under kibana, Data Views > click on Create Data view and add the index name and index pattern
@@ -13,8 +18,13 @@ stack management > under kibaana, Data Views > click on the index to see the fie
 
 
 
+
+EXAMPLE CREATING THE INDEX TEMPLATE THROUGH API:
+----------------------------------------
 ON INDEX TEMPLATE
 ------------------
+docuemnt > index pattern > index > index template
+documents are added to the indexes document > index and indexes have patterns on the data view. > any index pattern that is defined in the index template, gets filter through the index template. > index template
 example if you have multiple indexes starting with logs, you can apply the index template and create a dataview upon which all the seperate indexes with simiar naming convention, you will be able to see in one dataview to manage and search them. 
 logs-123
 logs-456
@@ -25,6 +35,7 @@ logs-789
 ### whichever logs that gets started with the logs-(xyz)*, the index template will be applied to those indexes
 ### any index starting with the log-(xyz)*, will be considered to be apply the template below 
 ### you are also mapping the fields with this index template to the field and its DataType
+
 PUT _index_template/testing_temp
 {
   "index_patterns": ["logs-*"], 
@@ -35,7 +46,7 @@ PUT _index_template/testing_temp
     },
     "mappings": {
       "properties": {
-        "timestamp": {
+        "timestamp": {      <-------------------- if the index will have the field called timestamp, it will apply the DATATYPE called date.
           "type": "date"
         },
         "message": {
@@ -48,7 +59,7 @@ PUT _index_template/testing_temp
     }
 
 
-### now we are posting the index and document which index template will find the pattern and apply the settings and mappings to it
+### now we are posting the index and document through a simple payload, to which the index template will find the pattern and apply the settings and mappings to it
 POST logs-2024-03/_doc/1
 {
   "timestamp": "2025-03-04T12:00:00",
@@ -57,6 +68,54 @@ POST logs-2024-03/_doc/1
 }
 
 
+### to look for the index that has been created
+stack management > clikc on index template > click management on top right hand corner drop down menu and click on the testing_temp index template review it. 
+h.w learn aobut the "_tier_preference": "data_content" (its going to be under the review template > preview once you have click on your index template)
 
+### THE INSTRUCTOR KEEP ON MAKING MISTAKES, SO FOLLOW FROM HERE FOR INDEX TEMPLATE, THE ABOVE INDEX TEMPLATE IS MAKING A DATASTREAM BECAUSE THE DOCUEMNT DOESNT HAVE THE INDEX
+### why the upper one is creating a data stream?
+DELETE _index_template/my_index_template
+PUT _index_template/my_index_template
+{
+  "index_patterns": ["my-index-*"], 
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 1
+    },
+    "mappings": {
+      "properties": {
+        "timestamp": {
+          "type": "date"
+        },
+        "user": {
+          "type": "keyword"
+        },        
+        "message": {
+          "type": "text"
+        },
+        "status_code": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}
 
+DELETE my-index-2025-03
+PUT my-index-2025-03
+
+DELETE my-index-2025-03/_doc/1
+POST my-index-2025-03/_doc/1
+{
+  "timestamp": "2025-03-04T12:00:00",
+  "message": "User logged in successfully",
+  "status_code": 200
+}
+
+--------------------------
+DATASTREM
+-------------------------
+to put the datastream in the in elasticsearch:
+you have to define the method to add the datastream in elasticsearch
 
