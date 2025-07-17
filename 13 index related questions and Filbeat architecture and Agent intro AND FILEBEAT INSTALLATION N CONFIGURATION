@@ -1,0 +1,313 @@
+What is the index?
+What is the shard?
+What is the replica and what is primaryh shard?
+What is the replica and what is the primary shard?
+What is the dataview?
+What is the documents?
+what is the default shard size in elk
+
+Index is a collection of shards. 
+We can related it to the database scheme, when we create a database, we create a schema (source of data)
+so under scheme multiple tables come, in the elk multiple tables doesnt come shards come in form of table. 
+
+When we read from the schema, we need to create a pattern which is a dataview and this dataview matches the pattern with the index name and provide the document to the interface and we will be able to visualize the documents which is data.
+
+Primary is where data is located and searchable and shard replica is a backup of the primary shard.
+shard size, we can create upto 40gb 
+
+
+❓ What is a shard?
+👉 Is a shard a smaller piece of an index?
+Exactly! A shard is like a slice of the index. If your data is too big, ELK breaks it into shards to spread across servers and make searching faster.
+
+❓ What is a primary shard?
+👉 Is the primary shard the original copy of the data?
+Yes! The primary shard holds the main data. Every piece of data goes into the primary shard first.
+
+❓ What is a replica shard?
+👉 Is the replica shard a backup of the primary shard?
+Yes! A replica shard is just a copy of a primary shard. It's used for backup and faster searching in case one node fails.
+
+❓ What is a data view in Kibana?
+👉 Is a data view how I look at my index in Kibana?
+Yes! A data view (previously called index pattern) is how you connect Kibana to one or more indexes so you can search, filter, and visualize your data.
+
+❓ What is a document in ELK?
+👉 Is a document like one row of data?
+Exactly! A document is one single entry or record. Like one log line, one user activity, or one error report.
+
+❓ What is the default shard size in elk?
+👉 Is there a fixed size for each shard by default?
+Not exactly — there’s no hard size limit, but Elasticsearch recommends keeping each shard under 50GB for best performance.
+
+✅ Best practice: Try to keep shard size around 20–40 GB, depending on your use case.
+So in summary:
+
+There's no strict limit, but...
+Too small = too many shards = waste of memory
+Too big = slow performance or errors
+🧠 Think of shards like pizza slices — not too many tiny slices, not one giant slice!
+Let me know if you want to see how to check shard sizes with a command!
+
+------------------------
+INDEX TEMPALTE :
+------------------------
+- Index template is a predefined format, in which data will be molded as per settings defined in the index template
+- if we dont define the index template, then by default index's will be using ecs (elastic common schema)
+
+how the index template matches? we define the index pattern in the settings
+
+
+
+------------------------
+FILEBEAT ARCHITECTURE:
+------------------------
+We will create the file beat architecture now:
+
+kibana
+logstash
+filebeat
+webapplication (structured and unstructured data) 
+  structured: /opt/test/logs/my-structured.logs
+  unstructured: /opt/test/logs/my-unstructured.logs
+
+
+structure ex: {"name": "shivam"}
+unstructured ex: name shivam age 30
+
+anything (data) readable by the machine is structured 
+anything (data) not readable by the machine is ustructured 
+
+
+in elasticsearch there are fleet of agents:
+
+there multiple agents
+beats:
+apm
+etl - logstash
+
+for different purpose we have different beats:
+Beats
+Filebeat. Lightweight shipper for logs and other data, Metricbeat. Lightweight shipper for metric data.
+Packetbeat. Lightweight shipper for network data.
+Winlogbeat. Lightweight shipper for Windows event logs.
+Auditbeat. Lightweight shipper for audit data.
+Heartbeat. Lightweight shipper for uptime monitoring.
+
+we can put multiple processors in the filebeat
+INPUT 
+  -logs
+  -/opts/test/logs/*.log  (inode numbers is the way filebeats rememeber from where the file is being read)
+PROCESSORS  
+  customization
+  adding some tags
+    service_name = web
+    server_env = prod
+  dropping some unwanted data
+OUTPUT
+  LOGSTASH
+  ELK
+
+Logs : information about process or error or debug info of any server or application
+Metrics: metric is data through which we can measure system resrouce utilization performance validation
+  Cpu, memory, resource, network, IO, storage, and etc
+windlogbeat: windows to collect windows events data 
+Heartbeat: api, server is up or not is there any lattency or not, url monitoring, etc
+
+------------------------------------------------
+FILEBEAT INSTALLATION AND CONFIGURATION
+------------------------------------------------
+File beat Installation Script for Ubuntu
+Save this script as install_filebeat.sh and run it.
+sh
+
+#!/bin/bash
+
+# Update package list
+sudo apt update -y
+
+# Download and install the Elastic GPG Key
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo tee /usr/share/keyrings/elasticsearch-keyring.asc
+
+# Add the Elastic APT repository
+echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.asc] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
+
+# Update package list again
+sudo apt update -y
+
+# Install Filebeat version 8.18.1
+sudo apt install -y filebeat=8.18.1
+
+# Enable and start Filebeat service
+sudo systemctl enable filebeat
+sudo systemctl start filebeat
+
+# Check Filebeat status
+sudo systemctl status filebeat --no-pager
+
+# Print installation success message
+echo "Filebeat 8.18.1 installation completed successfully!"
+
+ 
+How to Run the Script
+1.	Save the script as install_filebeat.sh.
+2.	Give execution permissions:
+chmod +x install_filebeat.sh
+3.	Run the script:
+./install_filebeat.sh
+This will install Filebeat 8.18.1, enable the service, and check its status. Let me know if you need additional configurations!
+
+------------------------------------------------------------------------
+ONCE THE FILEBEAT IS INSTALLED, YOU NEED TO CONFIGURE THE FILEBEAT
+------------------------------------------------------------------------
+in filebeat there are two configuration that you will be interacting mostly 
+/etc/filebeat < mendatory file
+filebeat.yml 
+  input custom:
+    /opt/var/log1
+    /opt/var/log2
+  modules:
+    iis.yml.enabled
+    mysql.yml.disabled
+
+### if we dont want to use the module
+you can comment out the filebeat.config.modules and the path
+
+root@elk:/usr/bin# cd ~
+root@elk:~# cd /etc/filebeat/
+root@elk:/etc/filebeat# ls
+fields.yml  filebeat.reference.yml  filebeat.yml  modules.d
+root@elk:/etc/filebeat# vi filebeat.yml
+...
+...
+
+### this is where the all the modules exist. You can enable and disable these modules.
+root@elk:/etc/filebeat# more filebeat.yml |grep module
+# For more available modules and options, please see the filebeat.reference.yml sample
+# ============================== Filebeat modules ==============================
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+root@elk:/etc/filebeat# cd modules.d/
+root@elk:/etc/filebeat/modules.d# ls
+activemq.yml.disabled    azure.yml.disabled       crowdstrike.yml.disabled    gcp.yml.disabled               iis.yml.disabled       logstash.yml.disabled   mysql.yml.disabled            o365.yml.disabled     pensando.yml.disabled    santa.yml.disabled     threatintel.yml.disabled
+apache.yml.disabled      cef.yml.disabled         cyberarkpas.yml.disabled    google_workspace.yml.disabled  iptables.yml.disabled  microsoft.yml.disabled  mysqlenterprise.yml.disabled  okta.yml.disabled     postgresql.yml.disabled  snyk.yml.disabled      traefik.yml.disabled
+auditd.yml.disabled      checkpoint.yml.disabled  elasticsearch.yml.disabled  haproxy.yml.disabled           juniper.yml.disabled   misp.yml.disabled       nats.yml.disabled             oracle.yml.disabled   rabbitmq.yml.disabled    sophos.yml.disabled    zeek.yml.disabled
+aws.yml.disabled         cisco.yml.disabled       envoyproxy.yml.disabled     ibmmq.yml.disabled             kafka.yml.disabled     mongodb.yml.disabled    netflow.yml.disabled          osquery.yml.disabled  redis.yml.disabled       suricata.yml.disabled  zookeeper.yml.disabled
+awsfargate.yml.disabled  coredns.yml.disabled     fortinet.yml.disabled       icinga.yml.disabled            kibana.yml.disabled    mssql.yml.disabled      nginx.yml.disabled            panw.yml.disabled     salesforce.yml.disabled  system.yml.disabled    zoom.yml.disabled
+root@elk:/etc/filebeat/modules.d# ^C
+root@elk:/etc/filebeat/modules.d#
+
+### example module
+root@elk:/etc/filebeat/modules.d# more mysql.yml.disabled
+# Module: mysql
+# Docs: https://www.elastic.co/guide/en/beats/filebeat/8.x/filebeat-module-mysql.html
+
+- module: mysql
+  # Error logs
+  error:
+    enabled: false
+
+    # Set custom paths for the log files. If left empty,
+    # Filebeat will choose the paths depending on your OS.
+    #var.paths:
+
+  # Slow logs
+  slowlog:
+    enabled: false
+
+    # Set custom paths for the log files. If left empty,
+    # Filebeat will choose the paths depending on your OS.
+    #var.paths:
+root@elk:/etc/filebeat/modules.d#
+
+
+
+Logstash Installation Script for Ubuntu
+
+
+Here are the steps to install Logstash on the latest Ubuntu version:
+Step 1: Update System Packages
+sh
+sudo apt update && sudo apt upgrade -y
+Step 2: Install Java (if not installed)
+Logstash requires Java. Install OpenJDK:
+sh
+
+sudo apt install -y openjdk-17-jdk
+Verify Java installation:
+sh
+
+java -version
+Step 3: Add Elasticsearch Repository
+sh
+
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo tee /usr/share/keyrings/elasticsearch-keyring.asc
+echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.asc] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
+Step 4: Install Logstash
+sh
+
+sudo apt update
+sudo apt install -y logstash
+Step 5: Configure Logstash
+Edit the main configuration file:
+sh
+
+sudo nano /etc/logstash/logstash.yml
+Modify settings as needed (e.g., pipeline configurations).
+Step 6: Configure Logstash Pipeline
+Create a sample pipeline:
+sh
+
+sudo nano /etc/logstash/conf.d/sample.conf
+Add an example pipeline configuration:
+plaintext
+
+input {
+  beats {
+    port => 5044
+  }
+}
+
+filter {
+  mutate {
+    add_field => { "example_field" => "Hello Logstash" }
+  }
+}
+
+output {
+  elasticsearch {
+    hosts => ["http://localhost:9200"]
+    index => "logstash-test"
+  }
+  stdout { codec => rubydebug }
+}
+Save and exit.
+Step 7: Enable and Start Logstash
+sh
+
+sudo systemctl enable logstash
+sudo systemctl start logstash
+Check service status:
+sh
+
+sudo systemctl status logstash
+Step 8: Verify Logstash
+Test Logstash manually:
+sh
+
+echo '{"message": "Hello, Logstash!"}' | /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/sample.conf
+Step 9: Allow Ports in Firewall (If Required)
+sh
+
+sudo ufw allow 5044/tcp
+sudo ufw reload
+Step 10: Monitor Logstash Logs
+sh
+
+sudo journalctl -u logstash -f
+Let me know if you need further customization! 
+
+
+
+
+
