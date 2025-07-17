@@ -108,6 +108,13 @@ OUTPUT
   LOGSTASH
   ELK
 
+Logs : information about process or error or debug info of any server or application
+Metrics: metric is data through which we can measure system resrouce utilization performance validation
+  Cpu, memory, resource, network, IO, storage, and etc
+windlogbeat: windows to collect windows events data 
+Heartbeat: api, server is up or not is there any lattency or not, url monitoring, etc
+
+
 
 
 
