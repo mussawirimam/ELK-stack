@@ -1,0 +1,1 @@
+# we will install filebeat and on one server we will install logstash and make the connectivity and send the file from filebeat to the logstash. 
