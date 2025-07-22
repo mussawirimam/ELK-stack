@@ -461,6 +461,9 @@ root@elk:/etc/filebeat# more filebeat.yml |grep module
 # ============================== Filebeat modules ==============================
 filebeat.config.modules:
   path: ${path.config}/modules.d/*.yml
+
+### location for module to enable and disable (which extra gives capabilities)
+
 root@elk:/etc/filebeat# cd modules.d/
 root@elk:/etc/filebeat/modules.d# ls
 activemq.yml.disabled    azure.yml.disabled       crowdstrike.yml.disabled    gcp.yml.disabled               iis.yml.disabled       logstash.yml.disabled   mysql.yml.disabled            o365.yml.disabled     pensando.yml.disabled    santa.yml.disabled     threatintel.yml.disabled
@@ -468,10 +471,11 @@ apache.yml.disabled      cef.yml.disabled         cyberarkpas.yml.disabled    go
 auditd.yml.disabled      checkpoint.yml.disabled  elasticsearch.yml.disabled  haproxy.yml.disabled           juniper.yml.disabled   misp.yml.disabled       nats.yml.disabled             oracle.yml.disabled   rabbitmq.yml.disabled    sophos.yml.disabled    zeek.yml.disabled
 aws.yml.disabled         cisco.yml.disabled       envoyproxy.yml.disabled     ibmmq.yml.disabled             kafka.yml.disabled     mongodb.yml.disabled    netflow.yml.disabled          osquery.yml.disabled  redis.yml.disabled       suricata.yml.disabled  zookeeper.yml.disabled
 awsfargate.yml.disabled  coredns.yml.disabled     fortinet.yml.disabled       icinga.yml.disabled            kibana.yml.disabled    mssql.yml.disabled      nginx.yml.disabled            panw.yml.disabled     salesforce.yml.disabled  system.yml.disabled    zoom.yml.disabled
-root@elk:/etc/filebeat/modules.d# ^C
+
 root@elk:/etc/filebeat/modules.d#
 
-### example module
+### example module file:
+
 root@elk:/etc/filebeat/modules.d# more mysql.yml.disabled
 # Module: mysql
 # Docs: https://www.elastic.co/guide/en/beats/filebeat/8.x/filebeat-module-mysql.html
@@ -493,6 +497,21 @@ root@elk:/etc/filebeat/modules.d# more mysql.yml.disabled
     # Filebeat will choose the paths depending on your OS.
     #var.paths:
 root@elk:/etc/filebeat/modules.d#
+
+
+### filebeat.yml file have two things inputs custom and modules. Understanding of these two is very important. 
+### if we dont want to use the module, we can comment out the filebeat.config.modules section
+root@elk:/etc/filebeat# more filebeat.yml |grep module
+# For more available modules and options, please see the filebeat.reference.yml sample
+# ============================== Filebeat modules ==============================
+filebeat.config.modules:    <-------------------------------------------------------------------
+  path: ${path.config}/modules.d/*.yml  <-------------------------------------------------------------
+
+3 steps for filebeat:
+input 
+process
+output
+  once the input and process is configured in filebeat, it will send out the output.
 
 ------------------------------------------------------------------------
 LOGSTASH INSTALLATION SCRIPT FOR UBUNTU
