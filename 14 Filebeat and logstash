@@ -124,9 +124,18 @@ conf.d = is related to manage the pipelines, we use it with combination of pipel
   pip3.conf
 
 currently we will work with the single pipeline which will to open the filebeat port recieve logs. 
+pipline.yml file you can specify form where to read the files, you can add a custom folder or use the conf.d which comes default with the logstash installation. 
 
+logstash uses logstash.yml file for the confuration
+logstash uses pipline.yml file for all the pipelines
+
+do homework on persisted que from the logstash.yml file what it does and why we need it. 
+
+persistence vs queue:
+persistence is handled by the logstash and the queue is handled by us. 
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+logstash.yml file example:
 root@elk:/etc/logstash# cat logstash.yml
 # Settings file in YAML
 #
@@ -246,7 +255,7 @@ path.data: /var/lib/logstash
 #
 # config.support_escapes: false
 #
-# ------------ API Settings -------------
+# ------------ API Settings -------------        ###<----------------------------------- whenever the logstash starts, it creates the api same as the elasticsearch to deal with the logstash. Which can be exposed on the api.http.host and we can change the port as well.
 # Define settings related to the HTTP API here.
 #
 # The HTTP API is enabled by default. It can be disabled, but features that rely
@@ -354,7 +363,7 @@ path.data: /var/lib/logstash
 # Each pipeline will group its PQ files in a subdirectory matching its `pipeline.id`.
 # Default is path.data/queue.
 #
-# path.queue:
+# path.queue:  ###<-------------------------------------------------------------------------------------------- what queing setting is: in your logstash you are going to use input, filter, and output. So to work with this, we specify if the name is not in tag then go to xyz queue. We can specify our queues, queue gets utilized for unhandled data. If there is unhandled exception, we can not send it to the elasticsearch but to dead letter queue. 
 #
 # If using queue.type: persisted, the page data files size. The queue data consists of
 # append-only data files separated into pages. Default is 64mb
