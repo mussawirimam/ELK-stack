@@ -1,1 +1,123 @@
 # we will install filebeat and on one server we will install logstash and make the connectivity and send the file from filebeat to the logstash. 
+
+filebeat logs files and send the data to the either to the elasticsearch or to the logstash
+
+IMPORTANT: why you send the data to the logstash?
+If there is any mutation that needs to be done in the data, we have to parse the data in a structured way. So, we send the data to Logstash, and Logstash hands it over to Elasticsearch. The data can then be visualized on the Kibana Discover page.
+
+we will continue after the installation of the file beat, you check the installation steps in document 13. 
+
+we will conigure the logstash below
+
+---------------------------------------------------------------------------------------------
+LOGSTASH INSTALLATION
+---------------------------------------------------------------------------------------------
+Installation steps are in this file in your githubrepository
+Elastic_SearchChintaman/Filebeat and Logstash installtion.docx
+https://github.com/mussawirimam/Elastic_SearchChintaman/blob/main/Filebeat%20and%20Logstash%20installtion.docx
+remember you installed the filebeat on the node6
+install the logstash on the node 5, you can also create another server for the logstash but we are going to use the node 5
+
+Here are the steps to install Logstash on the latest Ubuntu version:
+Step 1: Update System Packages
+sh
+sudo apt update && sudo apt upgrade -y
+Step 2: Install Java (if not installed)
+Logstash requires Java. Install OpenJDK:
+sh
+
+sudo apt install -y openjdk-17-jdk  <--------------------- ### if you have installed the elasticsearch before, you can skip this step ### we need java since the logstash is build in java, so we need a java runtime. 
+Verify Java installation:
+sh
+
+java -version
+Step 3: Add Elasticsearch Repository
+sh
+
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo tee /usr/share/keyrings/elasticsearch-keyring.asc
+echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.asc] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
+Step 4: Install Logstash
+sh
+
+sudo apt update
+sudo apt install -y logstash
+Step 5: Configure Logstash
+Edit the main configuration file:
+sh
+
+sudo nano /etc/logstash/logstash.yml
+Modify settings as needed (e.g., pipeline configurations).
+Step 6: Configure Logstash Pipeline
+Create a sample pipeline:
+sh
+
+sudo nano /etc/logstash/conf.d/sample.conf
+Add an example pipeline configuration:
+plaintext
+
+input {
+  beats {
+    port => 5044
+  }
+}
+
+filter {
+  mutate {
+    add_field => { "example_field" => "Hello Logstash" }
+  }
+}
+
+output {
+  elasticsearch {
+    hosts => ["http://localhost:9200"]
+    index => "logstash-test"
+  }
+  stdout { codec => rubydebug }
+}
+Save and exit.
+Step 7: Enable and Start Logstash
+sh
+
+sudo systemctl enable logstash
+sudo systemctl start logstash
+Check service status:
+sh
+
+sudo systemctl status logstash
+Step 8: Verify Logstash
+Test Logstash manually:
+sh
+
+echo '{"message": "Hello, Logstash!"}' | /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/sample.conf
+Step 9: Allow Ports in Firewall (If Required)
+sh
+
+sudo ufw allow 5044/tcp
+sudo ufw reload
+Step 10: Monitor Logstash Logs
+sh
+
+sudo journalctl -u logstash -f
+Let me know if you need further customization! 
+
+
+
+################# CONFIGURATION OF LOGSTASH
+root@elk:/etc/logstash# ls
+conf.d  jvm.options  log4j2.properties  logstash-sample.conf  logstash.yml  pipelines.yml  startup.options
+root@elk:/etc/logstash#
+
+these 3 files are for the system configureation, we dont deal with them but time to time incident can arise where you will check these files.
+jvm.options = we use it for java application settings
+log4j2.properties = is used for logging purpose, generating the logs of the logstash specification
+startup.option = steps of what will happen first, there are variable values 
+  e.g when the logstash process will run, it will create a pid. This process will be captured in /var/run/logstash.pid etc
+
+main 3 configuration files
+logstash.yml = all the features of the logstash, we can enable and disable through this file
+  e.g logfile or search settings etc
+
+
+
+### on conf.d
+
