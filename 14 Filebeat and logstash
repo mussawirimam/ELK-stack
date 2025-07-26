@@ -569,13 +569,33 @@ root@elk:/etc/logstash#
 ### we need to configure our filebeat config file in the /etc/logstash/conf.d <---------------------
 ### the file extension of the file should be .conf
 
+### we have three parts to create the structure of the conf.d configuration file: Input, filter, and Output.
+https://www.elastic.co/docs/reference/logstash/plugins/plugins-inputs-beats
 
 root@elk:/etc/logstash# ls
 conf.d  jvm.options  log4j2.properties  logstash-sample.conf  logstash.yml  pipelines.yml  startup.options
 root@elk:/etc/logstash# cd conf.d/
 root@elk:/etc/logstash/conf.d# vim filebeat.conf
 
-### we have three parts to create the structure of the conf.d configuration file: Input, filter, and Output.
+input {
+  beats {
+    port => 5044
+  }
+}
 
+filter {
 
+}
+
+output {
+  elasticsearch {
+    hosts => ["http://localhost:9200"]
+    index => "%{[@metadata][beat]}-%{[@metadata][version]}"
+  }
+}
+
+### we will configure the ssl within the filebeat.conf as well
+https://www.elastic.co/docs/reference/fleet/secure-logstash-connections
+
+}
 
