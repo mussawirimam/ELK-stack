@@ -536,3 +536,46 @@ path.logs: /var/log/logstash
 root@elk:/etc/logstash#
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+### On pipeline
+
+root@elk:/etc/logstash# ls
+conf.d  jvm.options  log4j2.properties  logstash-sample.conf  logstash.yml  pipelines.yml  startup.options
+
+
+
+### how logstash will make sure which pipeline id we should run?
+### it will look into more logstash.yml file and in that the pipeline.id: main is mentioned in both the files. 
+### but when we work with the mutliple pipelines, suppose in your pipeline the first id is main and second id can be xyz you can mention multiple id's based on multiple pipeline in different directories as well. 
+### you can add other files in the pipeline.yml file as well
+### from pipelines.yml we can read our config files path and it's location
+### we need to configure our filebeat config file in the /etc/logstash/conf.d <---------------------
+
+root@elk:/etc/logstash# cat pipelines.yml
+# This file is where you define your pipelines. You can define multiple.
+# For more information on multiple pipelines, see the documentation:
+#   https://www.elastic.co/guide/en/logstash/current/multiple-pipelines.html
+
+- pipeline.id: main
+  path.config: "/etc/logstash/conf.d/*.conf"
+root@elk:/etc/logstash#
+
+root@elk:/etc/logstash# cat logstash.yml | grep main
+# pipeline.id: main
+# Where to fetch the pipeline configuration for the main pipeline
+# Pipeline configuration string for the main pipeline
+#xpack.management.pipeline.id: ["main", "apache_logs"]
+root@elk:/etc/logstash#
+
+### we need to configure our filebeat config file in the /etc/logstash/conf.d <---------------------
+### the file extension of the file should be .conf
+
+
+root@elk:/etc/logstash# ls
+conf.d  jvm.options  log4j2.properties  logstash-sample.conf  logstash.yml  pipelines.yml  startup.options
+root@elk:/etc/logstash# cd conf.d/
+root@elk:/etc/logstash/conf.d# vim filebeat.conf
+
+### we have three parts to create the structure of the conf.d configuration file: Input, filter, and Output.
+
+
+
