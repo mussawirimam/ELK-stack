@@ -594,8 +594,31 @@ output {
   }
 }
 
+
 ### we will configure the ssl within the filebeat.conf as well
 https://www.elastic.co/docs/reference/fleet/secure-logstash-connections
+### now as we are using self-signed certificate ssl, so we have to provide ssl certificate here as well to elasticsearch
+### we need to provide ssl true, you can see it in the official document and provide the CA as well
+## we are using same CA through which we generated all the Certificates
+input {
+  beats {
+    port => 5044
+  }
+}
+
+filter {
 
 }
 
+output {
+  elasticsearch {
+    hosts => ["http://10.211.55.32:9200"] <---------------------------------------- ip address of the co-ordinator node where the filebeat is installed.
+    index => "%{[@metadata][beat]}-%{[@metadata][version]}"
+    ssl => true
+    cacert => "/path/to/http_ca.crt"  <-------------------------- we need provide the ca through which we generated all the certificates, we previously generated in the elasticsearch configuration. (CA utilized to generate all the certificates.)
+  }
+}
+
+### we also need to provide ID and Password
+### side note: for security reason we can use environment variable as well. 
+### side note: do not specify index name anywhere in capital letters
