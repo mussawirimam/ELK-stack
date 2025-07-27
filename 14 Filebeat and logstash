@@ -571,6 +571,7 @@ root@elk:/etc/logstash#
 
 ### we have three parts to create the structure of the conf.d configuration file: Input, filter, and Output.
 https://www.elastic.co/docs/reference/logstash/plugins/plugins-inputs-beats
+https://www.elastic.co/docs/reference/logstash/plugins/plugins-outputs-elasticsearch <------------- you can see the settings and password input type 
 
 root@elk:/etc/logstash# ls
 conf.d  jvm.options  log4j2.properties  logstash-sample.conf  logstash.yml  pipelines.yml  startup.options
@@ -622,3 +623,31 @@ output {
 ### we also need to provide ID and Password
 ### side note: for security reason we can use environment variable as well. 
 ### side note: do not specify index name anywhere in capital letters
+### but here we dont want api-key but ID password
+### these are the mandatory parameters below
+
+input {
+  beats {
+    port => 5044
+
+  }
+}
+
+filter {
+
+}
+
+output {
+  elasticsearch {
+    hosts => ["http://10.211.55.32:9200"]
+    index => "logs_for_test_%{+YYYY.MM.dd}"  <------------------------ pattern of the index, index name needs to be always in small letters
+    user => elastic <------------------------------------------------- you can create another user and add the user here
+    password => blfOwgJUMUuLKjmXVYU2
+    ssl => true
+    cacert => "/path/to/http_ca.crt"
+  }
+}
+
+#### IMPORTANT ON NEXT: 
+### now we will configure the filebeat and we will read data and send it to port 5044 and we will see the data coming to the elasticsearch
+###
