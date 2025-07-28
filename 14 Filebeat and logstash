@@ -651,3 +651,61 @@ output {
 #### IMPORTANT ON NEXT: 
 ### now we will configure the filebeat and we will read data and send it to port 5044 and we will see the data coming to the elasticsearch
 ###
+root@elk:/etc/logstash/conf.d# ifconfig |grep inet
+        inet 10.211.55.31 <-------------- logstash/elasticsearch node-5/data node
+
+# to verify if our node is able to communicate/connected with the elasticsearch port
+root@elk:/etc/logstash/conf.d# telnet 10.211.55.32:9200
+Server lookup failure:  10.211.55.32:9200:telnet, Name or service not known
+root@elk:/etc/logstash/conf.d# telnet 10.211.55.32 9200
+Trying 10.211.55.32...
+Connected to 10.211.55.32.
+Escape character is '^]'.
+
+### with providing ca crt to curl to verify certificate 
+### to verify the certificate, we can use this curl call
+curl -u elastic:<password here> https://sys.fcc:9200 --cacert /etc/elasticsearch/certs/ca/ca.crt
+
+-----------------------------------------------------------------------------------------------------
+TROUBLE SHOOTING TIME:
+-----------------------------------------------------------------------------------------------------
+ERROR:
+root@elk:/etc/logstash/conf.d# curl -u elastic:blfOwgJUMUuLKjmXVYU2 https://sys.fcc:9200 --cacert /etc/elasticsearch/certs/ca/ca.crt
+curl: (7) Failed to connect to sys.fcc port 9200 after 3061 ms: Couldn't connect to server
+root@elk:/etc/logstash/conf.d#
+
+RESOLUTION:
+### add the ip address of the node-6 in the /etc/hosts of node-5
+root@elk:/usr/share/elasticsearch/bin# ifconfig
+enp0s5: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.211.55.32
+
+### on node-5
+root@elk:/etc/logstash/conf.d# vi /etc/hosts
+10.211.55.32    sys.fcc
+:wq!
+
+root@elk:/etc/logstash/conf.d# curl -u elastic:blfOwgJUMUuLKjmXVYU2 https://sys.fcc:9200 --cacert /etc/elasticsearch/certs/ca/ca.crt
+{
+  "name" : "node-6",
+  "cluster_name" : "future",
+  "cluster_uuid" : "N5G75_FYSm-fp-cvIrhXGQ",
+  "version" : {
+    "number" : "8.18.1",
+    "build_flavor" : "default",
+    "build_type" : "deb",
+    "build_hash" : "df116ec6455476a07daafc3ded80e2bb1a3385ed",
+    "build_date" : "2025-04-30T10:07:44.026929518Z",
+    "build_snapshot" : false,
+    "lucene_version" : "9.12.1",
+    "minimum_wire_compatibility_version" : "7.17.0",
+    "minimum_index_compatibility_version" : "7.0.0"
+  },
+  "tagline" : "You Know, for Search"
+}
+root@elk:/etc/logstash/conf.d#
+### the reason it worked is because we generated the certificates with the sys.fcc
+-----------------------------------------------------------------------------------------------------
+TROUBLE SHOOTING TIME ENDS
+-----------------------------------------------------------------------------------------------------
+
