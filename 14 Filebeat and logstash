@@ -1368,13 +1368,179 @@ ping template {:es_version=>8, :ecs_compatibility=>:v8}
 [INFO ] 2025-07-29 01:05:49.953 [[main]<beats] Server - Starting server on port: 5044 ### <----------------------- ### when we are running manually, the pipleine is running and connecting 
 
   ### manual pipeline is working, so we will troubleshoot to see what error we get while RUNNING AS A DAEMON.
-  
+  ### On node-6 we will start the filebeat, meanwhile the logstash is running manually on Node-5
+root@elk:/etc/filebeat# vim filebeat.yml
+root@elk:/etc/filebeat# systemctl start filebeat
+root@elk:/etc/filebeat# systemctl status filebeat
+● filebeat.service - Filebeat sends log files to Logstash or directly to Elasticsearch.
+     Loaded: loaded (/usr/lib/systemd/system/filebeat.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2025-07-29 02:39:48 UTC; 6s ago
+       Docs: https://www.elastic.co/beats/filebeat
+   Main PID: 76722 (filebeat)
+      Tasks: 8 (limit: 4549)
+     Memory: 87.4M (peak: 87.7M)
+        CPU: 1.276s
+     CGroup: /system.slice/filebeat.service
+             └─76722 /usr/share/filebeat/bin/filebeat --environment systemd -c /etc/filebeat/filebeat.yml --path.home /usr/share/filebeat --path.config /etc/filebeat --path.data /var/lib/filebeat --path.logs /var/log/filebeat
 
+Jul 29 02:39:49 elk filebeat[76722]: {"log.level":"info","@timestamp":"2025-07-29T02:39:49.440Z","log.logger":"crawler","log.origin":{"function":"github.com/elastic/beats/v7/filebeat/beater.(*crawler).startInput","file.name":"beater/crawler.go","file.line":117},"message":"starting input, keys present on the config: [filebeat.inputs.0.enabled filebeat.inputs.0.id filebeat.inputs.0.paths.0 filebeat.inputs.0.type]","service.name":"filebeat","ecs.version":"1.6.0"}
+Jul 29 02:39:49 elk filebeat[76722]: {"log.level":"info","@timestamp":"2025-07-29T02:39:49.441Z","log.logger":"crawler","log.origin":{"function":"github.com/elastic/beats/v7/filebeat/beater.(*crawler).startInput","file.name":"beater/crawler.go","file.line":148},"message":"Starting input (ID: 11337388005444501392)","service.name":"filebeat","ecs.version":"1.6.0"}
+Jul 29 02:39:49 elk filebeat[76722]: {"log.level":"info","@timestamp":"2025-07-29T02:39:49.441Z","log.logger":"crawler","log.origin":{"function":"github.com/elastic/beats/v7/filebeat/beater.(*crawler).Start","file.name":"beater/crawler.go","file.line":106},"message":"Loading and starting Inputs completed. Enabled inputs: 1","service.name":"filebeat","ecs.version":"1.6.0"}
+Jul 29 02:39:49 elk filebeat[76722]: {"log.level":"info","@timestamp":"2025-07-29T02:39:49.441Z","log.origin":{"function":"github.com/elastic/beats/v7/libbeat/cfgfile.(*Reloader).Run","file.name":"cfgfile/reload.go","file.line":163},"message":"Config reloader started","service.name":"filebeat","ecs.version":"1.6.0"}
+Jul 29 02:39:49 elk filebeat[76722]: {"log.level":"info","@timestamp":"2025-07-29T02:39:49.441Z","log.origin":{"function":"github.com/elastic/beats/v7/libbeat/cfgfile.(*Reloader).Run","file.name":"cfgfile/reload.go","file.line":223},"message":"Loading of config files completed.","service.name":"filebeat","ecs.version":"1.6.0"}
+Jul 29 02:39:49 elk filebeat[76722]: {"log.level":"info","@timestamp":"2025-07-29T02:39:49.441Z","log.logger":"input.filestream","log.origin":{"function":"github.com/elastic/beats/v7/filebeat/input/v2/compat.(*runner).Start.func1","file.name":"compat/compat.go","file.line":135},"message":"Input 'filestream' starting","service.name":"filebeat","id":"my-filestream-id","ecs.version":"1.6.0"}
+Jul 29 02:39:49 elk filebeat[76722]: {"log.level":"info","@timestamp":"2025-07-29T02:39:49.441Z","log.logger":"metric_registry","log.origin":{"function":"github.com/elastic/beats/v7/libbeat/monitoring/inputmon.NewInputRegistry","file.name":"inputmon/input.go","file.line":63},"message":"registering","service.name":"filebeat","input_type":"filestream","id":"my-filestream-id","key":"my-filestream-id","uuid":"9b41d03b-3ff4-4c25-ac1d-5606ebabfbae","ecs.version":"1.6.0"}
+Jul 29 02:39:52 elk filebeat[76722]: {"log.level":"info","@timestamp":"2025-07-29T02:39:52.430Z","log.logger":"add_cloud_metadata","log.origin":{"function":"github.com/elastic/beats/v7/libbeat/processors/add_cloud_metadata.(*addCloudMetadata).init.func1","file.name":"add_cloud_metadata/add_cloud_metadata.go","file.line":100},"message":"add_cloud_metadata: hosting provider type not detected.","service.name":"filebeat","ecs.version":"1.6.0"}
+Jul 29 02:39:52 elk filebeat[76722]: {"log.level":"info","@timestamp":"2025-07-29T02:39:52.458Z","log.logger":"publisher_pipeline_output","log.origin":{"function":"github.com/elastic/beats/v7/libbeat/publisher/pipeline.(*netClientWorker).run","file.name":"pipeline/client_worker.go","file.line":138},"message":"Connecting to backoff(async(tcp://10.211.55.31:5044))","service.name":"filebeat","ecs.version":"1.6.0"}
+Jul 29 02:39:52 elk filebeat[76722]: {"log.level":"info","@timestamp":"2025-07-29T02:39:52.461Z","log.logger":"publisher_pipeline_output","log.origin":{"function":"github.com/elastic/beats/v7/libbeat/publisher/pipeline.(*netClientWorker).run","file.name":"pipeline/client_worker.go","file.line":146},"message":"Connection to backoff(async(tcp://10.211.55.31:5044)) established","service.name":"filebeat","ecs.version":"1.6.0"}
+root@elk:/etc/filebeat# systemctl enable filebeat
+Synchronizing state of filebeat.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install enable filebeat
+root@elk:/etc/filebeat#
 
+### we will see on KIBANA if the logs locadtion that is defined in the filebeat.yml are ingested or not on node-1 which is our master/elasticsearch/kibana
+http://10.211.55.11:5601
+### I couldnt find the logs in kibana, so we will take a look at filebeat logs 
+root@elk:/etc/filebeat# systemctl status filebeat
+● filebeat.service - Filebeat sends log files to Logstash or directly to Elasticsearch.
+...
+----------------> ### log location    └─76722 /usr/share/filebeat/bin/filebeat --environment systemd -c /etc/filebeat/filebeat.yml --path.home /usr/share/filebeat --path.config /etc/filebeat --path.data /var/lib/filebeat --path.logs /var/log/filebeat
+...
 
+### not being able to find the logs for the filebeat, stopping the filebeat for a while.
+root@elk:/etc/filebeat# systemctl stop filebeat
+root@elk:/etc/filebeat#
+### looking in the 
+root@elk:/etc/filebeat# systemctl start filebeat
+root@elk:/etc/filebeat# systemctl status filebeat
+● filebeat.service - Filebeat sends log files to Logstash or directly to Elasticsearch.
+     Loaded: loaded (/usr/lib/systemd/system/filebeat.service; enabled; preset: enabled)	<-------------------------------------------
+     Active: active (running) since Tue 2025-07-29 03:08:48 UTC; 4s ago
+       Docs: https://www.elastic.co/beats/filebeat
+   Main PID: 76898 (filebeat)
+      Tasks: 7 (limit: 4549)
+     Memory: 60.9M (peak: 61.1M)
+        CPU: 169ms
+     CGroup: /system.slice/filebeat.service
+             └─76898 /usr/share/filebeat/bin/filebeat --environment systemd -c /etc/filebeat/filebeat.yml --path.home /usr/share/filebeat --path.config /etc/filebeat --path.data /var/lib/filebeat --path.logs /var/log/filebeat
 
+root@elk:/etc/filebeat# vim /usr/lib/systemd/system/filebeat.service
+
+### filebeat isnt writing the logs, because the logs location which we are trying to find is correct (/var/log/filebeat)
+"/usr/lib/systemd/system/filebeat.service" 18L, 662B                                                                                                                                                                                             1,1           All
+[Unit]
+Description=Filebeat sends log files to Logstash or directly to Elasticsearch.
+Documentation=https://www.elastic.co/beats/filebeat
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+
+UMask=0027
+Environment="GODEBUG='madvdontneed=1'"
+Environment="BEAT_LOG_OPTS="
+Environment="BEAT_CONFIG_OPTS=-c /etc/filebeat/filebeat.yml"
+Environment="BEAT_PATH_OPTS=--path.home /usr/share/filebeat --path.config /etc/filebeat --path.data /var/lib/filebeat --path.logs /var/log/filebeat"
+ExecStart=/usr/share/filebeat/bin/filebeat --environment systemd $BEAT_LOG_OPTS $BEAT_CONFIG_OPTS $BEAT_PATH_OPTS
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+### manually creating the filebeat log file in /var/log 
+root@elk:/var/log# mkdir filebeat
+root@elk:/var/log# cd /var/log
+root@elk:/var/log# ls
+README  alternatives.log  apport.log  apt  bootstrap.log  btmp  cloud-init-output.log  cloud-init.log  dist-upgrade  dpkg.log  elasticsearch  faillog  filebeat  fontconfig.log  installer  journal  lastlog  private  unattended-upgrades  wtmp
+root@elk:/var/log# mkdir filebeat
+mkdir: cannot create directory ‘filebeat’: File exists
+root@elk:/var/log# cd filebeat/
+root@elk:/var/log/filebeat#
+
+### The instructor is mentioning that, he needs to create the inbound rule for the logstash port and that's how filebeat will be able to connect to the logstash server
+### HYPOTHESIS: I need to create similar firewall rule on the ubuntu server probably so that telnet is able to listen
+### telnetting from the Node-6 filebeat server to Node-5 logstash server port
+root@elk:/var/log/filebeat# telnet 10.211.55.31 5044
+Trying 10.211.55.31...
+Connected to 10.211.55.31.	<------------------------------------------ ### listening to the server port, meaning the server port 5044 is open and listening since it is not rejected
+Escape character is '^]'.
+### I didnt have to do anything, seems it is listening 
+
+### stop the manually running logstash on node-5
+### add the debug line in the logstash conf.d/filebeat.conf file
+### we are going to add another output in the logstash conf file file to print the log and then index it to elasticsearch
+root@elk:/etc/logstash/conf.d# vim filebeat.conf
+"filebeat.conf" 22L, 296B                                                                                                                                                                                                                                              14,20         All
+input {
+  beats {
+    port => 5044
+
+  }
+}
+
+filter {
+
+}
+
+output
+{
+
+stdout {
+  codec => rubydebug	<--------------------------- ### added this line
+}
+
+  elasticsearch {
+    hosts => ["https://sys.fcc:9200"]
+    index => "logs_for_test_%{+YYYY.MM.dd}"
+    user => elastic
+    password => blfOwgJUMUuLKjmXVYU2
+    ssl => true
+    cacert => "/etc/elasticsearch/certs/ca/ca.crt"
+  }
+}
+:wq!
+
+### whatever the activities that is going to happen with the pipeline will be printed on the console as well.
+### start the logstash again
+root@elk:/etc/logstash/conf.d# /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/filebeat.conf
+Using bundled JDK: /usr/share/logstash/jdk
+OpenJDK 64-Bit Server VM warning: Unable to get SVE vector length on this system. Disabling SVE. Specify -XX:UseSVE=0 to shun this warning.
+OpenJDK 64-Bit Server VM warning: Unable to get SVE vector length on this system. Disabling SVE. Specify -XX:UseSVE=0 to shun this warning.
+WARNING: Could not find logstash.yml which is typically located in $LS_HOME/config or /etc/logstash. You can specify the path using --path.settings. Continuing using the defaults
+Could not find log4j2 configuration at path /usr/share/logstash/config/log4j2.properties. Using default config which logs errors to the console
+[WARN ] 2025-07-29 03:35:43.345 [main] runner - Starting from version 9.0, running with superuser privileges is not permitted unless you explicitly set 'allow_superuser' to true, thereby acknowledging the possible security risks
+[WARN ] 2025-07-29 03:35:43.346 [main] runner - NOTICE: Running Logstash as a superuser is strongly discouraged as it poses a security risk. Set 'allow_superuser' to false for better security.
+[WARN ] 2025-07-29 03:35:43.348 [main] runner - 'pipeline.buffer.type' setting is not explicitly defined.Before moving to 9.x set it to 'heap' and tune heap size upward, or set it to 'direct' to maintain existing behavior.
+[INFO ] 2025-07-29 03:35:43.349 [main] runner - Starting Logstash {"logstash.version"=>"8.18.4", "jruby.version"=>"jruby 9.4.9.0 (3.1.4) 2024-11-04 547c6b150e OpenJDK 64-Bit Server VM 21.0.7+6-LTS on 21.0.7+6-LTS +indy +jit [aarch64-linux]"}
+[INFO ] 2025-07-29 03:35:43.350 [main] runner - JVM bootstrap flags: [-Xms1g, -Xmx1g, -Djava.awt.headless=true, -Dfile.encoding=UTF-8, -Djruby.compile.invokedynamic=true, -XX:+HeapDumpOnOutOfMemoryError, -Djava.security.egd=file:/dev/urandom, -Dlog4j2.isThreadContextMapInheritable=true, -Djruby.regexp.interruptible=true, -Djdk.io.File.enableADS=true, --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED, --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED, --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED, --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED, --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED, --add-opens=java.base/java.security=ALL-UNNAMED, --add-opens=java.base/java.io=ALL-UNNAMED, --add-opens=java.base/java.nio.channels=ALL-UNNAMED, --add-opens=java.base/sun.nio.ch=ALL-UNNAMED, --add-opens=java.management/sun.management=ALL-UNNAMED, -Dio.netty.allocator.maxOrder=11]
+[INFO ] 2025-07-29 03:35:43.401 [main] StreamReadConstraintsUtil - Jackson default value override `logstash.jackson.stream-read-constraints.max-string-length` configured to `200000000` (logstash default)
+[INFO ] 2025-07-29 03:35:43.401 [main] StreamReadConstraintsUtil - Jackson default value override `logstash.jackson.stream-read-constraints.max-number-length` configured to `10000` (logstash default)
+[INFO ] 2025-07-29 03:35:43.401 [main] StreamReadConstraintsUtil - Jackson default value override `logstash.jackson.stream-read-constraints.max-nesting-depth` configured to `1000` (logstash default)
+[WARN ] 2025-07-29 03:35:43.479 [LogStash::Runner] multilocal - Ignoring the 'pipelines.yml' file because modules or command line options are specified
+[INFO ] 2025-07-29 03:35:43.630 [Api Webserver] agent - Successfully started Logstash API endpoint {:port=>9600, :ssl_enabled=>false}
+[INFO ] 2025-07-29 03:35:43.732 [Converge PipelineAction::Create<main>] Reflections - Reflections took 50 ms to scan 1 urls, producing 150 keys and 529 values
+[WARN ] 2025-07-29 03:35:43.874 [Converge PipelineAction::Create<main>] elasticsearch - You are using a deprecated config setting "cacert" set in elasticsearch. Deprecated settings will continue to work, but are scheduled for removal from logstash in the future. Set 'ssl_certificate_authorities' instead. If you have any questions about this, please ask it on the https://discuss.elastic.co/c/logstash discussion forum {:name=>"cacert", :plugin=><LogStash::Outputs::ElasticSearch password=><password>, hosts=>[https://sys.fcc:9200], cacert=>"/etc/elasticsearch/certs/ca/ca.crt", index=>"logs_for_test_%{+YYYY.MM.dd}", id=>"1f45a3c3742417904a17ddcebf8b705d6bf69806b930c3cb6e48857b96105a9f", user=>"elastic", ssl=>true, enable_metric=>true, codec=><LogStash::Codecs::Plain id=>"plain_3a834685-a583-4d5a-ad9b-f494ca5e7c13", enable_metric=>true, charset=>"UTF-8">, workers=>1, ssl_certificate_verification=>true, ssl_verification_mode=>"full", sniffing=>false, sniffing_delay=>5, timeout=>60, pool_max=>1000, pool_max_per_route=>100, resurrect_delay=>5, validate_after_inactivity=>10000, http_compression=>true, compression_level=>1, retry_initial_interval=>2, retry_max_interval=>64, dlq_on_failed_indexname_interpolation=>true, data_stream_type=>"logs", data_stream_dataset=>"generic", data_stream_namespace=>"default", data_stream_sync_fields=>true, data_stream_auto_routing=>true, manage_template=>true, template_overwrite=>false, template_api=>"auto", doc_as_upsert=>false, script_type=>"inline", script_lang=>"painless", script_var_name=>"event", scripted_upsert=>false, retry_on_conflict=>1, ilm_enabled=>"auto", ilm_pattern=>"{now/d}-000001", ilm_policy=>"logstash-policy">}
+[WARN ] 2025-07-29 03:35:43.877 [Converge PipelineAction::Create<main>] elasticsearch - You are using a deprecated config setting "cacert" set in elasticsearch. Deprecated settings will continue to work, but are scheduled for removal from logstash in the future. Set 'ssl_certificate_authorities' instead. If you have any questions about this, please ask it on the https://discuss.elastic.co/c/logstash discussion forum
+[WARN ] 2025-07-29 03:35:43.877 [Converge PipelineAction::Create<main>] elasticsearch - You are using a deprecated config setting "ssl" set in elasticsearch. Deprecated settings will continue to work, but are scheduled for removal from logstash in the future. Set 'ssl_enabled' instead. If you have any questions about this, please ask it on the https://discuss.elastic.co/c/logstash discussion forum {:name=>"ssl", :plugin=><LogStash::Outputs::ElasticSearch password=><password>, hosts=>[https://sys.fcc:9200], cacert=>"/etc/elasticsearch/certs/ca/ca.crt", index=>"logs_for_test_%{+YYYY.MM.dd}", id=>"1f45a3c3742417904a17ddcebf8b705d6bf69806b930c3cb6e48857b96105a9f", user=>"elastic", ssl=>true, enable_metric=>true, codec=><LogStash::Codecs::Plain id=>"plain_3a834685-a583-4d5a-ad9b-f494ca5e7c13", enable_metric=>true, charset=>"UTF-8">, workers=>1, ssl_certificate_verification=>true, ssl_verification_mode=>"full", sniffing=>false, sniffing_delay=>5, timeout=>60, pool_max=>1000, pool_max_per_route=>100, resurrect_delay=>5, validate_after_inactivity=>10000, http_compression=>true, compression_level=>1, retry_initial_interval=>2, retry_max_interval=>64, dlq_on_failed_indexname_interpolation=>true, data_stream_type=>"logs", data_stream_dataset=>"generic", data_stream_namespace=>"default", data_stream_sync_fields=>true, data_stream_auto_routing=>true, manage_template=>true, template_overwrite=>false, template_api=>"auto", doc_as_upsert=>false, script_type=>"inline", script_lang=>"painless", script_var_name=>"event", scripted_upsert=>false, retry_on_conflict=>1, ilm_enabled=>"auto", ilm_pattern=>"{now/d}-000001", ilm_policy=>"logstash-policy">}
+[WARN ] 2025-07-29 03:35:43.877 [Converge PipelineAction::Create<main>] elasticsearch - You are using a deprecated config setting "ssl" set in elasticsearch. Deprecated settings will continue to work, but are scheduled for removal from logstash in the future. Set 'ssl_enabled' instead. If you have any questions about this, please ask it on the https://discuss.elastic.co/c/logstash discussion forum
+[INFO ] 2025-07-29 03:35:43.885 [Converge PipelineAction::Create<main>] javapipeline - Pipeline `main` is configured with `pipeline.ecs_compatibility: v8` setting. All plugins in this pipeline will default to `ecs_compatibility => v8` unless explicitly configured otherwise.
+[INFO ] 2025-07-29 03:35:43.891 [[main]-pipeline-manager] elasticsearch - New Elasticsearch output {:class=>"LogStash::Outputs::ElasticSearch", :hosts=>["https://sys.fcc:9200"]}
+[INFO ] 2025-07-29 03:35:43.933 [[main]-pipeline-manager] elasticsearch - Elasticsearch pool URLs updated {:changes=>{:removed=>[], :added=>[https://elastic:xxxxxx@sys.fcc:9200/]}}
+[WARN ] 2025-07-29 03:35:44.046 [[main]-pipeline-manager] elasticsearch - Restored connection to ES instance {:url=>"https://elastic:xxxxxx@sys.fcc:9200/"}
+[INFO ] 2025-07-29 03:35:44.047 [[main]-pipeline-manager] elasticsearch - Elasticsearch version determined (8.18.1) {:es_version=>8}
+[INFO ] 2025-07-29 03:35:44.052 [[main]-pipeline-manager] elasticsearch - Not eligible for data streams because config contains one or more settings that are not compatible with data streams: {"index"=>"logs_for_test_%{+YYYY.MM.dd}"}
+[INFO ] 2025-07-29 03:35:44.052 [[main]-pipeline-manager] elasticsearch - Data streams auto configuration (`data_stream => auto` or unset) resolved to `false`
+[INFO ] 2025-07-29 03:35:44.060 [[main]-pipeline-manager] javapipeline - Starting pipeline {:pipeline_id=>"main", "pipeline.workers"=>2, "pipeline.batch.size"=>125, "pipeline.batch.delay"=>50, "pipeline.max_inflight"=>250, "pipeline.sources"=>["/etc/logstash/conf.d/filebeat.conf"], :thread=>"#<Thread:0x2f04ffa7 /usr/share/logstash/logstash-core/lib/logstash/java_pipeline.rb:138 run>"}
+[INFO ] 2025-07-29 03:35:44.080 [Ruby-0-Thread-10: /usr/share/logstash/vendor/bundle/jruby/3.1.0/gems/logstash-output-elasticsearch-11.22.12-java/lib/logstash/plugin_mixins/elasticsearch/common.rb:164] elasticsearch - Using a default mapping template {:es_version=>8, :ecs_compatibility=>:v8}
+[INFO ] 2025-07-29 03:35:44.266 [[main]-pipeline-manager] javapipeline - Pipeline Java execution initialization time {"seconds"=>0.21}
+[INFO ] 2025-07-29 03:35:44.269 [[main]-pipeline-manager] beats - Starting input listener {:address=>"0.0.0.0:5044"}
+[INFO ] 2025-07-29 03:35:44.273 [[main]-pipeline-manager] javapipeline - Pipeline started {"pipeline.id"=>"main"}
+[INFO ] 2025-07-29 03:35:44.282 [Agent thread] agent - Pipelines running {:count=>1, :running_pipelines=>[:main], :non_running_pipelines=>[]}
+[INFO ] 2025-07-29 03:35:44.301 [[main]<beats] Server - Starting server on port: 5044
 
 
 RESOLUTION:
 
 
+SIDENOTE: 
+iis.conf iis is internet information service which is used in every organization. Either you host your website apache, tomcat or nginx webhosting system but for the windows it gets hosted over the iis. we need to monitor the IIS logs to see how much traffic is there, what activity is happening with webapplication. All that these gets monitored by the beats and then gets parsing. This happens through the logstash conf.d configuration file e.g iis.conf
