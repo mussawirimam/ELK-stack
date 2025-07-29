@@ -1172,6 +1172,7 @@ drwxr-x---   2 root          adm               4096 May 31 04:32 unattended-upgr
 -rw-rw-r--   1 root          utmp              7600 Jul 17 01:29 wtmp
 root@elk:/var/log#
 
+### continuing on commenting and uncommenting more lines in the filebeat.yml file
 ### currently we didnt specify any filters or anything, we are just going to enable it
 ### later we will do the customization
 root@elk:/etc/filebeat# vim filebeat.yml
@@ -1271,4 +1272,109 @@ Jul 28 04:41:29 elk systemd[1]: Started logstash.service - logstash.
 Jul 28 04:41:29 elk logstash[138859]: Using bundled JDK: /usr/share/logstash/jdk
 Jul 28 04:41:29 elk logstash[138868]: OpenJDK 64-Bit Server VM warning: Unable to get SVE vector length on this system. Disabling SVE. Specify -XX:UseSVE=0 to shun this warning.
 Jul 28 04:41:29 elk logstash[138859]: OpenJDK 64-Bit Server
+
+-----------------------------------------------------------------------
+### we are going to see combination of logstash and filebeat to send a log to the elasticsearch. We will see how this communication will happen in between them. 
+
+### we will check on node-5 whether the service is running or not. Now we have to that the port through which this config file we opened is working or not
+root@elk:~# more /etc/logstash/conf.d/filebeat.conf
+input {
+  beats {
+    port => 5044
+
+  }
+}
+
+filter {
+
+}
+
+output {
+  elasticsearch {
+    hosts => ["https://sys.fcc:9200"]
+    index => "logs_for_test_%{+YYYY.MM.dd}"
+    user => elastic
+    password => blfOwgJUMUuLKjmXVYU2
+    ssl => true
+    cacert => "/etc/elasticsearch/certs/ca/ca.crt"
+  }
+}
+
+### not able to make connection with the port 5044
+root@elk:~# telnet localhost 5044
+Trying 127.0.0.1...
+telnet: Unable to connect to remote host: Connection refused
+
+--------------------------------------------------------------------------------
+TROUBLESHOOTING TIME:
+--------------------------------------------------------------------------------
+ERROR:
+### cant reach the port on 5044
+root@elk:~# telnet localhost 5044
+Trying 127.0.0.1...
+telnet: Unable to connect to remote host: Connection refused
+
+ANALYSIS:
+  ### ERROR FOUND IN LOGSTASH LOGS
+root@elk:/var/log/logstash# tail logstash-plain.log
+      ...
+    }
+  }
+----> [2025-07-29T00:57:08,006][ERROR][logstash.agent           ] Failed to execute action {:action=>LogStash::PipelineAction::Create/pipeline_id:main, :exception=>"Java::JavaLang::IllegalStateException", :message=>"Unable to configure plugins: (ConfigurationError) Something is wrong with your configuration.", :backtrace=>["org.logstash.config.ir.CompiledPipeline.<init>(CompiledPipeline.java:137)", "org.logstash.execution.AbstractPipelineExt.initialize(AbstractPipelineExt.java:236)", "org.logstash.execution.AbstractPipelineExt$INVOKER$i$initialize.call(AbstractPipelineExt$INVOKER$i$initialize.gen)", "org.jruby.internal.runtime.methods.JavaMethod$JavaMethodN.call(JavaMethod.java:847)", "org.jruby.ir.runtime.IRRuntimeHelpers.instanceSuper(IRRuntimeHelpers.java:1379)", "org.jruby.ir.instructions.InstanceSuperInstr.interpret(InstanceSuperInstr.java:139)", "org.jruby.ir.interpreter.InterpreterEngine.processCall(InterpreterEngine.java:363)", "org.jruby.ir.interpreter.StartupInterpreterEngine.interpret(StartupInterpreterEngine.java:66)", "org.jruby.internal.runtime.methods.MixedModeIRMethod.INTERPRET_METHOD(MixedModeIRMethod.java:128)", "org.jruby.internal.runtime.methods.MixedModeIRMethod.call(MixedModeIRMethod.java:115)", "org.jruby.runtime.callsite.CachingCallSite.cacheAndCall(CachingCallSite.java:446)", "org.jruby.runtime.callsite.CachingCallSite.call(CachingCallSite.java:92)", "org.jruby.RubyClass.newInstance(RubyClass.java:949)", "org.jruby.RubyClass$INVOKER$i$newInstance.call(RubyClass$INVOKER$i$newInstance.gen)", "org.jruby.runtime.callsite.CachingCallSite.cacheAndCall(CachingCallSite.java:446)", "org.jruby.runtime.callsite.CachingCallSite.call(CachingCallSite.java:92)", "org.jruby.ir.instructions.CallBase.interpret(CallBase.java:548)", "org.jruby.ir.interpreter.InterpreterEngine.processCall(InterpreterEngine.java:363)", "org.jruby.ir.interpreter.StartupInterpreterEngine.interpret(StartupInterpreterEngine.java:66)", "org.jruby.ir.interpreter.InterpreterEngine.interpret(InterpreterEngine.java:88)", "org.jruby.internal.runtime.methods.MixedModeIRMethod.INTERPRET_METHOD(MixedModeIRMethod.java:238)", "org.jruby.internal.runtime.methods.MixedModeIRMethod.call(MixedModeIRMethod.java:225)", "org.jruby.internal.runtime.methods.DynamicMethod.call(DynamicMethod.java:228)", "org.jruby.runtime.callsite.CachingCallSite.cacheAndCall(CachingCallSite.java:476)", "org.jruby.runtime.callsite.CachingCallSite.call(CachingCallSite.java:293)", "org.jruby.ir.interpreter.InterpreterEngine.processCall(InterpreterEngine.java:324)", "org.jruby.ir.interpreter.StartupInterpreterEngine.interpret(StartupInterpreterEngine.java:66)", "org.jruby.ir.interpreter.Interpreter.INTERPRET_BLOCK(Interpreter.java:118)", "org.jruby.runtime.MixedModeIRBlockBody.commonYieldPath(MixedModeIRBlockBody.java:136)", "org.jruby.runtime.IRBlockBody.call(IRBlockBody.java:66)", "org.jruby.runtime.IRBlockBody.call(IRBlockBody.java:58)", "org.jruby.runtime.Block.call(Block.java:144)", "org.jruby.RubyProc.call(RubyProc.java:354)", "org.jruby.internal.runtime.RubyRunnable.run(RubyRunnable.java:111)", "java.base/java.lang.Thread.run(Thread.java:1583)"], :cause=>{:exception=>Java::OrgJrubyExceptions::Exception, :message=>"(ConfigurationError) Something is wrong with your configuration.", :backtrace=>["RUBY.config_init(/usr/share/logstash/logstash-core/lib/logstash/config/mixin.rb:111)", "RUBY.config_init(/usr/share/logstash/vendor/bundle/jruby/3.1.0/gems/logstash-output-elasticsearch-11.22.12-java/lib/logstash/outputs/elasticsearch.rb:390)", "RUBY.initialize(/usr/share/logstash/logstash-core/lib/logstash/outputs/base.rb:75)", "RUBY.initialize(/usr/share/logstash/vendor/bundle/jruby/3.1.0/gems/logstash-mixin-ecs_compatibility_support-1.3.0-java/lib/logstash/plugin_mixins/ecs_compatibility_support/selector.rb:61)", "RUBY.initialize(/usr/share/logstash/vendor/bundle/jruby/3.1.0/gems/logstash-output-elasticsearch-11.22.12-java/lib/logstash/outputs/elasticsearch.rb:276)", "org.logstash.plugins.factory.ContextualizerExt.initialize(org/logstash/plugins/factory/ContextualizerExt.java:97)", "org.jruby.RubyClass.new(org/jruby/RubyClass.java:949)", "org.logstash.plugins.factory.ContextualizerExt.initialize_plugin(org/logstash/plugins/factory/ContextualizerExt.java:80)", "org.logstash.plugins.factory.ContextualizerExt.initialize_plugin(org/logstash/plugins/factory/ContextualizerExt.java:53)", "org.jruby.RubyClass.new(org/jruby/RubyClass.java:949)", "org.logstash.config.ir.compiler.OutputDelegatorExt.initialize(org/logstash/config/ir/compiler/OutputDelegatorExt.java:79)", "org.logstash.config.ir.compiler.OutputDelegatorExt.initialize(org/logstash/config/ir/compiler/OutputDelegatorExt.java:56)", "org.logstash.plugins.factory.PluginFactoryExt.plugin(org/logstash/plugins/factory/PluginFactoryExt.java:241)", "org.logstash.execution.AbstractPipelineExt.initialize(org/logstash/execution/AbstractPipelineExt.java:236)", "RUBY.initialize(/usr/share/logstash/logstash-core/lib/logstash/java_pipeline.rb:47)", "org.jruby.RubyClass.new(org/jruby/RubyClass.java:949)", "RUBY.execute(/usr/share/logstash/logstash-core/lib/logstash/pipeline_action/create.rb:50)", "RUBY.converge_state(/usr/share/logstash/logstash-core/lib/logstash/agent.rb:431)"]}}
+[2025-07-29T00:57:08,015][INFO ][logstash.runner          ] Logstash shut down.
+[2025-07-29T00:57:08,017][FATAL][org.logstash.Logstash    ] Logstash stopped processing because of an error: (SystemExit) exit
+org.jruby.exceptions.SystemExit: (SystemExit) exit
+	at org.jruby.RubyKernel.exit(org/jruby/RubyKernel.java:924) ~[jruby.jar:?]
+	at org.jruby.RubyKernel.exit(org/jruby/RubyKernel.java:883) ~[jruby.jar:?]
+	at usr.share.logstash.lib.bootstrap.environment.<main>(/usr/share/logstash/lib/bootstrap/environment.rb:90) ~[?:?]
+root@elk:/var/log/logstash#
+
+  ### CHECKING CONFIGURATION 
+root@elk:/var/log/logstash# cd /etc/logstash/conf.d/
+root@elk:/etc/logstash/conf.d# vim filebeat.conf
+input {
+  beats {
+    port => 5044
+
+  }
+}
+
+filter {
+
+}
+
+output {
+  elasticsearch {
+    hosts => ["https://sys.fcc:9200"]
+    index => "logs_for_test_%{+YYYY.MM.dd}"
+    user => elastic
+    password => blfOwgJUMUuLKjmXVYU2
+    ssl => true
+    cacert => "/etc/elasticsearch/certs/ca/ca.crt"
+  }
+}
+:q!
+
+  ### WE ARE TRYING TO RUN LOGSTASH MANUALLY TO SEE WHAT IS THE ISSUE 
+root@elk:/etc/logstash/conf.d# systemctl stop logstash
+root@elk:/etc/logstash/conf.d# /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/filebeat.conf
+...
+ping template {:es_version=>8, :ecs_compatibility=>:v8}
+[INFO ] 2025-07-29 01:05:49.746 [[main]-pipeline-manager] javapipeline - Starting pipeline {:pipeline_id=>"main", "pipeline.workers"=>2, "pipeline.batch.size"=>125, "pipeline.batch.delay"=>50, "pipeline.max_inflight"=>250, "pipeline.sources"=>["/etc/logstash/conf.d/filebeat.conf"], :thread=>"#<Thread:0x9dd58e6 /usr/share/logstash/logstash-core/lib/logstash/java_pipeline.rb:138 run>"}
+[INFO ] 2025-07-29 01:05:49.921 [[main]-pipeline-manager] javapipeline - Pipeline Java execution initialization time {"seconds"=>0.17}
+[INFO ] 2025-07-29 01:05:49.923 [[main]-pipeline-manager] beats - Starting input listener {:address=>"0.0.0.0:5044"}
+[INFO ] 2025-07-29 01:05:49.926 [[main]-pipeline-manager] javapipeline - Pipeline started {"pipeline.id"=>"main"}
+[INFO ] 2025-07-29 01:05:49.933 [Agent thread] agent - Pipelines running {:count=>1, :running_pipelines=>[:main], :non_running_pipelines=>[]}
+[INFO ] 2025-07-29 01:05:49.953 [[main]<beats] Server - Starting server on port: 5044 ### <----------------------- ### when we are running manually, the pipleine is running and connecting 
+
+  ### manual pipeline is working, so we will troubleshoot to see what error we get while RUNNING AS A DAEMON.
+  
+
+
+
+
+
+
+RESOLUTION:
+
 
