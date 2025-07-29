@@ -1538,9 +1538,19 @@ Could not find log4j2 configuration at path /usr/share/logstash/config/log4j2.pr
 [INFO ] 2025-07-29 03:35:44.282 [Agent thread] agent - Pipelines running {:count=>1, :running_pipelines=>[:main], :non_running_pipelines=>[]}
 [INFO ] 2025-07-29 03:35:44.301 [[main]<beats] Server - Starting server on port: 5044
 
+INDEX SHOWED UP IN THE KIBANA
+click on hamburger drop down menu > stack management > index management > indices
+logs_for_test_2025.07.29	green	open	1	1	9,595	5.02mb
+
 
 RESOLUTION:
 
 
 SIDENOTE: 
 iis.conf iis is internet information service which is used in every organization. Either you host your website apache, tomcat or nginx webhosting system but for the windows it gets hosted over the iis. we need to monitor the IIS logs to see how much traffic is there, what activity is happening with webapplication. All that these gets monitored by the beats and then gets parsing. This happens through the logstash conf.d configuration file e.g iis.conf
+
+do homework on 
+- SHA256 vs RSA and how two different are used and what is difference between fingerprint of data and encryption
+- dissect vs GROK
+	dissect -- matched fields
+	GROK -- regex
