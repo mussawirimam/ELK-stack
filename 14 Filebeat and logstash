@@ -740,6 +740,9 @@ means the same thing which belongs to the same server which is our cordinator no
 TROUBLE SHOOTING TIME ENDS
 -----------------------------------------------------------------------------------------------------
 
+-------------------------------
+### STARTING LOGSTASH MANUALLY:
+-------------------------------
 ### whenever we are testing the logstash we should manually check whether our configuration file going to work or not.
 ## we are going to go to logstash binary director to test
 
