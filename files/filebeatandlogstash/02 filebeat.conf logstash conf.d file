@@ -1,0 +1,32 @@
+#root@elk:/etc/logstash/conf.d# ls
+#filebeat.conf
+#root@elk:/etc/logstash/conf.d# cat filebeat.conf
+input {
+  beats {
+    port => 5044
+
+  }
+}
+
+filter {
+
+}
+
+output
+{
+
+stdout {
+  codec => rubydebug
+}
+
+  elasticsearch {
+    hosts => ["https://sys.fcc:9200"]
+    index => "logs_for_test_%{+YYYY.MM.dd}"
+    user => elastic
+    password => blfOwgJUMUuLKjmXVYU2
+    ssl => true
+    cacert => "/etc/elasticsearch/certs/ca/ca.crt"
+  }
+}
+
+#root@elk:/etc/logstash/conf.d#
