@@ -1,0 +1,10 @@
+root@elk:/etc/logstash# ls
+conf.d  jvm.options  log4j2.properties  logstash-sample.conf  logstash.yml  pipelines.yml  startup.options
+root@elk:/etc/logstash# cat pipelines.yml
+# This file is where you define your pipelines. You can define multiple.
+# For more information on multiple pipelines, see the documentation:
+#   https://www.elastic.co/guide/en/logstash/current/multiple-pipelines.html
+
+- pipeline.id: main
+  path.config: "/etc/logstash/conf.d/*.conf"
+root@elk:/etc/logstash#
