@@ -1,0 +1,23 @@
+
+
+filebeat.yml 
+input >> /file
+output >> logstash:5055
+
+Logstash/conf.d/<file.conf>
+input >> beats 5044
+filter >>
+output >> ELK
+
+Agents:
+in ELK stack these are all the agents:
+Beats (file, metric, heart)
+logstash
+other agents
+
+Ui: 
+Kibana
+
+clear
+Database: 
+ELK
