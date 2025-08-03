@@ -21,3 +21,19 @@ Kibana
 clear
 Database: 
 ELK
+
+### command to run the logstash
+root@elk:/etc/logstash/conf.d# /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/filebeat.conf
+
+### on filebeat server node 6 run filebeat
+root@elk:/var/log# systemctl start filebeat
+
+### on Kibana 
+next go to the kibana, go to stack management and you will see logs_for_test_<alias rolloever date>
+next create the data view 
+Dataview > index pattern
+logs_for_test*
+
+
+
+
