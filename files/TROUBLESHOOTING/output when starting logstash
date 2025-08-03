@@ -1,0 +1,1026 @@
+### not a troubleshooting step but just a output I got when starting the logstash server
+root@elk:/etc/logstash/conf.d# /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/filebeat.conf
+Using bundled JDK: /usr/share/logstash/jdk
+WARNING: Could not find logstash.yml which is typically located in $LS_HOME/config or /etc/logstash. You can specify the path using --path.settings. Continuing using the defaults
+Could not find log4j2 configuration at path /usr/share/logstash/config/log4j2.properties. Using default config which logs errors to the console
+[WARN ] 2025-08-03 01:26:00.034 [main] runner - Starting from version 9.0, running with superuser privileges is not permitted unless you explicitly set 'allow_superuser' to true, thereby acknowledging the possible security risks
+[WARN ] 2025-08-03 01:26:00.036 [main] runner - NOTICE: Running Logstash as a superuser is strongly discouraged as it poses a security risk. Set 'allow_superuser' to false for better security.
+[WARN ] 2025-08-03 01:26:00.040 [main] runner - 'pipeline.buffer.type' setting is not explicitly defined.Before moving to 9.x set it to 'heap' and tune heap size upward, or set it to 'direct' to maintain existing behavior.
+[INFO ] 2025-08-03 01:26:00.043 [main] runner - Starting Logstash {"logstash.version"=>"8.18.4", "jruby.version"=>"jruby 9.4.9.0 (3.1.4) 2024-11-04 547c6b150e OpenJDK 64-Bit Server VM 21.0.7+6-LTS on 21.0.7+6-LTS +indy +jit [aarch64-linux]"}
+[INFO ] 2025-08-03 01:26:00.044 [main] runner - JVM bootstrap flags: [-Xms1g, -Xmx1g, -Djava.awt.headless=true, -Dfile.encoding=UTF-8, -Djruby.compile.invokedynamic=true, -XX:+HeapDumpOnOutOfMemoryError, -Djava.security.egd=file:/dev/urandom, -Dlog4j2.isThreadContextMapInheritable=true, -Djruby.regexp.interruptible=true, -Djdk.io.File.enableADS=true, --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED, --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED, --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED, --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED, --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED, --add-opens=java.base/java.security=ALL-UNNAMED, --add-opens=java.base/java.io=ALL-UNNAMED, --add-opens=java.base/java.nio.channels=ALL-UNNAMED, --add-opens=java.base/sun.nio.ch=ALL-UNNAMED, --add-opens=java.management/sun.management=ALL-UNNAMED, -Dio.netty.allocator.maxOrder=11]
+[INFO ] 2025-08-03 01:26:00.126 [main] StreamReadConstraintsUtil - Jackson default value override `logstash.jackson.stream-read-constraints.max-string-length` configured to `200000000` (logstash default)
+[INFO ] 2025-08-03 01:26:00.126 [main] StreamReadConstraintsUtil - Jackson default value override `logstash.jackson.stream-read-constraints.max-number-length` configured to `10000` (logstash default)
+[INFO ] 2025-08-03 01:26:00.126 [main] StreamReadConstraintsUtil - Jackson default value override `logstash.jackson.stream-read-constraints.max-nesting-depth` configured to `1000` (logstash default)
+[WARN ] 2025-08-03 01:26:00.236 [LogStash::Runner] multilocal - Ignoring the 'pipelines.yml' file because modules or command line options are specified
+[INFO ] 2025-08-03 01:26:00.645 [Api Webserver] agent - Successfully started Logstash API endpoint {:port=>9600, :ssl_enabled=>false}
+[INFO ] 2025-08-03 01:26:00.927 [Converge PipelineAction::Create<main>] Reflections - Reflections took 83 ms to scan 1 urls, producing 150 keys and 529 values
+[WARN ] 2025-08-03 01:26:01.183 [Converge PipelineAction::Create<main>] elasticsearch - You are using a deprecated config setting "cacert" set in elasticsearch. Deprecated settings will continue to work, but are scheduled for removal from logstash in the future. Set 'ssl_certificate_authorities' instead. If you have any questions about this, please ask it on the https://discuss.elastic.co/c/logstash discussion forum {:name=>"cacert", :plugin=><LogStash::Outputs::ElasticSearch password=><password>, hosts=>[https://sys.fcc:9200], cacert=>"/etc/elasticsearch/certs/ca/ca.crt", index=>"logs_for_test_%{+YYYY.MM.dd}", id=>"1f45a3c3742417904a17ddcebf8b705d6bf69806b930c3cb6e48857b96105a9f", user=>"elastic", ssl=>true, enable_metric=>true, codec=><LogStash::Codecs::Plain id=>"plain_42c645f5-2b36-4837-b5c4-faf5b12747fa", enable_metric=>true, charset=>"UTF-8">, workers=>1, ssl_certificate_verification=>true, ssl_verification_mode=>"full", sniffing=>false, sniffing_delay=>5, timeout=>60, pool_max=>1000, pool_max_per_route=>100, resurrect_delay=>5, validate_after_inactivity=>10000, http_compression=>true, compression_level=>1, retry_initial_interval=>2, retry_max_interval=>64, dlq_on_failed_indexname_interpolation=>true, data_stream_type=>"logs", data_stream_dataset=>"generic", data_stream_namespace=>"default", data_stream_sync_fields=>true, data_stream_auto_routing=>true, manage_template=>true, template_overwrite=>false, template_api=>"auto", doc_as_upsert=>false, script_type=>"inline", script_lang=>"painless", script_var_name=>"event", scripted_upsert=>false, retry_on_conflict=>1, ilm_enabled=>"auto", ilm_pattern=>"{now/d}-000001", ilm_policy=>"logstash-policy">}
+[WARN ] 2025-08-03 01:26:01.184 [Converge PipelineAction::Create<main>] elasticsearch - You are using a deprecated config setting "cacert" set in elasticsearch. Deprecated settings will continue to work, but are scheduled for removal from logstash in the future. Set 'ssl_certificate_authorities' instead. If you have any questions about this, please ask it on the https://discuss.elastic.co/c/logstash discussion forum
+[WARN ] 2025-08-03 01:26:01.184 [Converge PipelineAction::Create<main>] elasticsearch - You are using a deprecated config setting "ssl" set in elasticsearch. Deprecated settings will continue to work, but are scheduled for removal from logstash in the future. Set 'ssl_enabled' instead. If you have any questions about this, please ask it on the https://discuss.elastic.co/c/logstash discussion forum {:name=>"ssl", :plugin=><LogStash::Outputs::ElasticSearch password=><password>, hosts=>[https://sys.fcc:9200], cacert=>"/etc/elasticsearch/certs/ca/ca.crt", index=>"logs_for_test_%{+YYYY.MM.dd}", id=>"1f45a3c3742417904a17ddcebf8b705d6bf69806b930c3cb6e48857b96105a9f", user=>"elastic", ssl=>true, enable_metric=>true, codec=><LogStash::Codecs::Plain id=>"plain_42c645f5-2b36-4837-b5c4-faf5b12747fa", enable_metric=>true, charset=>"UTF-8">, workers=>1, ssl_certificate_verification=>true, ssl_verification_mode=>"full", sniffing=>false, sniffing_delay=>5, timeout=>60, pool_max=>1000, pool_max_per_route=>100, resurrect_delay=>5, validate_after_inactivity=>10000, http_compression=>true, compression_level=>1, retry_initial_interval=>2, retry_max_interval=>64, dlq_on_failed_indexname_interpolation=>true, data_stream_type=>"logs", data_stream_dataset=>"generic", data_stream_namespace=>"default", data_stream_sync_fields=>true, data_stream_auto_routing=>true, manage_template=>true, template_overwrite=>false, template_api=>"auto", doc_as_upsert=>false, script_type=>"inline", script_lang=>"painless", script_var_name=>"event", scripted_upsert=>false, retry_on_conflict=>1, ilm_enabled=>"auto", ilm_pattern=>"{now/d}-000001", ilm_policy=>"logstash-policy">}
+[WARN ] 2025-08-03 01:26:01.184 [Converge PipelineAction::Create<main>] elasticsearch - You are using a deprecated config setting "ssl" set in elasticsearch. Deprecated settings will continue to work, but are scheduled for removal from logstash in the future. Set 'ssl_enabled' instead. If you have any questions about this, please ask it on the https://discuss.elastic.co/c/logstash discussion forum
+[INFO ] 2025-08-03 01:26:01.201 [Converge PipelineAction::Create<main>] javapipeline - Pipeline `main` is configured with `pipeline.ecs_compatibility: v8` setting. All plugins in this pipeline will default to `ecs_compatibility => v8` unless explicitly configured otherwise.
+[INFO ] 2025-08-03 01:26:01.217 [[main]-pipeline-manager] elasticsearch - New Elasticsearch output {:class=>"LogStash::Outputs::ElasticSearch", :hosts=>["https://sys.fcc:9200"]}
+[INFO ] 2025-08-03 01:26:01.295 [[main]-pipeline-manager] elasticsearch - Elasticsearch pool URLs updated {:changes=>{:removed=>[], :added=>[https://elastic:xxxxxx@sys.fcc:9200/]}}
+[WARN ] 2025-08-03 01:26:01.634 [[main]-pipeline-manager] elasticsearch - Restored connection to ES instance {:url=>"https://elastic:xxxxxx@sys.fcc:9200/"}
+[INFO ] 2025-08-03 01:26:01.634 [[main]-pipeline-manager] elasticsearch - Elasticsearch version determined (8.18.1) {:es_version=>8}
+[INFO ] 2025-08-03 01:26:01.658 [[main]-pipeline-manager] elasticsearch - Not eligible for data streams because config contains one or more settings that are not compatible with data streams: {"index"=>"logs_for_test_%{+YYYY.MM.dd}"}
+[INFO ] 2025-08-03 01:26:01.658 [[main]-pipeline-manager] elasticsearch - Data streams auto configuration (`data_stream => auto` or unset) resolved to `false`
+[INFO ] 2025-08-03 01:26:01.666 [Ruby-0-Thread-10: /usr/share/logstash/vendor/bundle/jruby/3.1.0/gems/logstash-output-elasticsearch-11.22.12-java/lib/logstash/plugin_mixins/elasticsearch/common.rb:164] elasticsearch - Using a default mapping template {:es_version=>8, :ecs_compatibility=>:v8}
+[INFO ] 2025-08-03 01:26:01.689 [[main]-pipeline-manager] javapipeline - Starting pipeline {:pipeline_id=>"main", "pipeline.workers"=>2, "pipeline.batch.size"=>125, "pipeline.batch.delay"=>50, "pipeline.max_inflight"=>250, "pipeline.sources"=>["/etc/logstash/conf.d/filebeat.conf"], :thread=>"#<Thread:0x5e190da /usr/share/logstash/logstash-core/lib/logstash/java_pipeline.rb:138 run>"}
+[INFO ] 2025-08-03 01:26:02.079 [[main]-pipeline-manager] javapipeline - Pipeline Java execution initialization time {"seconds"=>0.39}
+[INFO ] 2025-08-03 01:26:02.083 [[main]-pipeline-manager] beats - Starting input listener {:address=>"0.0.0.0:5044"}
+[INFO ] 2025-08-03 01:26:02.109 [[main]-pipeline-manager] javapipeline - Pipeline started {"pipeline.id"=>"main"}
+[INFO ] 2025-08-03 01:26:02.129 [Agent thread] agent - Pipelines running {:count=>1, :running_pipelines=>[:main], :non_running_pipelines=>[]}
+[INFO ] 2025-08-03 01:26:02.196 [[main]<beats] Server - Starting server on port: 5044
+[INFO ] 2025-08-03 01:26:50.161 [720bb89df28e9cc310a2765446195aa42fae3a8eac4e17a9135e8c6b09f4934e-beatsHandler[T#1]] BeatsHandler - [local: 10.211.55.31:5044, remote: 10.211.55.32:51566] Handling exception: io.netty.handler.codec.DecoderException: org.logstash.beats.InvalidFrameProtocolException: Invalid version of beats protocol: -1 (caused by: org.logstash.beats.InvalidFrameProtocolException: Invalid version of beats protocol: -1)
+[WARN ] 2025-08-03 01:26:50.164 [720bb89df28e9cc310a2765446195aa42fae3a8eac4e17a9135e8c6b09f4934e-workGroup[T#1]] DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+io.netty.handler.codec.DecoderException: org.logstash.beats.InvalidFrameProtocolException: Invalid version of beats protocol: -1
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:500) ~[netty-codec-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:290) ~[netty-codec-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.access$600(AbstractChannelHandlerContext.java:61) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.AbstractChannelHandlerContext$7.run(AbstractChannelHandlerContext.java:425) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.DefaultEventExecutor.run(DefaultEventExecutor.java:66) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at java.lang.Thread.run(Thread.java:1583) ~[?:?]
+Caused by: org.logstash.beats.InvalidFrameProtocolException: Invalid version of beats protocol: -1
+	at org.logstash.beats.Protocol.version(Protocol.java:22) ~[logstash-input-beats-6.9.3.jar:?]
+	at org.logstash.beats.BeatsParser.decode(BeatsParser.java:62) ~[logstash-input-beats-6.9.3.jar:?]
+	at io.netty.handler.codec.ByteToMessageDecoder.decodeRemovalReentryProtection(ByteToMessageDecoder.java:530) ~[netty-codec-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:469) ~[netty-codec-4.1.118.Final.jar:4.1.118.Final]
+	... 9 more
+[INFO ] 2025-08-03 01:26:50.170 [720bb89df28e9cc310a2765446195aa42fae3a8eac4e17a9135e8c6b09f4934e-beatsHandler[T#1]] BeatsHandler - [local: 10.211.55.31:5044, remote: 10.211.55.32:51566] Handling exception: io.netty.handler.codec.DecoderException: org.logstash.beats.InvalidFrameProtocolException: Invalid version of beats protocol: -12 (caused by: org.logstash.beats.InvalidFrameProtocolException: Invalid version of beats protocol: -12)
+[WARN ] 2025-08-03 01:26:50.171 [720bb89df28e9cc310a2765446195aa42fae3a8eac4e17a9135e8c6b09f4934e-workGroup[T#1]] DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+io.netty.handler.codec.DecoderException: org.logstash.beats.InvalidFrameProtocolException: Invalid version of beats protocol: -12
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:500) ~[netty-codec-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.handler.codec.ByteToMessageDecoder.channelInputClosed(ByteToMessageDecoder.java:427) ~[netty-codec-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.handler.codec.ByteToMessageDecoder.channelInputClosed(ByteToMessageDecoder.java:394) ~[netty-codec-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.handler.codec.ByteToMessageDecoder.channelInactive(ByteToMessageDecoder.java:377) ~[netty-codec-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:303) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.access$300(AbstractChannelHandlerContext.java:61) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.channel.AbstractChannelHandlerContext$4.run(AbstractChannelHandlerContext.java:286) ~[netty-transport-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.DefaultEventExecutor.run(DefaultEventExecutor.java:66) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.118.Final.jar:4.1.118.Final]
+	at java.lang.Thread.run(Thread.java:1583) ~[?:?]
+Caused by: org.logstash.beats.InvalidFrameProtocolException: Invalid version of beats protocol: -12
+	at org.logstash.beats.Protocol.version(Protocol.java:22) ~[logstash-input-beats-6.9.3.jar:?]
+	at org.logstash.beats.BeatsParser.decode(BeatsParser.java:62) ~[logstash-input-beats-6.9.3.jar:?]
+	at io.netty.handler.codec.ByteToMessageDecoder.decodeRemovalReentryProtection(ByteToMessageDecoder.java:530) ~[netty-codec-4.1.118.Final.jar:4.1.118.Final]
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:469) ~[netty-codec-4.1.118.Final.jar:4.1.118.Final]
+	... 11 more
+{
+         "agent" => {
+                "type" => "filebeat",
+                "name" => "elk",
+        "ephemeral_id" => "0b2f8e70-db95-437d-a46e-fc9b24b5846b",
+                  "id" => "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+             "version" => "8.18.1"
+    },
+         "event" => {
+        "original" => "2025-08-03 01:37:28 startup packages remove"
+    },
+          "host" => {
+                  "mac" => [
+            [0] "00-1C-42-6D-E0-89"
+        ],
+        "containerized" => false,
+             "hostname" => "elk",
+                   "os" => {
+              "kernel" => "6.8.0-64-generic",
+                "name" => "Ubuntu",
+              "family" => "debian",
+            "codename" => "noble",
+                "type" => "linux",
+            "platform" => "ubuntu",
+             "version" => "24.04.2 LTS (Noble Numbat)"
+        },
+                   "ip" => [
+            [0] "10.211.55.32",
+            [1] "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+            [2] "fe80::21c:42ff:fe6d:e089"
+        ],
+                 "name" => "elk",
+         "architecture" => "aarch64",
+                   "id" => "53d351d845dc4ea09111e51cc53b4b62"
+    },
+          "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ],
+           "ecs" => {
+        "version" => "8.0.0"
+    },
+           "log" => {
+        "offset" => 577311,
+          "file" => {
+                "inode" => "133150",
+                 "path" => "/var/log/dpkg.log",
+            "device_id" => "64512"
+        }
+    },
+       "message" => "2025-08-03 01:37:28 startup packages remove",
+      "@version" => "1",
+    "@timestamp" => 2025-08-03T01:37:35.892Z,
+         "input" => {
+        "type" => "filestream"
+    }
+}
+{
+         "agent" => {
+                "name" => "elk",
+                "type" => "filebeat",
+        "ephemeral_id" => "0b2f8e70-db95-437d-a46e-fc9b24b5846b",
+                  "id" => "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+             "version" => "8.18.1"
+    },
+         "event" => {
+        "original" => "2025-08-03 01:37:28 remove telnet:all 0.17+2.5-3ubuntu4 <none>"
+    },
+          "host" => {
+                  "mac" => [
+            [0] "00-1C-42-6D-E0-89"
+        ],
+        "containerized" => false,
+             "hostname" => "elk",
+                   "os" => {
+              "kernel" => "6.8.0-64-generic",
+                "name" => "Ubuntu",
+            "codename" => "noble",
+                "type" => "linux",
+            "platform" => "ubuntu",
+              "family" => "debian",
+             "version" => "24.04.2 LTS (Noble Numbat)"
+        },
+                   "ip" => [
+            [0] "10.211.55.32",
+            [1] "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+            [2] "fe80::21c:42ff:fe6d:e089"
+        ],
+                 "name" => "elk",
+         "architecture" => "aarch64",
+                   "id" => "53d351d845dc4ea09111e51cc53b4b62"
+    },
+          "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ],
+           "ecs" => {
+        "version" => "8.0.0"
+    },
+           "log" => {
+        "offset" => 577421,
+          "file" => {
+                "inode" => "133150",
+                 "path" => "/var/log/dpkg.log",
+            "device_id" => "64512"
+        }
+    },
+       "message" => "2025-08-03 01:37:28 remove telnet:all 0.17+2.5-3ubuntu4 <none>",
+      "@version" => "1",
+    "@timestamp" => 2025-08-03T01:37:35.894Z,
+         "input" => {
+        "type" => "filestream"
+    }
+}
+{
+         "agent" => {
+                "name" => "elk",
+                "type" => "filebeat",
+        "ephemeral_id" => "0b2f8e70-db95-437d-a46e-fc9b24b5846b",
+                  "id" => "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+             "version" => "8.18.1"
+    },
+         "event" => {
+        "original" => "2025-08-03 01:37:28 status half-configured telnet:all 0.17+2.5-3ubuntu4"
+    },
+          "host" => {
+                  "mac" => [
+            [0] "00-1C-42-6D-E0-89"
+        ],
+        "containerized" => false,
+             "hostname" => "elk",
+                   "os" => {
+              "kernel" => "6.8.0-64-generic",
+            "codename" => "noble",
+                "type" => "linux",
+            "platform" => "ubuntu",
+              "family" => "debian",
+                "name" => "Ubuntu",
+             "version" => "24.04.2 LTS (Noble Numbat)"
+        },
+                 "name" => "elk",
+                   "ip" => [
+            [0] "10.211.55.32",
+            [1] "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+            [2] "fe80::21c:42ff:fe6d:e089"
+        ],
+         "architecture" => "aarch64",
+                   "id" => "53d351d845dc4ea09111e51cc53b4b62"
+    },
+          "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ],
+           "ecs" => {
+        "version" => "8.0.0"
+    },
+           "log" => {
+        "offset" => 577484,
+          "file" => {
+                "inode" => "133150",
+                 "path" => "/var/log/dpkg.log",
+            "device_id" => "64512"
+        }
+    },
+       "message" => "2025-08-03 01:37:28 status half-configured telnet:all 0.17+2.5-3ubuntu4",
+      "@version" => "1",
+    "@timestamp" => 2025-08-03T01:37:35.894Z,
+         "input" => {
+        "type" => "filestream"
+    }
+}
+{
+         "agent" => {
+                "type" => "filebeat",
+                "name" => "elk",
+        "ephemeral_id" => "0b2f8e70-db95-437d-a46e-fc9b24b5846b",
+                  "id" => "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+             "version" => "8.18.1"
+    },
+         "event" => {
+        "original" => "2025-08-03 01:37:28 status half-installed telnet:all 0.17+2.5-3ubuntu4"
+    },
+          "host" => {
+                  "mac" => [
+            [0] "00-1C-42-6D-E0-89"
+        ],
+        "containerized" => false,
+             "hostname" => "elk",
+                   "os" => {
+              "kernel" => "6.8.0-64-generic",
+                "name" => "Ubuntu",
+              "family" => "debian",
+            "codename" => "noble",
+                "type" => "linux",
+            "platform" => "ubuntu",
+             "version" => "24.04.2 LTS (Noble Numbat)"
+        },
+                   "ip" => [
+            [0] "10.211.55.32",
+            [1] "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+            [2] "fe80::21c:42ff:fe6d:e089"
+        ],
+                 "name" => "elk",
+         "architecture" => "aarch64",
+                   "id" => "53d351d845dc4ea09111e51cc53b4b62"
+    },
+          "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ],
+           "ecs" => {
+        "version" => "8.0.0"
+    },
+           "log" => {
+        "offset" => 577556,
+          "file" => {
+                "inode" => "133150",
+                 "path" => "/var/log/dpkg.log",
+            "device_id" => "64512"
+        }
+    },
+       "message" => "2025-08-03 01:37:28 status half-installed telnet:all 0.17+2.5-3ubuntu4",
+      "@version" => "1",
+    "@timestamp" => 2025-08-03T01:37:35.894Z,
+         "input" => {
+        "type" => "filestream"
+    }
+}
+{
+         "agent" => {
+                "name" => "elk",
+                "type" => "filebeat",
+        "ephemeral_id" => "0b2f8e70-db95-437d-a46e-fc9b24b5846b",
+                  "id" => "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+             "version" => "8.18.1"
+    },
+         "event" => {
+        "original" => "2025-08-03 01:37:28 status config-files telnet:all 0.17+2.5-3ubuntu4"
+    },
+          "host" => {
+                  "mac" => [
+            [0] "00-1C-42-6D-E0-89"
+        ],
+        "containerized" => false,
+             "hostname" => "elk",
+                   "os" => {
+              "kernel" => "6.8.0-64-generic",
+            "codename" => "noble",
+                "type" => "linux",
+            "platform" => "ubuntu",
+              "family" => "debian",
+                "name" => "Ubuntu",
+             "version" => "24.04.2 LTS (Noble Numbat)"
+        },
+                 "name" => "elk",
+                   "ip" => [
+            [0] "10.211.55.32",
+            [1] "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+            [2] "fe80::21c:42ff:fe6d:e089"
+        ],
+         "architecture" => "aarch64",
+                   "id" => "53d351d845dc4ea09111e51cc53b4b62"
+    },
+          "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ],
+           "ecs" => {
+        "version" => "8.0.0"
+    },
+           "log" => {
+        "offset" => 577627,
+          "file" => {
+                "inode" => "133150",
+            "device_id" => "64512",
+                 "path" => "/var/log/dpkg.log"
+        }
+    },
+       "message" => "2025-08-03 01:37:28 status config-files telnet:all 0.17+2.5-3ubuntu4",
+      "@version" => "1",
+    "@timestamp" => 2025-08-03T01:37:35.894Z,
+         "input" => {
+        "type" => "filestream"
+    }
+}
+{
+         "agent" => {
+                "name" => "elk",
+                "type" => "filebeat",
+        "ephemeral_id" => "0b2f8e70-db95-437d-a46e-fc9b24b5846b",
+                  "id" => "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+             "version" => "8.18.1"
+    },
+         "event" => {
+        "original" => "2025-08-03 01:37:28 status not-installed telnet:all <none>"
+    },
+          "host" => {
+                  "mac" => [
+            [0] "00-1C-42-6D-E0-89"
+        ],
+        "containerized" => false,
+             "hostname" => "elk",
+                 "name" => "elk",
+                   "os" => {
+              "kernel" => "6.8.0-64-generic",
+            "codename" => "noble",
+                "type" => "linux",
+            "platform" => "ubuntu",
+              "family" => "debian",
+                "name" => "Ubuntu",
+             "version" => "24.04.2 LTS (Noble Numbat)"
+        },
+                   "ip" => [
+            [0] "10.211.55.32",
+            [1] "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+            [2] "fe80::21c:42ff:fe6d:e089"
+        ],
+         "architecture" => "aarch64",
+                   "id" => "53d351d845dc4ea09111e51cc53b4b62"
+    },
+          "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ],
+           "ecs" => {
+        "version" => "8.0.0"
+    },
+           "log" => {
+        "offset" => 577696,
+          "file" => {
+                "inode" => "133150",
+                 "path" => "/var/log/dpkg.log",
+            "device_id" => "64512"
+        }
+    },
+       "message" => "2025-08-03 01:37:28 status not-installed telnet:all <none>",
+      "@version" => "1",
+    "@timestamp" => 2025-08-03T01:37:35.894Z,
+         "input" => {
+        "type" => "filestream"
+    }
+}
+{
+         "agent" => {
+                "name" => "elk",
+                "type" => "filebeat",
+        "ephemeral_id" => "0b2f8e70-db95-437d-a46e-fc9b24b5846b",
+                  "id" => "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+             "version" => "8.18.1"
+    },
+         "event" => {
+        "original" => "2025-08-03 01:37:28 startup packages configure"
+    },
+          "host" => {
+                  "mac" => [
+            [0] "00-1C-42-6D-E0-89"
+        ],
+        "containerized" => false,
+             "hostname" => "elk",
+                   "os" => {
+              "kernel" => "6.8.0-64-generic",
+                "type" => "linux",
+              "family" => "debian",
+            "platform" => "ubuntu",
+                "name" => "Ubuntu",
+            "codename" => "noble",
+             "version" => "24.04.2 LTS (Noble Numbat)"
+        },
+                 "name" => "elk",
+                   "ip" => [
+            [0] "10.211.55.32",
+            [1] "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+            [2] "fe80::21c:42ff:fe6d:e089"
+        ],
+                   "id" => "53d351d845dc4ea09111e51cc53b4b62",
+         "architecture" => "aarch64"
+    },
+          "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ],
+           "ecs" => {
+        "version" => "8.0.0"
+    },
+           "log" => {
+        "offset" => 577755,
+          "file" => {
+                "inode" => "133150",
+                 "path" => "/var/log/dpkg.log",
+            "device_id" => "64512"
+        }
+    },
+       "message" => "2025-08-03 01:37:28 startup packages configure",
+      "@version" => "1",
+    "@timestamp" => 2025-08-03T01:37:35.894Z,
+         "input" => {
+        "type" => "filestream"
+    }
+}
+{
+         "agent" => {
+                "name" => "elk",
+                "type" => "filebeat",
+        "ephemeral_id" => "0b2f8e70-db95-437d-a46e-fc9b24b5846b",
+                  "id" => "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+             "version" => "8.18.1"
+    },
+         "event" => {
+        "original" => "2025-08-03 01:37:41 startup archives unpack"
+    },
+          "host" => {
+                  "mac" => [
+            [0] "00-1C-42-6D-E0-89"
+        ],
+        "containerized" => false,
+             "hostname" => "elk",
+                   "os" => {
+              "kernel" => "6.8.0-64-generic",
+            "codename" => "noble",
+                "type" => "linux",
+            "platform" => "ubuntu",
+              "family" => "debian",
+                "name" => "Ubuntu",
+             "version" => "24.04.2 LTS (Noble Numbat)"
+        },
+                   "ip" => [
+            [0] "10.211.55.32",
+            [1] "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+            [2] "fe80::21c:42ff:fe6d:e089"
+        ],
+                 "name" => "elk",
+         "architecture" => "aarch64",
+                   "id" => "53d351d845dc4ea09111e51cc53b4b62"
+    },
+          "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ],
+           "ecs" => {
+        "version" => "8.0.0"
+    },
+           "log" => {
+        "offset" => 577802,
+          "file" => {
+                "inode" => "133150",
+                 "path" => "/var/log/dpkg.log",
+            "device_id" => "64512"
+        }
+    },
+       "message" => "2025-08-03 01:37:41 startup archives unpack",
+      "@version" => "1",
+    "@timestamp" => 2025-08-03T01:37:41.899Z,
+         "input" => {
+        "type" => "filestream"
+    }
+}
+{
+         "agent" => {
+                "name" => "elk",
+                "type" => "filebeat",
+        "ephemeral_id" => "0b2f8e70-db95-437d-a46e-fc9b24b5846b",
+                  "id" => "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+             "version" => "8.18.1"
+    },
+         "event" => {
+        "original" => "2025-08-03 01:37:28 status installed telnet:all 0.17+2.5-3ubuntu4"
+    },
+          "host" => {
+                  "mac" => [
+            [0] "00-1C-42-6D-E0-89"
+        ],
+        "containerized" => false,
+             "hostname" => "elk",
+                   "os" => {
+              "kernel" => "6.8.0-64-generic",
+                "type" => "linux",
+              "family" => "debian",
+            "platform" => "ubuntu",
+                "name" => "Ubuntu",
+            "codename" => "noble",
+             "version" => "24.04.2 LTS (Noble Numbat)"
+        },
+                 "name" => "elk",
+                   "ip" => [
+            [0] "10.211.55.32",
+            [1] "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+            [2] "fe80::21c:42ff:fe6d:e089"
+        ],
+         "architecture" => "aarch64",
+                   "id" => "53d351d845dc4ea09111e51cc53b4b62"
+    },
+          "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ],
+           "ecs" => {
+        "version" => "8.0.0"
+    },
+           "log" => {
+        "offset" => 577355,
+          "file" => {
+                "inode" => "133150",
+                 "path" => "/var/log/dpkg.log",
+            "device_id" => "64512"
+        }
+    },
+       "message" => "2025-08-03 01:37:28 status installed telnet:all 0.17+2.5-3ubuntu4",
+      "@version" => "1",
+    "@timestamp" => 2025-08-03T01:37:35.894Z,
+         "input" => {
+        "type" => "filestream"
+    }
+}
+{
+         "agent" => {
+                "name" => "elk",
+                "type" => "filebeat",
+        "ephemeral_id" => "0b2f8e70-db95-437d-a46e-fc9b24b5846b",
+                  "id" => "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+             "version" => "8.18.1"
+    },
+         "event" => {
+        "original" => "2025-08-03 01:37:41 install telnet:all <none> 0.17+2.5-3ubuntu4"
+    },
+          "host" => {
+                  "mac" => [
+            [0] "00-1C-42-6D-E0-89"
+        ],
+        "containerized" => false,
+             "hostname" => "elk",
+                 "name" => "elk",
+                   "ip" => [
+            [0] "10.211.55.32",
+            [1] "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+            [2] "fe80::21c:42ff:fe6d:e089"
+        ],
+                   "os" => {
+              "kernel" => "6.8.0-64-generic",
+                "name" => "Ubuntu",
+              "family" => "debian",
+            "codename" => "noble",
+                "type" => "linux",
+            "platform" => "ubuntu",
+             "version" => "24.04.2 LTS (Noble Numbat)"
+        },
+         "architecture" => "aarch64",
+                   "id" => "53d351d845dc4ea09111e51cc53b4b62"
+    },
+          "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ],
+           "ecs" => {
+        "version" => "8.0.0"
+    },
+           "log" => {
+        "offset" => 577846,
+          "file" => {
+                "inode" => "133150",
+            "device_id" => "64512",
+                 "path" => "/var/log/dpkg.log"
+        }
+    },
+       "message" => "2025-08-03 01:37:41 install telnet:all <none> 0.17+2.5-3ubuntu4",
+      "@version" => "1",
+    "@timestamp" => 2025-08-03T01:37:41.899Z,
+         "input" => {
+        "type" => "filestream"
+    }
+}
+{
+         "agent" => {
+                "name" => "elk",
+                "type" => "filebeat",
+        "ephemeral_id" => "0b2f8e70-db95-437d-a46e-fc9b24b5846b",
+                  "id" => "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+             "version" => "8.18.1"
+    },
+         "event" => {
+        "original" => "2025-08-03 01:37:41 status half-installed telnet:all 0.17+2.5-3ubuntu4"
+    },
+          "host" => {
+                  "mac" => [
+            [0] "00-1C-42-6D-E0-89"
+        ],
+        "containerized" => false,
+             "hostname" => "elk",
+                 "name" => "elk",
+                   "ip" => [
+            [0] "10.211.55.32",
+            [1] "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+            [2] "fe80::21c:42ff:fe6d:e089"
+        ],
+                   "os" => {
+              "kernel" => "6.8.0-64-generic",
+                "name" => "Ubuntu",
+              "family" => "debian",
+            "codename" => "noble",
+                "type" => "linux",
+            "platform" => "ubuntu",
+             "version" => "24.04.2 LTS (Noble Numbat)"
+        },
+         "architecture" => "aarch64",
+                   "id" => "53d351d845dc4ea09111e51cc53b4b62"
+    },
+          "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ],
+           "ecs" => {
+        "version" => "8.0.0"
+    },
+           "log" => {
+        "offset" => 577910,
+          "file" => {
+                "inode" => "133150",
+                 "path" => "/var/log/dpkg.log",
+            "device_id" => "64512"
+        }
+    },
+       "message" => "2025-08-03 01:37:41 status half-installed telnet:all 0.17+2.5-3ubuntu4",
+      "@version" => "1",
+    "@timestamp" => 2025-08-03T01:37:41.899Z,
+         "input" => {
+        "type" => "filestream"
+    }
+}
+{
+         "agent" => {
+                "name" => "elk",
+                "type" => "filebeat",
+        "ephemeral_id" => "0b2f8e70-db95-437d-a46e-fc9b24b5846b",
+                  "id" => "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+             "version" => "8.18.1"
+    },
+         "event" => {
+        "original" => "2025-08-03 01:37:41 status unpacked telnet:all 0.17+2.5-3ubuntu4"
+    },
+          "host" => {
+                  "mac" => [
+            [0] "00-1C-42-6D-E0-89"
+        ],
+        "containerized" => false,
+             "hostname" => "elk",
+                 "name" => "elk",
+                   "ip" => [
+            [0] "10.211.55.32",
+            [1] "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+            [2] "fe80::21c:42ff:fe6d:e089"
+        ],
+                   "os" => {
+              "kernel" => "6.8.0-64-generic",
+                "name" => "Ubuntu",
+              "family" => "debian",
+            "codename" => "noble",
+                "type" => "linux",
+            "platform" => "ubuntu",
+             "version" => "24.04.2 LTS (Noble Numbat)"
+        },
+                   "id" => "53d351d845dc4ea09111e51cc53b4b62",
+         "architecture" => "aarch64"
+    },
+          "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ],
+           "ecs" => {
+        "version" => "8.0.0"
+    },
+           "log" => {
+        "offset" => 577981,
+          "file" => {
+                "inode" => "133150",
+                 "path" => "/var/log/dpkg.log",
+            "device_id" => "64512"
+        }
+    },
+       "message" => "2025-08-03 01:37:41 status unpacked telnet:all 0.17+2.5-3ubuntu4",
+      "@version" => "1",
+    "@timestamp" => 2025-08-03T01:37:41.899Z,
+         "input" => {
+        "type" => "filestream"
+    }
+}
+{
+         "agent" => {
+                "name" => "elk",
+                "type" => "filebeat",
+        "ephemeral_id" => "0b2f8e70-db95-437d-a46e-fc9b24b5846b",
+                  "id" => "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+             "version" => "8.18.1"
+    },
+         "event" => {
+        "original" => "2025-08-03 01:37:41 startup packages configure"
+    },
+          "host" => {
+                  "mac" => [
+            [0] "00-1C-42-6D-E0-89"
+        ],
+        "containerized" => false,
+             "hostname" => "elk",
+                   "os" => {
+              "kernel" => "6.8.0-64-generic",
+                "name" => "Ubuntu",
+              "family" => "debian",
+            "codename" => "noble",
+                "type" => "linux",
+            "platform" => "ubuntu",
+             "version" => "24.04.2 LTS (Noble Numbat)"
+        },
+                 "name" => "elk",
+                   "ip" => [
+            [0] "10.211.55.32",
+            [1] "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+            [2] "fe80::21c:42ff:fe6d:e089"
+        ],
+         "architecture" => "aarch64",
+                   "id" => "53d351d845dc4ea09111e51cc53b4b62"
+    },
+          "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ],
+           "ecs" => {
+        "version" => "8.0.0"
+    },
+           "log" => {
+        "offset" => 578046,
+          "file" => {
+                "inode" => "133150",
+            "device_id" => "64512",
+                 "path" => "/var/log/dpkg.log"
+        }
+    },
+       "message" => "2025-08-03 01:37:41 startup packages configure",
+      "@version" => "1",
+    "@timestamp" => 2025-08-03T01:37:41.899Z,
+         "input" => {
+        "type" => "filestream"
+    }
+}
+{
+         "agent" => {
+                "type" => "filebeat",
+                "name" => "elk",
+        "ephemeral_id" => "0b2f8e70-db95-437d-a46e-fc9b24b5846b",
+                  "id" => "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+             "version" => "8.18.1"
+    },
+         "event" => {
+        "original" => "2025-08-03 01:37:41 configure telnet:all 0.17+2.5-3ubuntu4 <none>"
+    },
+          "host" => {
+                  "mac" => [
+            [0] "00-1C-42-6D-E0-89"
+        ],
+        "containerized" => false,
+             "hostname" => "elk",
+                 "name" => "elk",
+                   "ip" => [
+            [0] "10.211.55.32",
+            [1] "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+            [2] "fe80::21c:42ff:fe6d:e089"
+        ],
+                   "os" => {
+              "kernel" => "6.8.0-64-generic",
+                "name" => "Ubuntu",
+            "codename" => "noble",
+                "type" => "linux",
+            "platform" => "ubuntu",
+              "family" => "debian",
+             "version" => "24.04.2 LTS (Noble Numbat)"
+        },
+                   "id" => "53d351d845dc4ea09111e51cc53b4b62",
+         "architecture" => "aarch64"
+    },
+          "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ],
+           "ecs" => {
+        "version" => "8.0.0"
+    },
+           "log" => {
+        "offset" => 578093,
+          "file" => {
+                "inode" => "133150",
+                 "path" => "/var/log/dpkg.log",
+            "device_id" => "64512"
+        }
+    },
+       "message" => "2025-08-03 01:37:41 configure telnet:all 0.17+2.5-3ubuntu4 <none>",
+      "@version" => "1",
+    "@timestamp" => 2025-08-03T01:37:41.899Z,
+         "input" => {
+        "type" => "filestream"
+    }
+}
+{
+         "agent" => {
+                "name" => "elk",
+                "type" => "filebeat",
+        "ephemeral_id" => "0b2f8e70-db95-437d-a46e-fc9b24b5846b",
+                  "id" => "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+             "version" => "8.18.1"
+    },
+         "event" => {
+        "original" => "2025-08-03 01:37:41 status unpacked telnet:all 0.17+2.5-3ubuntu4"
+    },
+          "host" => {
+                  "mac" => [
+            [0] "00-1C-42-6D-E0-89"
+        ],
+        "containerized" => false,
+             "hostname" => "elk",
+                   "os" => {
+              "kernel" => "6.8.0-64-generic",
+                "name" => "Ubuntu",
+            "codename" => "noble",
+                "type" => "linux",
+            "platform" => "ubuntu",
+              "family" => "debian",
+             "version" => "24.04.2 LTS (Noble Numbat)"
+        },
+                 "name" => "elk",
+                   "ip" => [
+            [0] "10.211.55.32",
+            [1] "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+            [2] "fe80::21c:42ff:fe6d:e089"
+        ],
+         "architecture" => "aarch64",
+                   "id" => "53d351d845dc4ea09111e51cc53b4b62"
+    },
+          "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ],
+           "ecs" => {
+        "version" => "8.0.0"
+    },
+           "log" => {
+        "offset" => 578159,
+          "file" => {
+                "inode" => "133150",
+            "device_id" => "64512",
+                 "path" => "/var/log/dpkg.log"
+        }
+    },
+       "message" => "2025-08-03 01:37:41 status unpacked telnet:all 0.17+2.5-3ubuntu4",
+      "@version" => "1",
+    "@timestamp" => 2025-08-03T01:37:41.899Z,
+         "input" => {
+        "type" => "filestream"
+    }
+}
+{
+         "agent" => {
+                "type" => "filebeat",
+                "name" => "elk",
+        "ephemeral_id" => "0b2f8e70-db95-437d-a46e-fc9b24b5846b",
+                  "id" => "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+             "version" => "8.18.1"
+    },
+         "event" => {
+        "original" => "2025-08-03 01:37:41 status half-configured telnet:all 0.17+2.5-3ubuntu4"
+    },
+          "host" => {
+                  "mac" => [
+            [0] "00-1C-42-6D-E0-89"
+        ],
+        "containerized" => false,
+             "hostname" => "elk",
+                 "name" => "elk",
+                   "ip" => [
+            [0] "10.211.55.32",
+            [1] "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+            [2] "fe80::21c:42ff:fe6d:e089"
+        ],
+                   "os" => {
+              "kernel" => "6.8.0-64-generic",
+            "codename" => "noble",
+                "type" => "linux",
+            "platform" => "ubuntu",
+              "family" => "debian",
+                "name" => "Ubuntu",
+             "version" => "24.04.2 LTS (Noble Numbat)"
+        },
+                   "id" => "53d351d845dc4ea09111e51cc53b4b62",
+         "architecture" => "aarch64"
+    },
+          "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ],
+           "ecs" => {
+        "version" => "8.0.0"
+    },
+           "log" => {
+        "offset" => 578224,
+          "file" => {
+                "inode" => "133150",
+                 "path" => "/var/log/dpkg.log",
+            "device_id" => "64512"
+        }
+    },
+       "message" => "2025-08-03 01:37:41 status half-configured telnet:all 0.17+2.5-3ubuntu4",
+      "@version" => "1",
+    "@timestamp" => 2025-08-03T01:37:41.899Z,
+         "input" => {
+        "type" => "filestream"
+    }
+}
+{
+         "agent" => {
+                "name" => "elk",
+                "type" => "filebeat",
+        "ephemeral_id" => "0b2f8e70-db95-437d-a46e-fc9b24b5846b",
+                  "id" => "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+             "version" => "8.18.1"
+    },
+         "event" => {
+        "original" => "2025-08-03 01:37:41 status installed telnet:all 0.17+2.5-3ubuntu4"
+    },
+          "host" => {
+                  "mac" => [
+            [0] "00-1C-42-6D-E0-89"
+        ],
+        "containerized" => false,
+             "hostname" => "elk",
+                   "os" => {
+              "kernel" => "6.8.0-64-generic",
+                "name" => "Ubuntu",
+            "codename" => "noble",
+                "type" => "linux",
+            "platform" => "ubuntu",
+              "family" => "debian",
+             "version" => "24.04.2 LTS (Noble Numbat)"
+        },
+                   "ip" => [
+            [0] "10.211.55.32",
+            [1] "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+            [2] "fe80::21c:42ff:fe6d:e089"
+        ],
+                 "name" => "elk",
+         "architecture" => "aarch64",
+                   "id" => "53d351d845dc4ea09111e51cc53b4b62"
+    },
+          "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ],
+           "ecs" => {
+        "version" => "8.0.0"
+    },
+           "log" => {
+        "offset" => 578296,
+          "file" => {
+                "inode" => "133150",
+                 "path" => "/var/log/dpkg.log",
+            "device_id" => "64512"
+        }
+    },
+       "message" => "2025-08-03 01:37:41 status installed telnet:all 0.17+2.5-3ubuntu4",
+      "@version" => "1",
+    "@timestamp" => 2025-08-03T01:37:41.899Z,
+         "input" => {
+        "type" => "filestream"
+    }
+}
