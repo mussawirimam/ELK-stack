@@ -1,0 +1,354 @@
+### now that we have learned how to setup the filebeat and logstash servers and their configuration and basics.
+### we will learn how to parse the data through the filter first and learn about the GROK
+
+basic of conf'd pipeline
+input
+filter  <------------------ ### we learned input and output, now we will learn about the parseing data/logs through filter
+output
+
+
+e.g 
+suppose this is my log
+123
+1234
+123456
+
+message> 123
+message> 1234
+message> 123456
+
+Grok parse >> target message {GROK PATTER}
+
+GROK LEARNING DOC:
+https://github.com/mussawirimam/Elastic_SearchChintaman/blob/main/grok%20learning.docx
+
+### for now we will stop the logstash and change the directory 
+
+†^C[WARN ] 2025-08-03 17:19:36.443 [SIGINT handler] runner - SIGINT received. Shutting down.
+[WARN ] 2025-08-03 17:19:41.447 [Ruby-0-Thread-19: /usr/share/logstash/logstash-core/lib/logstash/runner.rb:624] runner - Received shutdown signal, but pipeline is still waiting for in-flight events
+to be processed. Sending another ^C will force quit Logstash, but this may cause
+data loss.
+[INFO ] 2025-08-03 17:19:43.205 [[main]-pipeline-manager] javapipeline - Pipeline terminated {"pipeline.id"=>"main"}
+[INFO ] 2025-08-03 17:19:43.504 [Converge PipelineAction::StopAndDelete<main>] pipelinesregistry - Removed pipeline from registry successfully {:pipeline_id=>:main}
+[INFO ] 2025-08-03 17:19:43.526 [LogStash::Runner] runner - Logstash shut down.
+root@elk:/etc/logstash# cd /etc/logstash/
+root@elk:/etc/logstash# vim /etc/logstash/conf.d/
+root@elk:/etc/logstash# vim /etc/logstash/conf.d/filebeat.conf
+
+### currently our filebeat.conf is setup like this, we arent doing any filteration on it.
+### now what we have to understand is how to specify a filter
+root@elk:/etc/logstash# cat /etc/logstash/conf.d/filebeat.conf
+input {
+  beats {    <----------- filebeat will be an input. Which will send the data to logstash. And, through logstash data will be parsed and sent to elasticsearch as output
+    port => 5044  <-------------------- logstash port
+
+  }
+}
+
+filter {
+    <-------------------------- ### we are going to work here now, we will learn how to specify the filter in logstash
+}
+
+output
+{
+
+stdout {
+  codec => rubydebug
+}
+
+  elasticsearch {
+    hosts => ["https://sys.fcc:9200"]  <------------------- host to which the output will be sent
+    index => "logs_for_test_%{+YYYY.MM.dd}"  <---------------------- date pattern
+    user => elastic    <----------------------------- username
+    password => blfOwgJUMUuLKjmXVYU2  <------------------------------- password
+    ssl => true  <------------------------------------------- ssl enabled
+    cacert => "/etc/elasticsearch/certs/ca/ca.crt"  <--------------------------- location of the ca certificate
+  }
+}
+
+### let's suppose there are unwatned field that I am able to see, let's suppose I have decided which fields I dont want. We will use the filter for it. 
+### we have this document as an e.g that is coming through the filebeat, we will idenify that we dont want some of the fields coming in through the logs that the filebeat is sending over to logstash and then logstash parsing that data to elasticsearch.
+### we will use the filter to drop some of these fields.
+# SAMPLE JSON event document from kibana UI:
+{
+  "_index": "logs_for_test_2025.08.03",
+  "_id": "voXncJgBh6oPYmnzTH_S",
+  "_version": 1,
+  "_source": {
+    "agent": {
+      "id": "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+      "ephemeral_id": "deba83c2-edba-4aad-be61-fcaa8810305e",
+      "name": "elk",
+      "type": "filebeat",
+      "version": "8.18.1"
+    },
+    "ecs": {
+      "version": "8.0.0"
+    },
+    "log": {
+      "offset": 20,
+      "file": {
+        "device_id": "64512",
+        "inode": "131799",
+        "path": "/var/log/hello.log"
+      }
+    },
+    "@timestamp": "2025-08-03T17:07:33.091Z",
+    "@version": "1",
+    "tags": [
+      "beats_input_codec_plain_applied"
+    ],
+    "input": {
+      "type": "filestream"
+    },
+    "message": "my next line",
+    "event": {
+      "original": "my next line"
+    },
+    "host": {
+      "id": "53d351d845dc4ea09111e51cc53b4b62",
+      "ip": [
+        "10.211.55.32",
+        "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+        "fe80::21c:42ff:fe6d:e089"
+      ],
+      "containerized": false,
+      "hostname": "elk",
+      "name": "elk",
+      "mac": [
+        "00-1C-42-6D-E0-89"
+      ],
+      "os": {
+        "platform": "ubuntu",
+        "family": "debian",
+        "type": "linux",
+        "codename": "noble",
+        "name": "Ubuntu",
+        "kernel": "6.8.0-64-generic",
+        "version": "24.04.2 LTS (Noble Numbat)"
+      },
+      "architecture": "aarch64"
+    }
+  },
+  "fields": {
+    "agent.version.keyword": [
+      "8.18.1"
+    ],
+    "host.architecture.keyword": [
+      "aarch64"
+    ],
+    "host.name.keyword": [
+      "elk"
+    ],
+    "host.hostname": [
+      "elk"
+    ],
+    "host.mac": [
+      "00-1C-42-6D-E0-89"
+    ],
+    "ecs.version.keyword": [
+      "8.0.0"
+    ],
+    "host.ip.keyword": [
+      "10.211.55.32",
+      "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+      "fe80::21c:42ff:fe6d:e089"
+    ],
+    "host.os.version": [
+      "24.04.2 LTS (Noble Numbat)"
+    ],
+    "host.os.name": [
+      "Ubuntu"
+    ],
+    "agent.name": [
+      "elk"
+    ],
+    "host.id.keyword": [
+      "53d351d845dc4ea09111e51cc53b4b62"
+    ],
+    "host.name": [
+      "elk"
+    ],
+    "host.os.version.keyword": [
+      "24.04.2 LTS (Noble Numbat)"
+    ],
+    "event.original": [
+      "my next line"
+    ],
+    "host.os.type": [
+      "linux"
+    ],
+    "agent.id.keyword": [
+      "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621"
+    ],
+    "@version.keyword": [
+      "1"
+    ],
+    "input.type": [
+      "filestream"
+    ],
+    "log.offset": [
+      20
+    ],
+    "tags": [
+      "beats_input_codec_plain_applied"
+    ],
+    "host.architecture": [
+      "aarch64"
+    ],
+    "agent.id": [
+      "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621"
+    ],
+    "ecs.version": [
+      "8.0.0"
+    ],
+    "host.containerized": [
+      false
+    ],
+    "message.keyword": [
+      "my next line"
+    ],
+    "host.hostname.keyword": [
+      "elk"
+    ],
+    "agent.version": [
+      "8.18.1"
+    ],
+    "host.os.family": [
+      "debian"
+    ],
+    "input.type.keyword": [
+      "filestream"
+    ],
+    "tags.keyword": [
+      "beats_input_codec_plain_applied"
+    ],
+    "log.file.inode.keyword": [
+      "131799"
+    ],
+    "host.ip": [
+      "10.211.55.32",
+      "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+      "fe80::21c:42ff:fe6d:e089"
+    ],
+    "agent.type": [
+      "filebeat"
+    ],
+    "host.os.kernel.keyword": [
+      "6.8.0-64-generic"
+    ],
+    "host.os.kernel": [
+      "6.8.0-64-generic"
+    ],
+    "log.file.device_id": [
+      "64512"
+    ],
+    "@version": [
+      "1"
+    ],
+    "host.os.name.keyword": [
+      "Ubuntu"
+    ],
+    "log.file.device_id.keyword": [
+      "64512"
+    ],
+    "host.id": [
+      "53d351d845dc4ea09111e51cc53b4b62"
+    ],
+    "log.file.path.keyword": [
+      "/var/log/hello.log"
+    ],
+    "agent.type.keyword": [
+      "filebeat"
+    ],
+    "agent.ephemeral_id.keyword": [
+      "deba83c2-edba-4aad-be61-fcaa8810305e"
+    ],
+    "host.os.codename.keyword": [
+      "noble"
+    ],
+    "host.mac.keyword": [
+      "00-1C-42-6D-E0-89"
+    ],
+    "agent.name.keyword": [
+      "elk"
+    ],
+    "host.os.codename": [
+      "noble"
+    ],
+    "message": [
+      "my next line"
+    ],
+    "host.os.family.keyword": [
+      "debian"
+    ],
+    "@timestamp": [
+      "2025-08-03T17:07:33.091Z"
+    ],
+    "host.os.type.keyword": [
+      "linux"
+    ],
+    "host.os.platform": [
+      "ubuntu"
+    ],
+    "host.os.platform.keyword": [
+      "ubuntu"
+    ],
+    "log.file.inode": [
+      "131799"
+    ],
+    "event.original.keyword": [
+      "my next line"
+    ],
+    "log.file.path": [
+      "/var/log/hello.log"
+    ],
+    "agent.ephemeral_id": [
+      "deba83c2-edba-4aad-be61-fcaa8810305e"
+    ]
+  }
+}
+
+### google: remove field logstash filter
+https://discuss.elastic.co/t/how-to-remove-fields-in-logstash-es/77039/2
+#add this to your conf.d/filebeat.conf file.
+
+
+root@elk:/etc/logstash/conf.d# ls
+filebeat.conf
+root@elk:/etc/logstash/conf.d# vim filebeat.conf
+
+
+root@elk:/etc/logstash/conf.d# cat filebeat.conf
+input {
+  beats {
+    port => 5044
+
+  }
+}
+
+filter {
+  mutate { remove_field => [ "field1", "field2", "field3", ... "fieldN" ] }  <-------------------------------- ### we added this line, now what we have to do is to add the fields that we want to mutate from our json data from the log documents
+}
+
+output
+{
+
+stdout {
+  codec => rubydebug
+}
+
+  elasticsearch {
+    hosts => ["https://sys.fcc:9200"]
+    index => "logs_for_test_%{+YYYY.MM.dd}"
+    user => elastic
+    password => blfOwgJUMUuLKjmXVYU2
+    ssl => true
+    cacert => "/etc/elasticsearch/certs/ca/ca.crt"
+  }
+}
+
+### mutate is one of the filter plugin
+### in mutatation what do I have to do? In mutation many things can happen.
+### google search: all mutate logstash filters (lets use offical documentation)
+https://www.elastic.co/docs/reference/logstash/plugins/plugins-filters-mutate
