@@ -400,4 +400,59 @@ TOOLS FOR REGEX AND GROK:
 https://regexr.com
 https://grokdebugger.com
 ----------------------------
+GROK Pattern:
+%{TIMESTAMP_ISO8601:log_timestamp} %{LOGLEVEL:log_level} \[%{DATA:service}\] - %{GREEDYDATA:message}
 
+Sample raw Data:
+025-03-10 14:25:43,123 INFO [order-service] - Order ID 4567 processed successfully in 120ms
+2025-03-10 14:25:44,789 ERROR [payment-service] - Payment ID 8910 failed due to insufficient funds
+
+JSON OUTPUT after applying GROK pattern:
+[
+  {
+    "log_timestamp": "25-03-10 14:25:43,123",
+    "log_level": "INFO",
+    "service": "order-service",
+    "message": "Order ID 4567 processed successfully in 120ms"
+  },
+  {
+    "log_timestamp": "2025-03-10 14:25:44,789",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "message": "Payment ID 8910 failed due to insufficient funds"
+  }
+]
+
+--------------------
+DECONSTRUCTING GROK Pattern:
+--------------------
+GROK Pattern:
+%{TIMESTAMP_ISO8601:log_timestamp} %{LOGLEVEL:log_level} \[%{DATA:service}\] - %{GREEDYDATA:message}
+
+Sample raw Data:
+%{TIMESTAMP_ISO8601:log_timestamp} =  025-03-10 14:25:43,123 
+%{LOGLEVEL:log_level} = INFO 
+\[%{DATA:service}\] = [order-service] 
+- %{GREEDYDATA:message} = - Order ID 4567 processed successfully in 120ms
+
+
+%{TIMESTAMP_ISO8601:log_timestamp} = 2025-03-10 14:25:44,789
+%{LOGLEVEL:log_level} =  ERROR 
+\[%{DATA:service}\] = [payment-service]
+- %{GREEDYDATA:message} = - Payment ID 8910 failed due to insufficient funds
+
+JSON OUTPUT after applying GROK pattern:
+[
+  {
+    "log_timestamp": "25-03-10 14:25:43,123",  <----------------------- all the fieldnames are coming from the name we have defined for the GROK if you notice above. %{TIMESTAMP_ISO8601 <---------- collects the raw data information  :log_timestamp <-------------- gives the fieldname} 
+    "log_level": "INFO",
+    "service": "order-service",
+    "message": "Order ID 4567 processed successfully in 120ms"
+  },
+  {
+    "log_timestamp": "2025-03-10 14:25:44,789",
+    "log_level": "ERROR",
+    "service": "payment-service",
+    "message": "Payment ID 8910 failed due to insufficient funds"
+  }
+]
