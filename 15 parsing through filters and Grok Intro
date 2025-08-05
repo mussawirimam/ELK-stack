@@ -348,7 +348,50 @@ stdout {
   }
 }
 
+---------------------------------------------------------------------
+FILTERS:
+---------------------------------------------------------------------
+
 ### mutate is one of the filter plugin
 ### in mutatation what do I have to do? In mutation many things can happen.
 ### google search: all mutate logstash filters (lets use offical documentation)
 https://www.elastic.co/docs/reference/logstash/plugins/plugins-filters-mutate
+
+### this is the directory where all the file gets read by the filebeat and send to the output which logstash and logstash can process it to the elk
+### currently we did not do any filteration on the conf file, the data is very unstructured in logstash. 
+### we are running the logstash as the BINARY: /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/filebeat.conf (later we will use it as a DAEMON)
+### so we will see how the logs are going to inject in elasticsearch and then once we apply filter how the data is going to look like. 
+
+filebeat.conf
+....
+output
+{
+
+stdout {
+  codec => rubydebug
+}
+
+  elasticsearch {
+    hosts => ["https://sys.fcc:9200"]
+    index => "logs_for_test_%{+YYYY.MM.dd}" <------------- # in our pipeeline we gave the index name logs_for_test and the and on Kibana UI, we created dataview on particular index and then we used date as the suffix. And we added a index pattern at the time of creating dataview on kibana. So any log that gets sent from the filebeat to the elasticsearch gets visualized in the dataview.
+    user => elastic
+    password => blfOwgJUMUuLKjmXVYU2
+    ssl => true
+    cacert => "/etc/elasticsearch/certs/ca/ca.crt"
+  }
+}
+
+### Sample data and filters:
+https://github.com/mussawirimam/Elastic_SearchChintaman/blob/main/Cooman%20Logstash%20fillters.docx
+
+### we are going to create a sample log file in filebeat server in the defined directory location that's been configured and we will apply the filter in the logstash server:
+root@elk:/var/log# vim test1.log
+127.0.0.1 - - frank [10/Oct/2024:13:55:36 -0700] "GET /apache_pb.gif HTTP/1.0" 200 
+:wq!
+
+
+### when using a Grok what happens is that behind the scene for grok there is a regex.
+### regex is used for finding the pattern. 
+
+https://github.com/logstash-plugins/logstash-patterns-core
+
