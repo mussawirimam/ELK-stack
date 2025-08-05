@@ -392,6 +392,12 @@ root@elk:/var/log# vim test1.log
 
 ### when using a Grok what happens is that behind the scene for grok there is a regex.
 ### regex is used for finding the pattern. 
-
+### most of the regex are available in the GROK patterns
 https://github.com/logstash-plugins/logstash-patterns-core
+
+----------------------------
+TOOLS FOR REGEX AND GROK:
+https://regexr.com
+https://grokdebugger.com
+----------------------------
 
