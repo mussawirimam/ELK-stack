@@ -1,3 +1,11 @@
+### GROK DOCUMENTATION:
+https://www.elastic.co/docs/explore-analyze/scripting/grok
+
+TOOLS:
+https://regexr.com
+https://grokdebugger.com
+https://github.com/cjslack/grok-debugger/blob/master/public/patterns/grok-patterns
+
 ### now that we have learned how to setup the filebeat and logstash servers and their configuration and basics.
 ### we will learn how to parse the data through the filter first and learn about the GROK
 
