@@ -1,5 +1,7 @@
+IMPORTANT:
 ### GROK DOCUMENTATION:
 https://www.elastic.co/docs/explore-analyze/scripting/grok
+
 
 TOOLS:
 https://regexr.com
@@ -464,3 +466,13 @@ JSON OUTPUT after applying GROK pattern:
     "message": "Payment ID 8910 failed due to insufficient funds"
   }
 ]
+
+
+
+
+UNSTRUCTURED DATA TO STRUCTURED DATA:
+UNSTRUCTURED:
+
+GROK PATTERN
+
+STRUCTURED:
