@@ -468,11 +468,24 @@ JSON OUTPUT after applying GROK pattern:
 ]
 
 
-
-
+---------------------------------
 UNSTRUCTURED DATA TO STRUCTURED DATA:
+---------------------------------
 UNSTRUCTURED:
+127.0.0.1 - frank [10/Oct/2000:13:55:36 -0700] "GET /apache_pb.gif HTTP/1.0" 200 2326
 
 GROK PATTERN
+%{IP:IP} - %{DATA:Name} \[%{HTTPDATE:timestamp}\] "%{DATA:Request} %{DATA:Uri}HTTP/1.0" %{NUMBER:Responce} %{NUMBER:Pid}
 
 STRUCTURED:
+[
+  {
+    "IP": "127.0.0.1",
+    "Name": "frank",
+    "timestamp": "10/Oct/2000:13:55:36 -0700",
+    "Request": "GET",
+    "Uri": "/apache_pb.gif ",
+    "Responce": 200,
+    "Pid": 2326
+  }
+]
