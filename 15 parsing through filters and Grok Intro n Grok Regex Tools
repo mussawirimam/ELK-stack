@@ -467,7 +467,9 @@ JSON OUTPUT after applying GROK pattern:
   }
 ]
 
-
+---------------------------------
+VERY IMPORTANT:
+### look how it is catching the phrases through the GrokPattern (under the hood regex is the player)
 ---------------------------------
 UNSTRUCTURED DATA TO STRUCTURED DATA:
 ---------------------------------
