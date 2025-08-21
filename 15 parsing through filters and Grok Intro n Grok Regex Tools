@@ -620,3 +620,293 @@ stdout {
 
 root@elk:/etc/logstash/conf.d#
 
+### TROUBLE SHOOTING ENDS
+
+####  ACTUAL OUTPUT OF THE LOG DOCUMENT FROM THE KIBANA UI IN JSON FORMAT:
+{
+  "_index": "logs_for_test_2025.08.20",
+  "_id": "KIXvyZgBh6oPYmnzZMvq",
+  "_version": 1,
+  "_source": {
+    "ecs": {
+      "version": "8.0.0"
+    },
+    "@version": "1",
+    "Responce": "200",
+    "Name": "frank",
+    "Request": "GET",
+    "timestamp": "10/Oct/2000:13:55:36 -0700",
+    "IP": "127.0.0.1",
+    "host": {
+      "id": "53d351d845dc4ea09111e51cc53b4b62",
+      "os": {
+        "kernel": "6.8.0-64-generic",
+        "codename": "noble",
+        "platform": "ubuntu",
+        "family": "debian",
+        "name": "Ubuntu",
+        "type": "linux",
+        "version": "24.04.2 LTS (Noble Numbat)"
+      },
+      "containerized": false,
+      "architecture": "aarch64",
+      "name": "elk",
+      "ip": [
+        "10.211.55.32",
+        "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+        "fe80::21c:42ff:fe6d:e089"
+      ],
+      "hostname": "elk",
+      "mac": [
+        "00-1C-42-6D-E0-89"
+      ]
+    },
+    "Pid": "2326",
+    "log": {
+      "file": {
+        "inode": "132543",
+        "device_id": "64512",
+        "path": "/var/log/test1.log"
+      },
+      "offset": 0
+    },
+    "tags": [
+      "beats_input_codec_plain_applied"
+    ],
+    "agent": {
+      "name": "elk",
+      "id": "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621",
+      "type": "filebeat",
+      "ephemeral_id": "96dfdd30-e886-4fe1-a151-3aafde20a96d",
+      "version": "8.18.1"
+    },
+    "@timestamp": "2025-08-20T23:26:53.268Z",
+    "message": "127.0.0.1 - frank [10/Oct/2000:13:55:36 -0700] \"GET /apache_pb.gif HTTP/1.0\" 200 2326",
+    "event": {
+      "original": "127.0.0.1 - frank [10/Oct/2000:13:55:36 -0700] \"GET /apache_pb.gif HTTP/1.0\" 200 2326"
+    },
+    "Uri": "/apache_pb.gif ",
+    "input": {
+      "type": "filestream"
+    }
+  },
+  "fields": {
+    "agent.version.keyword": [
+      "8.18.1"
+    ],
+    "host.architecture.keyword": [
+      "aarch64"
+    ],
+    "host.name.keyword": [
+      "elk"
+    ],
+    "host.hostname": [
+      "elk"
+    ],
+    "host.mac": [
+      "00-1C-42-6D-E0-89"
+    ],
+    "Name": [
+      "frank"
+    ],
+    "ecs.version.keyword": [
+      "8.0.0"
+    ],
+    "host.ip.keyword": [
+      "10.211.55.32",
+      "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+      "fe80::21c:42ff:fe6d:e089"
+    ],
+    "host.os.version": [
+      "24.04.2 LTS (Noble Numbat)"
+    ],
+    "host.os.name": [
+      "Ubuntu"
+    ],
+    "agent.name": [
+      "elk"
+    ],
+    "host.id.keyword": [
+      "53d351d845dc4ea09111e51cc53b4b62"
+    ],
+    "host.name": [
+      "elk"
+    ],
+    "IP.keyword": [
+      "127.0.0.1"
+    ],
+    "host.os.version.keyword": [
+      "24.04.2 LTS (Noble Numbat)"
+    ],
+    "Request.keyword": [
+      "GET"
+    ],
+    "event.original": [
+      "127.0.0.1 - frank [10/Oct/2000:13:55:36 -0700] \"GET /apache_pb.gif HTTP/1.0\" 200 2326"
+    ],
+    "host.os.type": [
+      "linux"
+    ],
+    "IP": [
+      "127.0.0.1"
+    ],
+    "agent.id.keyword": [
+      "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621"
+    ],
+    "@version.keyword": [
+      "1"
+    ],
+    "input.type": [
+      "filestream"
+    ],
+    "log.offset": [
+      0
+    ],
+    "tags": [
+      "beats_input_codec_plain_applied"
+    ],
+    "host.architecture": [
+      "aarch64"
+    ],
+    "agent.id": [
+      "d7a4dfcb-de4e-4bbf-b0a1-060c65dab621"
+    ],
+    "ecs.version": [
+      "8.0.0"
+    ],
+    "host.containerized": [
+      false
+    ],
+    "Responce.keyword": [
+      "200"
+    ],
+    "message.keyword": [
+      "127.0.0.1 - frank [10/Oct/2000:13:55:36 -0700] \"GET /apache_pb.gif HTTP/1.0\" 200 2326"
+    ],
+    "host.hostname.keyword": [
+      "elk"
+    ],
+    "agent.version": [
+      "8.18.1"
+    ],
+    "host.os.family": [
+      "debian"
+    ],
+    "input.type.keyword": [
+      "filestream"
+    ],
+    "tags.keyword": [
+      "beats_input_codec_plain_applied"
+    ],
+    "Uri": [
+      "/apache_pb.gif "
+    ],
+    "timestamp.keyword": [
+      "10/Oct/2000:13:55:36 -0700"
+    ],
+    "log.file.inode.keyword": [
+      "132543"
+    ],
+    "host.ip": [
+      "10.211.55.32",
+      "fdb2:2c26:f4e4:0:21c:42ff:fe6d:e089",
+      "fe80::21c:42ff:fe6d:e089"
+    ],
+    "agent.type": [
+      "filebeat"
+    ],
+    "host.os.kernel.keyword": [
+      "6.8.0-64-generic"
+    ],
+    "host.os.kernel": [
+      "6.8.0-64-generic"
+    ],
+    "log.file.device_id": [
+      "64512"
+    ],
+    "@version": [
+      "1"
+    ],
+    "host.os.name.keyword": [
+      "Ubuntu"
+    ],
+    "log.file.device_id.keyword": [
+      "64512"
+    ],
+    "Pid.keyword": [
+      "2326"
+    ],
+    "host.id": [
+      "53d351d845dc4ea09111e51cc53b4b62"
+    ],
+    "Name.keyword": [
+      "frank"
+    ],
+    "log.file.path.keyword": [
+      "/var/log/test1.log"
+    ],
+    "agent.type.keyword": [
+      "filebeat"
+    ],
+    "timestamp": [
+      "10/Oct/2000:13:55:36 -0700"
+    ],
+    "Responce": [
+      "200"
+    ],
+    "agent.ephemeral_id.keyword": [
+      "96dfdd30-e886-4fe1-a151-3aafde20a96d"
+    ],
+    "host.os.codename.keyword": [
+      "noble"
+    ],
+    "host.mac.keyword": [
+      "00-1C-42-6D-E0-89"
+    ],
+    "agent.name.keyword": [
+      "elk"
+    ],
+    "Uri.keyword": [
+      "/apache_pb.gif "
+    ],
+    "Request": [
+      "GET"
+    ],
+    "host.os.codename": [
+      "noble"
+    ],
+    "Pid": [
+      "2326"
+    ],
+    "message": [
+      "127.0.0.1 - frank [10/Oct/2000:13:55:36 -0700] \"GET /apache_pb.gif HTTP/1.0\" 200 2326"
+    ],
+    "host.os.family.keyword": [
+      "debian"
+    ],
+    "@timestamp": [
+      "2025-08-20T23:26:53.268Z"
+    ],
+    "host.os.type.keyword": [
+      "linux"
+    ],
+    "host.os.platform": [
+      "ubuntu"
+    ],
+    "host.os.platform.keyword": [
+      "ubuntu"
+    ],
+    "log.file.inode": [
+      "132543"
+    ],
+    "event.original.keyword": [
+      "127.0.0.1 - frank [10/Oct/2000:13:55:36 -0700] \"GET /apache_pb.gif HTTP/1.0\" 200 2326"
+    ],
+    "log.file.path": [
+      "/var/log/test1.log"
+    ],
+    "agent.ephemeral_id": [
+      "96dfdd30-e886-4fe1-a151-3aafde20a96d"
+    ]
+  }
+}
