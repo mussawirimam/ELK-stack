@@ -1,0 +1,24 @@
+### this section is a continuation on the file 15
+### we will parse file from the filebeat and filter it throught the logstash pipeline 
+
+root@elk:/etc/logstash/conf.d# pwd
+/etc/logstash/conf.d
+root@elk:/etc/logstash/conf.d# ls
+filebeat.conf
+root@elk:/etc/logstash/conf.d#
+
+### we are going to create iis filter, iis is part of window machine but we are going to show an example on the linux machine 
+### on filebeat server create a directory iis
+root@elk:/var/log# ls
+README            apport.log  bootstrap.log  cloud-init-output.log  dist-upgrade  elasticsearch  filebeat        hello.log  journal  my_data.log  test.log   unattended-upgrades
+alternatives.log  apt         btmp           cloud-init.log         dpkg.log      faillog        fontconfig.log  installer  lastlog  private      test1.log  wtmp
+root@elk:/var/log# mkdir iis
+root@elk:/var/log#
+
+root@elk:/var/log# vim iis.log
+root@elk:/var/log#
+
+### add the sample iis log in iis.log file through iis logs grok and disect.docx document:
+https://github.com/mussawirimam/Elastic_SearchChintaman/blob/main/iis%20logs%20grok%20and%20disect.docx
+
+---------------------------------------------------------
