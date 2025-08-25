@@ -21,6 +21,27 @@ match => {"message" => "%{IP:IP} - %{DATA:Name} \[%{HTTPDATE:timestamp}\] \"%{DA
 ]
 
 # iis log sample:
-2025-03-18 12:00:44 192.168.1.10 GET /mobile/home.html - 80 - 192.168.1.44 Mozilla/5.0 200 0 0 134
+2024-03-21 14:30:00 W3SVC1 192.168.1.1 GET /index.html - 80 - 192.168.1.100 Mozilla/5.0 200 0 0 15
 
 # iis filter pattern:
+%{TIMESTAMP_ISO8601:log_timestamp} %{DATA:sitename} %{IP:server_ip} %{WORD:method} %{URIPATH:uri} %{NOTSPACE:query} %{NUMBER:port} %{NOTSPACE:username} %{IP:client_ip} %{NOTSPACE:user_agent} %{NUMBER:response_code} %{NUMBER:sub_status} %{NUMBER:win32_status} %{NUMBER:time_taken}
+
+# output in grokdebugger.com: 
+[
+  {
+    "log_timestamp": "2024-03-21 14:30:00",
+    "sitename": "W3SVC1",
+    "server_ip": "192.168.1.1",
+    "method": "GET",
+    "uri": "/index.html",
+    "query": "-",
+    "port": 80,
+    "username": "-",
+    "client_ip": "192.168.1.100",
+    "user_agent": "Mozilla/5.0",
+    "response_code": 200,
+    "sub_status": 0,
+    "win32_status": 0,
+    "time_taken": 15
+  }
+]
