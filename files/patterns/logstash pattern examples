@@ -1,0 +1,26 @@
+TOOLS:
+https://grokdebugger.com
+
+# apache log sample:
+127.0.0.1 - frank [10/Oct/2000:13:55:36 -0700] "GET /apache_pb.gif HTTP/1.0" 200 2326
+
+# logstash filter pattern:
+match => {"message" => "%{IP:IP} - %{DATA:Name} \[%{HTTPDATE:timestamp}\] \"%{DATA:Request} %{DATA:Uri}HTTP/1.0\" %{NUMBER:Responce} %{NUMBER:Pid}" }
+
+# output in grokdebugger.com:
+[
+  {
+    "IP": "127.0.0.1",
+    "Name": "frank",
+    "timestamp": "10/Oct/2000:13:55:36 -0700",
+    "Request": "GET",
+    "Uri": "/apache_pb.gif ",
+    "Responce": 200,
+    "Pid": 2326
+  }
+]
+
+# iis log sample:
+2025-03-18 12:00:44 192.168.1.10 GET /mobile/home.html - 80 - 192.168.1.44 Mozilla/5.0 200 0 0 134
+
+# iis filter pattern:
