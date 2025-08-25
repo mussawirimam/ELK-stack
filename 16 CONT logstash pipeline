@@ -22,3 +22,10 @@ root@elk:/var/log#
 https://github.com/mussawirimam/Elastic_SearchChintaman/blob/main/iis%20logs%20grok%20and%20disect.docx
 
 ---------------------------------------------------------
+
+### we already have apache pattern in the logstash pipeline, now we are targeting the iis pattern logs to parse the data through filebeat to logstash
+# using grok debugger
+TOOL: https://grokdebugger.com
+
+root@elk:/var/log# rm -rf hello.log
+root@elk:/var/log#
