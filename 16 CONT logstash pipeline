@@ -29,3 +29,35 @@ TOOL: https://grokdebugger.com
 
 root@elk:/var/log# rm -rf hello.log
 root@elk:/var/log#
+
+
+### in IIS we have a sample data and its grok pattern:
+GROK on grokdebugger.
+
+### IIS SAMPLE DATA
+2024-03-21 14:30:00 W3SVC1 192.168.1.1 GET /index.html - 80 - 192.168.1.100 Mozilla/5.0 200 0 0 15
+
+### OUTPUT AFTER PARSING
+[
+  {
+    "log_timestamp": "2024-03-21 14:30:00",
+    "sitename": "W3SVC1",
+    "server_ip": "192.168.1.1",
+    "method": "GET",
+    "uri": "/index.html",
+    "query": "-",
+    "port": 80,
+    "username": "-",
+    "client_ip": "192.168.1.100",
+    "user_agent": "Mozilla/5.0",
+    "response_code": 200,
+    "sub_status": 0,
+    "win32_status": 0,
+    "time_taken": 15
+  }
+]
+----------------------------------------------
+So now we have two types logstash pipelines on logstash server and two types of files on filebeat server.
+We will use the help of the tags in our logstash pipline to further help us differentiate the data identification and parse the data through the elasticsearch 
+we will use tags and if statement
+
