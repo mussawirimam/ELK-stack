@@ -61,3 +61,15 @@ So now we have two types logstash pipelines on logstash server and two types of 
 We will use the help of the tags in our logstash pipline to further help us differentiate the data identification and parse the data through the elasticsearch 
 we will use tags and if statement
 
+
+when there are two files which you are trying to parse through the logstash conf.d files aka pipeline, you would need to add the tags and if and else condition in the logstash file
+and at the filebeat config file, you will have to add the unique id among all input for apache and iis
+
+### we need two inputs at the filebeat level configuration. 
+
+
+### the importance of the tags in filebeat.yml
+so if you have a tag apache in the filebeat.yml file you can then speicify in the logstash pipeline conf.d to target it
+also, 
+Separation → If Filebeat is collecting from multiple sources (e.g., nginx, system, mysql), you can assign different tags so you know where the logs originated.
+Dashboards → Kibana visualizations/dashboards often rely on tags to differentiate log types.
