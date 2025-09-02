@@ -21,7 +21,7 @@ root@elk:/var/log#
 ### add the sample iis log in iis.log file through iis logs grok and disect.docx document:
 https://github.com/mussawirimam/Elastic_SearchChintaman/blob/main/iis%20logs%20grok%20and%20disect.docx
 
----------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ### we already have apache pattern in the logstash pipeline, now we are targeting the iis pattern logs to parse the data through filebeat to logstash
 # using grok debugger
@@ -56,7 +56,7 @@ GROK on grokdebugger.
     "time_taken": 15
   }
 ]
-----------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 So now we have two types logstash pipelines on logstash server and two types of files on filebeat server.
 We will use the help of the tags in our logstash pipline to further help us differentiate the data identification and parse the data through the elasticsearch 
 we will use tags and if statement
@@ -76,8 +76,70 @@ Dashboards → Kibana visualizations/dashboards often rely on tags to differenti
 
 
 
-root@elk:/var/log# vim /etc/filebeat/filebeat.yml
-root@elk:/var/log# cat /etc/filebeat/filebeat.yml
+root@elk:/etc/logstash/conf.d# cat filebeat.conf
+input {
+  beats {
+    port => 5044
+
+  }
+}
+
+filter {
+if "apache" in [tags]
+{
+grok {
+match => {"message" => "%{IP:IP} - %{DATA:Name} \[%{HTTPDATE:timestamp}\] \"%{DATA:Request} %{DATA:Uri}HTTP/1.0\" %{NUMBER:Responce} %{NUMBER:Pid}" }
+}
+    mutate {
+      add_field => { "log_type" => "apache_access" }
+    }
+
+    mutate {
+      add_field => { "log_type" => "myapacheindex" }
+    }
+
+}
+}
+
+if "iis" in [tags]
+{
+
+grok {
+
+match => {"message" => "%{TIMESTAMP_ISO8601:log_timestamp} %{DATA:sitename} %{IP:server_ip} %{WORD:method} %{URIPATH:uri} %{NOTSPACE:query} %{NUMBER:port} %{NOTSPACE:username} %{IP:client_ip} %{NOTSPACE:user_agent} %{NUMBER:response_code} %{NUMBER:sub_status} %{NUMBER:win32_status} %{NUMBER:time_taken}" }
+
+}
+    mutate {
+      add_field => { "log_type" => "iis" }
+    }
+
+    mutate {
+      add_field => { "log_type" => "myiis" }
+    }
+
+}
+}
+output
+{
+
+stdout {
+  codec => rubydebug
+}
+
+  elasticsearch {
+    hosts => ["https://sys.fcc:9200"]
+    index => "logs_for_test_%{+YYYY.MM.dd}"
+    user => elastic
+    password => blfOwgJUMUuLKjmXVYU2
+    ssl => true
+    cacert => "/etc/elasticsearch/certs/ca/ca.crt"
+  }
+}
+
+root@elk:/etc/logstash/conf.d#
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+root@elk:/etc/filebeat# cat filebeat.yml
 ###################### Filebeat Configuration Example #########################
 
 # This file is an example configuration file highlighting only the most common
@@ -351,6 +413,19 @@ processors:
 # This allows to enable 6.7 migration aliases
 #migration.6_to_7.enabled: true
 
+root@elk:/etc/filebeat#
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+### we will now create the directory and files for the apache and iis to send out to logstash to be parsed with the grok pattern to be applied 
+root@elk:/etc/filebeat# systemctl stop filebeat
+root@elk:/etc/filebeat#
+
+root@elk:/var/log# mkdir iis
+mkdir: cannot create directory ‘iis’: File exists
+root@elk:/var/log# mkdir apache
+mkdir: cannot create directory ‘apache’: File exists
 root@elk:/var/log#
 
------------------------------------------------------------------------------------------------------------------------------
+root@elk:/var/log# cd apache/
+root@elk:/var/log/apache#
