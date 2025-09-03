@@ -138,6 +138,8 @@ stdout {
 
 root@elk:/etc/logstash/conf.d#
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CONCEPT OF ID AND TAG IN FILEBEAT AND LOGSTASH
+-------------------------------------------------
 
 root@elk:/etc/filebeat# cat filebeat.yml
 ###################### Filebeat Configuration Example #########################
@@ -428,4 +430,34 @@ mkdir: cannot create directory ‘apache’: File exists
 root@elk:/var/log#
 
 root@elk:/var/log# cd apache/
-root@elk:/var/log/apache#
+root@elk:/var/log/apache# vim apache.log
+127.0.0.1 - frank [10/Oct/2024:13:55:36 -0700] "GET /apache_pb.gif HTTP/1.0" 200 2326
+
+:wq!
+
+### we will add this grok pattern on logstash server inside confd file
+filter {
+  grok {
+    match => { "message" => "%{IP:client_ip} - %{WORD:user} \[%{HTTPDATE:timestamp}\] \"%{WORD:method} %{URIPATHPARAM:request} HTTP/%{NUMBER:http_version}\" %{NUMBER:response_code} %{NUMBER:bytes}" }
+  }
+  date {
+    match => [ "timestamp", "dd/MMM/yyyy:HH:mm:ss Z" ]
+  }
+}
+
+
+root@elk:/var/log# cd iis
+root@elk:/var/log/iis# vim iis.log
+2024-03-21 14:30:00 W3SVC1 192.168.1.1 GET /index.html - 80 - 192.168.1.100 Mozilla/5.0 200 0 0 15
+
+:wq!
+
+### we will add this grok pattern on logstash server inside confd file
+filter {
+  grok {
+    match => { "message" => "%{TIMESTAMP_ISO8601:log_timestamp} %{DATA:sitename} %{IP:server_ip} %{WORD:method} %{URIPATH:uri} %{NOTSPACE:query} %{NUMBER:port} %{NOTSPACE:username} %{IP:client_ip} %{NOTSPACE:user_agent} %{NUMBER:response_code} %{NUMBER:sub_status} %{NUMBER:win32_status} %{NUMBER:time_taken}" }
+  }
+  date {
+    match => [ "log_timestamp", "YYYY-MM-dd HH:mm:ss" ]
+  }
+}
