@@ -1,0 +1,61 @@
+root@elk:/etc/logstash/conf.d# cat filebeat.conf
+input {
+  beats {
+    port => 5044
+
+  }
+}
+
+filter {
+if "apache" in [tags]
+{
+grok {
+match => {"message" => "%{IP:IP} - %{DATA:Name} \[%{HTTPDATE:timestamp}\] \"%{DATA:Request} %{DATA:Uri}HTTP/1.0\" %{NUMBER:Responce} %{NUMBER:Pid}" }
+}
+    mutate {
+      add_field => { "log_type" => "apache_access" }
+    }
+
+    mutate {
+      add_field => { "log_type" => "myapacheindex" }
+    }
+
+}
+
+
+if "iis" in [tags]
+{
+
+grok {
+
+match => {"message" => "%{TIMESTAMP_ISO8601:log_timestamp} %{DATA:sitename} %{IP:server_ip} %{WORD:method} %{URIPATH:uri} %{NOTSPACE:query} %{NUMBER:port} %{NOTSPACE:username} %{IP:client_ip} %{NOTSPACE:user_agent} %{NUMBER:response_code} %{NUMBER:sub_status} %{NUMBER:win32_status} %{NUMBER:time_taken}" }
+
+}
+    mutate {
+      add_field => { "log_type" => "iis" }
+    }
+
+    mutate {
+      add_field => { "log_type" => "myiis" }
+    }
+
+}
+}
+output
+{
+
+stdout {
+  codec => rubydebug
+}
+
+  elasticsearch {
+    hosts => ["https://sys.fcc:9200"]
+    index => "logs_for_test_%{+YYYY.MM.dd}"
+    user => elastic
+    password => blfOwgJUMUuLKjmXVYU2
+    ssl => true
+    cacert => "/etc/elasticsearch/certs/ca/ca.crt"
+  }
+}
+
+root@elk:/etc/logstash/conf.d#
