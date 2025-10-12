@@ -1,0 +1,32 @@
+# whenever you have an unstructured data/logs, you will be using Grok to turn it into structured data.
+# whenver you have a structured data/logs or following a pattern in same form, use Dissect. 
+
+### official documentation for DISSECT:
+https://www.elastic.co/docs/reference/logstash/plugins/plugins-filters-dissect
+
+### DISSECT TESTER TOOL FOR DISSECT PARSER
+https://dissect-tester.jorgelbg.me
+
+Dissect pattern:
+%{timestamp} %{+timestamp} %{IP} %{Method} %{URI} user=%{user} %{port} %{admin} %{client_IP} %{browser} %{response_code} %{uri} %{uri2} %{number}
+
+Log Sample:
+# I took this from iis logs grok and disect.docx document for sample
+2025-03-18 12:00:02 192.168.1.10 POST /login.aspx user=admin 443 admin 192.168.1.2 Mozilla/5.0 302 0 0 245
+
+RESULT ON https://dissect-tester.jorgelbg.me:
+{
+  "IP": "192.168.1.10",
+  "Method": "POST",
+  "URI": "/login.aspx",
+  "admin": "admin",
+  "browser": "Mozilla/5.0",
+  "client_IP": "192.168.1.2",
+  "number": "245",
+  "port": "443",
+  "response_code": "302",
+  "timestamp": "2025-03-18 12:00:02",
+  "uri": "0",
+  "uri2": "0",
+  "user": "admin"
+}
