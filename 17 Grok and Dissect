@@ -30,3 +30,82 @@ RESULT ON https://dissect-tester.jorgelbg.me:
   "uri2": "0",
   "user": "admin"
 }
+
+-------------------------------------------------------------------------------------
+
+### we will add this dissect in the filebeat.conf pipeline on the logstash server and in filebeat server we will add the logs according to dissect from iis logs grok and disect.docx document
+
+root@elk:/etc/logstash/conf.d# vim filebeat.conf
+input {
+  beats {
+    port => 5044
+
+  }
+}
+
+filter {
+if "apache" in [tags]
+{
+grok {
+match => {"message" => "%{IP:IP} - %{DATA:Name} \[%{HTTPDATE:timestamp}\] \"%{DATA:Request} %{DATA:Uri}HTTP/1.0\" %{NUMBER:Responce} %{NUMBER:Pid}" }
+}
+    mutate {
+      add_field => { "log_type" => "apache_access" }
+    }
+
+    mutate {
+      add_field => { "log_type" => "myapacheindex" }
+    }
+
+}
+
+
+if "iis" in [tags]
+{
+dissect {
+    mapping => {
+        "message" => "%{timestamp} %{+timestamp} %{IP} %{Method} %{URI} user=%{user} %{port} %{admin} %{client_IP} %{browser} %{response_code} %{uri} %{uri2} %{number}"
+    }
+}
+    mutate {
+      add_field => { "log_type" => "iis" }
+    }
+
+    mutate {
+      add_field => { "log_type" => "myiis" }
+    }
+
+}
+mutate {
+     remove_field=>{"message","event"}
+}
+output
+{
+
+stdout {
+  codec => rubydebug
+}
+
+  elasticsearch {
+    hosts => ["https://sys.fcc:9200"]
+    index => "logs_for_test_%{+YYYY.MM.dd}"
+    user => elastic
+    password => blfOwgJUMUuLKjmXVYU2
+    ssl => true
+    cacert => "/etc/elasticsearch/certs/ca/ca.crt"
+  }
+}
+:wq!
+root@elk:/etc/logstash/conf.d# 
+
+-----------------------------------------------------
+### start the Logstash process:
+root@elk:/etc/logstash/conf.d# pgrep -f /etc/logstash/conf.d/filebeat
+693408
+root@elk:/etc/logstash/conf.d# kill -9 693408
+
+root@elk:/etc/logstash/conf.d# /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/filebeat.conf
+
+Note: Grok is suppose to be captured on the pattern and the dissect is used as the variables.
+
+
