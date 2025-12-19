@@ -1,0 +1,70 @@
+Part1
+Intro
+Traditional structure of gathering logs:
+In most cases, when gathering logs—for example, if you have three systems—you will have three Filebeat instances running on those systems. Each Filebeat instance will collect logs from its respective system and send them to Logstash. Logstash then processes and forwards the logs to the ELK stack, where they can be visualized in Kibana.
+when working with database, you will not need the filebeat. You will have to work directly with the logstash and use the drivers and input for database.
+
+With Database:
+With databases, you do not need to install Filebeat; you only need to install Logstash.
+You have two options:
+You can use a single Logstash instance to retrieve logs from all systems by creating multiple configuration files—for example, one configuration per system (config 1, config 2, config 3).
+Alternatively, you can create a single configuration file that retrieves data from all three database sources and then sends the data to the ELK stack.
+This approach is called one configuration with multiple inputs.
+
+example of config file with database: 
+input {
+### instead of filebeat, we will be using the JDBC as in for the input
+  jdbc {
+    # JDBC driver JAR path
+    jdbc_driver_library => "/path/to/jdbc-driver.jar"
+
+    # JDBC driver class
+    jdbc_driver_class => "com.mysql.cj.jdbc.Driver"
+
+    # Database connection string
+    jdbc_connection_string => "jdbc:mysql://DB_HOST:DB_PORT/DB_NAME"
+
+    # Database credentials
+    jdbc_user => "DB_USERNAME"
+    jdbc_password => "DB_PASSWORD"
+
+    # SQL query to fetch data
+    statement => "SELECT * FROM table_name"
+
+    # Schedule (cron format)
+    schedule => "* * * * *"
+
+    # Optional: track last run
+    use_column_value => true
+    tracking_column => "updated_at"
+    tracking_column_type => "timestamp"
+    last_run_metadata_path => "/var/lib/logstash/.logstash_jdbc_last_run"
+  }
+}
+
+filter {
+  # Optional filters (mutate, date, grok, etc.)
+}
+
+output {
+  elasticsearch {
+    hosts => ["http://ELK_HOST:9200"]
+    index => "database-logs-%{+YYYY.MM.dd}"
+  }
+
+  stdout {
+    codec => rubydebug
+  }
+}
+
+
+Mid
+
+Conc
+---------------®----------------------------------------------------------------------
+part2
+Intro 
+
+Mid
+
+Conc
