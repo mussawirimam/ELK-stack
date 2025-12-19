@@ -13,7 +13,10 @@ This approach is called one configuration with multiple inputs.
 
 example of config file with database: 
 input {
-### instead of filebeat, we will be using the JDBC as in for the input
+
+### Instead of Filebeat, we will use JDBC as the input. JDBC is a Java Database Connectivity utility that allows us to establish a connection to the database and execute queries to retrieve log data from the database.
+### There are multiple methods available. You can refer to the official Elasticsearch website for additional input options based on your use cases and use the appropriate inputs accordingly.
+
   jdbc {
     # JDBC driver JAR path
     jdbc_driver_library => "/path/to/jdbc-driver.jar"
@@ -57,6 +60,8 @@ output {
   }
 }
 
+### Currently, we will work with a single configuration file in which we will use multiple inputs. These multiple inputs will send the data to the ELK stack.
+### first you will need a database installed on the server on which you are going to collect the database logs, then you would start the process. 
 
 Mid
 
