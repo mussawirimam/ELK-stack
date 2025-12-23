@@ -1,15 +1,57 @@
 Part1
 Intro
 Traditional structure of gathering logs:
+----------------------------------------
 In most cases, when gathering logs—for example, if you have three systems—you will have three Filebeat instances running on those systems. Each Filebeat instance will collect logs from its respective system and send them to Logstash. Logstash then processes and forwards the logs to the ELK stack, where they can be visualized in Kibana.
 when working with database, you will not need the filebeat. You will have to work directly with the logstash and use the drivers and input for database.
++-------------+      +------------+
+|   System 1  | ---> | Filebeat 1 |
++-------------+      +------------+
+                           |
++-------------+      +------------+      +-----------+      +---------+
+|   System 2  | ---> | Filebeat 2 | ---> | Logstash  | ---> | Elasticsearch |
++-------------+      +------------+      +-----------+      +---------+
+                           |                                      |
++-------------+      +------------+                               v
+|   System 3  | ---> | Filebeat 3 |                         +-----------+
++-------------+      +------------+                         |  Kibana   |
+                                                             +-----------+
+
 
 With Database:
+--------------
 With databases, you do not need to install Filebeat; you only need to install Logstash.
 You have two options:
 You can use a single Logstash instance to retrieve logs from all systems by creating multiple configuration files—for example, one configuration per system (config 1, config 2, config 3).
 Alternatively, you can create a single configuration file that retrieves data from all three database sources and then sends the data to the ELK stack.
 This approach is called one configuration with multiple inputs.
+
++----------------+    +----------------+    +----------------+
+|   Database 1   |    |   Database 2   |    |   Database 3   |
++----------------+    +----------------+    +----------------+
+        |                      |                      |
+        +----------------------+----------------------+
+                               |
+                               v
+                      +--------------------+
+                      |      Logstash      |
+                      |   (JDBC Inputs)    |
+                      |  - DB Drivers      |
+                      |  - SQL Queries     |
+                      +--------------------+
+                               |
+                               v
+                      +--------------------+
+                      |  Elasticsearch     |
+                      +--------------------+
+                               |
+                               v
+                      +--------------------+
+                      |      Kibana        |
+                      |  (Visualization)   |
+                      +--------------------+
+
+
 
 example of config file with database: 
 input {
@@ -60,8 +102,8 @@ output {
   }
 }
 
-### Currently, we will work with a single configuration file in which we will use multiple inputs. These multiple inputs will send the data to the ELK stack.
-### first you will need a database installed on the server on which you are going to collect the database logs, then you would start the process. 
+### Currently, we will work with a single configuration file in which we will use multiple inputs. These inputs will send data to the ELK stack.
+### First, you need to have a database installed on the server from which you intend to collect database logs. Once the database is in place, you can start the process.
 
 Mid
 
