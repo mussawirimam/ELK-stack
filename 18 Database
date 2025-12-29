@@ -1,3 +1,4 @@
+26-3-2025
 Part1
 Intro
 Traditional structure of gathering logs:
@@ -103,7 +104,11 @@ output {
 }
 
 ### Currently, we will work with a single configuration file in which we will use multiple inputs. These inputs will send data to the ELK stack.
-### First, you need to have a database installed on the server from which you intend to collect database logs. Once the database is in place, you can start the process.
+### First, you need to have a database installed on the server from which you intend to collect database logs. Once the database is in place, you can start the process. In our case, we are using MSJDBC
+### you would have to download the jar file for the JDBC (driver) from online https://learn.microsoft.com/en-us/sql/connect/jdbc/download-microsoft-jdbc-driver-for-sql-server?view=sql-server-ver17
+### we will use the driver to connect to the jdbc and we will put the driver in our linux machine and we will mention the path of the driver in our logstash conf file
+
+
 
 Mid
 
