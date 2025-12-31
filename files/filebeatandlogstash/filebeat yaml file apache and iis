@@ -1,3 +1,11 @@
+### we add three things in the filebeat.yml 
+# logfilepath ### The file path (paths) in filebeat.yml tells Filebeat exactly which log files to read and ingest.
+# id ### id in filebeat.yml uniquely identifies a Filebeat input so Filebeat can track read position correctly and avoid duplicate log ingestion across restarts and rotations.
+# tag ### We use tags in filebeat.yml to label events at the source so downstream components (ingest pipeline, Logstash, Kibana) can filter, route, parse, or visualize logs differently.
+### paths tell Filebeat what to read, id tells it how to remember, and tags tell downstream systems how to treat the log.
+### Without paths nothing is ingested, without id you risk duplicates, without tags you lose flexibility.
+
+
 root@elk:/var/log# cat /etc/filebeat/filebeat.yml
 ###################### Filebeat Configuration Example #########################
 
