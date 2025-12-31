@@ -1,3 +1,5 @@
+### im using this command to run the logstash manually:
+# /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/filebeat.conf
 root@elk:/etc/logstash/conf.d# cat filebeat.conf
 input {
   beats {
