@@ -8,6 +8,53 @@ elasticsearch allows you to to preprocess documents before indexing them. They a
 So earilier, we were working with the filebeat and logstash and you dont have the need for logstash. And you will install a filebeat 
 in logstash you use the filter and in ingest pipeline you will use the processors
 
++------------------+
+|   Application    |
+|   / System Logs  |
+|  (Server / VM)   |
++--------+---------+
+         |
+         | 1. Logs written to files
+         v
++------------------+
+|     Filebeat     |
+|  (Lightweight    |
+|   Shipper)       |
+|                  |
+| - Reads log files|
+| - Adds metadata  |
+| - Parses basics  |
++--------+---------+
+         |
+         | 2. Beats Protocol (HTTP/JSON)
+         v
++------------------------------+
+|        Elasticsearch         |
+|   (Ingest Node Enabled)      |
+|                              |
+|  +------------------------+  |
+|  |   Ingest Pipeline      |  |
+|  |------------------------|  |
+|  | - Grok processors      |  |
+|  | - Date processors      |  |
+|  | - GeoIP / Enrich       |  |
+|  | - Rename / Drop fields |  |
+|  +------------------------+  |
+|                              |
+|  -> Indexed into Data Stream |
+|     / Index                  |
++---------------+--------------+
+                |
+                | 3. Search / Query
+                v
++------------------------------+
+|           Kibana             |
+|                              |
+| - Discover                   |
+| - Dashboards                 |
+| - Alerts                     |
++------------------------------+
+
 Mid
 
 Conc
