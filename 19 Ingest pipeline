@@ -57,7 +57,18 @@ in logstash you use the filter and in ingest pipeline you will use the processor
 
 Mid
 
+### we are going to ingest the apache logs and for that we will be creating the grok pattern in order to feed it through the ingest pipeline:
+### use this Tool: https://grokdebugger.com
+# apache grok pattern:
+%{IP:IP} - %{DATA:Name} \[%{HTTPDATE:timestamp}\] \"%{DATA:Request} %{DATA:Uri}HTTP/1.0\" %{NUMBER:Response} %{NUMBER:Pid}
+# apache log
+127.0.0.1 - frank [10/Oct/2024:13:55:36 -0700] "GET /apache_pb.gif HTTP/1.0" 200 2326
+
+
 Conc
+
+### Below is the documentation and simple grok pattern to use it for ingestion: 
+
 
 Introduction to Ingest Pipelines
 Ingest pipelines in Elastic Search allow you to preprocess documents before indexing them. They are particularly useful when working with raw log data that needs transformation, enrichment, or cleanup.
