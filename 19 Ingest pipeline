@@ -63,6 +63,75 @@ Mid
 %{IP:IP} - %{DATA:Name} \[%{HTTPDATE:timestamp}\] \"%{DATA:Request} %{DATA:Uri}HTTP/1.0\" %{NUMBER:Response} %{NUMBER:Pid}
 # apache log
 127.0.0.1 - frank [10/Oct/2024:13:55:36 -0700] "GET /apache_pb.gif HTTP/1.0" 200 2326
+########################################################################################
+or you can use combined apache log GROK which makes things easy
+PUT _ingest/pipeline/apache_access_pipeline
+{
+  "description": "Parse Apache access logs",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "patterns": [
+          "%{COMBINEDAPACHELOG}"
+        ]
+      }
+    },
+    {
+      "date": {
+        "field": "timestamp",
+        "formats": ["dd/MMM/yyyy:HH:mm:ss Z"],
+        "ignore_failure": true
+      }
+    }
+  ]
+}
+
+
+POST _ingest/pipeline/apache_access_pipeline/_simulate
+{
+  "docs": [
+    {
+      "_source": {
+        "message": "127.0.0.1 - frank [18/Mar/2025:12:00:01 +0000] \"GET /index.html HTTP/1.1\" 200 1234 \"-\" \"Mozilla/5.0\""
+      }
+    }
+  ]
+}
+OUTPUT:
+===============
+{
+  "docs": [
+    {
+      "doc": {
+        "_index": "_index",
+        "_id": "_id",
+        "_version": "-3",
+        "_source": {
+          "request": "/index.html",
+          "agent": "\"Mozilla/5.0\"",
+          "auth": "frank",
+          "ident": "-",
+          "verb": "GET",
+          "message": "127.0.0.1 - frank [18/Mar/2025:12:00:01 +0000] \"GET /index.html HTTP/1.1\" 200 1234 \"-\" \"Mozilla/5.0\"",
+          "referrer": "\"-\"",
+          "@timestamp": "2025-03-18T12:00:01.000Z",
+          "response": "200",
+          "bytes": "1234",
+          "clientip": "127.0.0.1",
+          "httpversion": "1.1",
+          "timestamp": "18/Mar/2025:12:00:01 +0000"
+        },
+        "_ingest": {
+          "timestamp": "2026-01-02T03:38:53.653741833Z"
+        }
+      }
+    }
+  ]
+}
+
+
+
 
 
 Conc
