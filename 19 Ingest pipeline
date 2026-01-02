@@ -130,8 +130,62 @@ OUTPUT:
   ]
 }
 
-
-
+### so instead of simulating to make permanent changes to the pipeline.
+you can either use the index pattern to point the logs to the ingest pipeline or through filebeat.yml file you can point the logs to ingest pipeline. 
+2. Point Filebeat to the pipeline (THIS makes it permanent)
+In filebeat.yml:
+output.elasticsearch:
+  hosts: ["https://sys.fcc:9200"]
+  pipeline: apache_access_pipeline
+Restart Filebeat:
+systemctl restart filebeat
+✔ Every new event from Filebeat now always goes through this pipeline
+✅ OPTION 2: Attach Pipeline at Index Level (Index Template)
+Use this if multiple shippers write to the same index.
+1. Create an index template
+PUT _index_template/apache_logs_template
+{
+  "index_patterns": ["apache-logs-*"],
+  "template": {
+    "settings": {
+      "index.default_pipeline": "apache_access_pipeline"
+    }
+  }
+}
+✔ Any index matching apache-logs-* automatically uses the pipeline
+✅ OPTION 3: Attach Pipeline Per Request (Manual / Rare)
+Only for manual indexing or testing:
+POST apache-logs-2025.03.18/_doc?pipeline=apache_access_pipeline
+{
+  "message": "..."
+}
+❌ Not suitable for Filebeat
+🔥 COMMON MISTAKE (Very Important)
+“I created the pipeline, but nothing changed”
+That happens because:
+Pipelines do nothing until attached
+Simulation does not apply them
+Old data is never reprocessed
+Only new documents go through the pipeline.
+Best Practice Summary
+Scenario	Best Method
+Filebeat → ES	output.elasticsearch.pipeline
+Multiple sources	Index template
+Manual tests	Request parameter
+Final Recommendation (For Your Setup)
+You already use Filebeat → Elasticsearch.
+Do this:
+Filebeat → output.elasticsearch.pipeline
+Then:
+Restart Filebeat
+Ingest new logs
+Verify parsed fields in Kibana
+If you want, I can:
+Give you exact Filebeat config
+Convert this to IIS pipeline
+Show how to migrate off Logstash safely
+Add failure handling / dead-letter indexing
+Say what you want next.
 
 
 Conc
