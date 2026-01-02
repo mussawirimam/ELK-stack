@@ -128,6 +128,17 @@ OUTPUT:
   ]
 }
 
+--------------------
+### Next, the ingest pipeline name and Elasticsearch connection details are added to the Filebeat configuration file.
+### Note: this setup uses Filebeat with Elasticsearch ingest pipelines directly; Logstash is not used.
+### Because Apache logs are being ingested, the pipeline configuration is defined in the Filebeat configuration file.
+### The Logstash output in Filebeat is commented out, and the ingest pipeline name is configured in filebeat.yml.
+### An index can be explicitly defined; if it is not, data is written to the default Filebeat index.
+
+
+
+
+
 
 ########################################################################################
 or you can use combined apache log GROK which makes things easy
