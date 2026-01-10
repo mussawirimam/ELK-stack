@@ -167,6 +167,8 @@ e.g
 ...
 
 
+### we will start the filebeat service
+
 ########################################################################################
 or you can use combined apache log GROK which makes things easy
 PUT _ingest/pipeline/apache_access_pipeline
