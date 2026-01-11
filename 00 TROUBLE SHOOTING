@@ -1,0 +1,6 @@
+ingest pipeline: 
+sudo systemctl stop filebeat
+sudo rm -rf /var/lib/filebeat/registry
+sudo rm -f /var/lib/filebeat/filebeat.lock
+sudo systemctl start filebeat
+
