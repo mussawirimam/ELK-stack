@@ -4,3 +4,4 @@ sudo rm -rf /var/lib/filebeat/registry
 sudo rm -f /var/lib/filebeat/filebeat.lock
 sudo systemctl start filebeat
 
+GET filebeat-*/_count = gives the document count, you can use it to see if the new documents rolled in or not. Your document count will increase or decrease. 
