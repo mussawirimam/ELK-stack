@@ -1,3 +1,16 @@
+### simulating pipeline is the most important step, use the below json configuration: 
+POST _ingest/pipeline/apache_logs_pipeline/_simulate
+{
+  "docs": [
+    {
+      "_source": {
+        "message": "192.168.1.100 - - [27/Mar/2025:12:45:32 +0000] \"GET /index.html HTTP/1.1\" 200 5324"
+      }
+    }
+  ]
+}
+
+
 # Click the Variables button, above, to create your own variables.
 GET ${exampleVariable1} // _search
 {
