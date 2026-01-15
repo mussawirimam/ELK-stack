@@ -1,3 +1,6 @@
+### ingest pipeline is a json configuration where you define the name of the ingest pipeline, descripton, processors, and patthern if a processor requires. you can get more information how error handling will be used in code through
+official documentation of elasticsearch. 
+
 ### simulating pipeline is the most important step, use the below json configuration: 
 POST _ingest/pipeline/apache_logs_pipeline/_simulate
 {
@@ -23,7 +26,7 @@ GET _ingest/pipeline/my_pipeline
 
 GET filebeat-*/_search ### searching for the default filebeat index which is created by the filebeat agent itself it not other index is specified in filebeat.yml configuration.  
 
-###
+### APACHE INGEST PIPELINE E.G
 ### these two pipelines are functionally similar, but they are not equivalent. They parse the same Apache log format, but they differ in field naming, structure, and downstream usefulness.
 ### this ingest pipeline logs the unstructured apache logs to structured logs and add 
 PUT _ingest/pipeline/apache_logs_pipeline
