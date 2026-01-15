@@ -1,0 +1,74 @@
+# Click the Variables button, above, to create your own variables.
+GET ${exampleVariable1} // _search
+{
+  "query": {
+    "${exampleVariable2}": {} // match_all
+  }
+}
+
+GET _ingest/pipeline/my_pipeline
+
+GET filebeat-*/_search ### searching for the default filebeat index which is created by the filebeat agent itself it not other index is specified in filebeat.yml configuration.  
+
+###
+### these two pipelines are functionally similar, but they are not equivalent. They parse the same Apache log format, but they differ in field naming, structure, and downstream usefulness.
+### this ingest pipeline logs the unstructured apache logs to structured logs and add 
+PUT _ingest/pipeline/apache_logs_pipeline
+{
+  "description": "Parse Apache access logs safely",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "patterns": [
+          "%{IP:ip} - %{DATA:user} \\[%{HTTPDATE:timestamp}\\] \"%{WORD:method} %{URIPATHPARAM:uri} HTTP/%{NUMBER:http_version}\" %{NUMBER:response} %{NUMBER:bytes} \"%{DATA:referrer}\" \"%{DATA:user_agent}\""
+        ],
+        "ignore_failure": true
+      }
+    },
+    {
+      "date": {
+        "field": "timestamp",
+        "formats": ["dd/MMM/yyyy:HH:mm:ss Z"],
+        "ignore_failure": true
+      }
+    }
+  ]
+}
+
+
+PUT _ingest/pipeline/apache_access_pipeline
+{
+  "description": "Parse Apache access logs safely (no dropping)",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "patterns": [
+          "%{IP:client.ip} - %{DATA:user.name} \\[%{HTTPDATE:apache.timestamp}\\] \"%{WORD:http.request.method} %{URIPATHPARAM:url.path} HTTP/%{NUMBER:http.version}\" %{NUMBER:http.response.status_code} %{NUMBER:http.response.body.bytes} \"%{DATA:http.request.referrer}\" \"%{DATA:user_agent.original}\""
+        ],
+        "ignore_failure": true
+      }
+    },
+    {
+      "date": {
+        "field": "apache.timestamp",
+        "formats": ["dd/MMM/yyyy:HH:mm:ss Z"],
+        "target_field": "@timestamp",
+        "ignore_failure": true
+      }
+    },
+    {
+      "remove": {
+        "field": "apache.timestamp",
+        "ignore_failure": true
+      }
+    }
+  ]
+}
+
+GET filebeat-*/_count
+### for testing its ok to delete the stream/index and reindex/populate it back again through stopping filebeat and starting it
+### but in prod you should never do that.
+
+--------------------------------------------------------------
