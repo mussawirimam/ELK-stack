@@ -1,3 +1,7 @@
+### flow:
+ingest pipeline > put ingest pipeline > simulate the ingest pipeline with document > specify ingest pipeline in and specify log path in filebeat.yml > start filebeat
+if its not indexing delete the stream from stack management > stop filebeat service and restart 
+
 ### ingest pipeline is a json configuration where you define the name of the ingest pipeline, descripton, processors, and patthern if a processor requires. you can get more information how error handling will be used in code through
 official documentation of elasticsearch. 
 
