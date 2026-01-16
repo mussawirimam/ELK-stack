@@ -49,6 +49,10 @@ PUT _ingest/pipeline/apache_logs_pipeline
   ]
 }
 
+
+### TARGET LOG that exists within the apache.log on server
+127.0.0.1 - dave [11/Jan/2026:12:09:33 +0000] "GET /api/data HTTP/1.1" 500 231 "-" "PostmanRuntime/7.36.1"
+
 ### we are using this pipeline, from above pipeline I wasnt getting results. 
 PUT _ingest/pipeline/apache_access_pipeline
 {
