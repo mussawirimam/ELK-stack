@@ -80,6 +80,78 @@ PUT _ingest/pipeline/apache_access_pipeline
   ]
 }
 
+### OUTPUT FROM THE SIMULATION
+{
+  "docs": [
+    {
+      "doc": {
+        "_index": ".ds-filebeat-8.17.0-2026.01.16-000001",
+        "_version": "-3",
+        "_id": "sgwpxZsBoLzpx93GxXbZ",
+        "_source": {
+          "agent": {
+            "name": "elk",
+            "id": "6c0ce29e-6873-4137-9901-66b87b5e2b86",
+            "type": "filebeat",
+            "ephemeral_id": "71bf0658-959b-4f28-9b4d-a299775e6d19",
+            "version": "8.17.0"
+          },
+          "log": {
+            "offset": 2595,
+            "file": {
+              "path": "/home/elk/filebeat/apache.log"
+            }
+          },
+          "message": "127.0.0.1 - dave [11/Jan/2026:12:09:33 +0000] \"GET /api/data HTTP/1.1\" 500 231 \"-\" \"PostmanRuntime/7.36.1\"",
+          "url": {
+            "path": "/api/data"
+          },
+          "tags": [
+            "apache"
+          ],
+          "input": {
+            "type": "log"
+          },
+          "@timestamp": "2026-01-11T12:09:33.000Z",
+          "apache": {},
+          "ecs": {
+            "version": "8.0.0"
+          },
+          "host": {
+            "name": "elk"
+          },
+          "http": {
+            "request": {
+              "method": "GET",
+              "referrer": "-"
+            },
+            "version": "1.1",
+            "response": {
+              "body": {
+                "bytes": "231"
+              },
+              "status_code": "500"
+            }
+          },
+          "client": {
+            "ip": "127.0.0.1"
+          },
+          "user": {
+            "name": "dave"
+          },
+          "user_agent": {
+            "original": "PostmanRuntime/7.36.1"
+          }
+        },
+        "_ingest": {
+          "timestamp": "2026-01-16T05:28:21.139139127Z"
+        }
+      }
+    }
+  ]
+}
+### OUTPUT FROM THE SIMULATION
+
 ### to test if the count has increased or decreased for the documents getting parsed into elasticsearch.
 GET filebeat-*/_count
 
