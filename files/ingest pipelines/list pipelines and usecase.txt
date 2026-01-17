@@ -168,7 +168,7 @@ PUT _ingest/pipeline/json_logs_pipeline
 ### not sure how they are doing it in prod env but in my local machine im specifying the name of the ingest pipeline in the filebeat.yml and the log path. 
 
 
-### OUTPUT FROM THE SIMULATION
+### OUTPUT FROM THE INDEX IN JSON FORMAT
 {
   "_index": ".ds-filebeat-8.17.0-2026.01.17-000001",
   "_id": "xgzizZsBoLzpx93Gf3bo",
@@ -270,6 +270,7 @@ PUT _ingest/pipeline/json_logs_pipeline
     ]
   }
 }
+### OUTPUT FROM THE INDEX IN JSON FORMAT ENDS
 
 
 
