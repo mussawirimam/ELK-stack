@@ -2,7 +2,7 @@
 ingest pipeline > put ingest pipeline > simulate the ingest pipeline with document > specify ingest pipeline in and specify log path in filebeat.yml > start filebeat
 if its not indexing delete the stream from stack management > stop filebeat service and restart 
 
-### ingest pipeline is a json configuration where you define the name of the ingest pipeline, descripton, processors, and patthern if a processor requires. you can get more information how error handling will be used in code through
+### what is ingest pipeline: ingest pipeline is a json configuration where you define the name of the ingest pipeline, descripton, processors, and patthern if a processor requires. you can get more information how error handling will be used in code through
 official documentation of elasticsearch. 
 
 ### simulating pipeline is the most important step, use the below json configuration: 
@@ -23,37 +23,14 @@ GET _ingest/pipeline/my_pipeline
 ### searching for the default filebeat index which is created by the filebeat agent itself it not other index is specified in filebeat.yml configuration.  
 GET filebeat-*/_search 
 
-### APACHE INGEST PIPELINE E.G
-### these two pipelines are functionally similar, but they are not equivalent. They parse the same Apache log format, but they differ in field naming, structure, and downstream usefulness.
-### this ingest pipeline logs the unstructured apache logs to structured logs and add 
-PUT _ingest/pipeline/apache_logs_pipeline
-{
-  "description": "Parse Apache access logs safely",
-  "processors": [
-    {
-      "grok": {
-        "field": "message",
-        "patterns": [
-          "%{IP:ip} - %{DATA:user} \\[%{HTTPDATE:timestamp}\\] \"%{WORD:method} %{URIPATHPARAM:uri} HTTP/%{NUMBER:http_version}\" %{NUMBER:response} %{NUMBER:bytes} \"%{DATA:referrer}\" \"%{DATA:user_agent}\""
-        ],
-        "ignore_failure": true
-      }
-    },
-    {
-      "date": {
-        "field": "timestamp",
-        "formats": ["dd/MMM/yyyy:HH:mm:ss Z"],
-        "ignore_failure": true
-      }
-    }
-  ]
-}
 
-
+--------------------------------------------------------------
 ### TARGET LOG that exists within the apache.log on server
 127.0.0.1 - dave [11/Jan/2026:12:09:33 +0000] "GET /api/data HTTP/1.1" 500 231 "-" "PostmanRuntime/7.36.1"
 
-### we are using this pipeline, from above pipeline I wasnt getting results. 
+### TASK: need to create unstructured logs into structured logs and breakdown information in message field into new fields
+### this ingest pipeline logs the unstructured apache logs to structured logs and add 
+
 PUT _ingest/pipeline/apache_access_pipeline
 {
   "description": "Parse Apache access logs safely (no dropping)",
@@ -154,17 +131,18 @@ PUT _ingest/pipeline/apache_access_pipeline
     }
   ]
 }
+### OUTPUT FROM THE SIMULATION ENDS
+--------------------------------------------------------------
+--------------------------------------------------------------
+### TARGET LOG: is json structured logs
+
+### TASK: we need to break down breakdown the key-value pair in new fields from message field
+
+
+
 ### OUTPUT FROM THE SIMULATION
 
-### to test if the count has increased or decreased for the documents getting parsed into elasticsearch.
-GET filebeat-*/_count
 
-NOTE:
-### for testing its ok to delete the stream/index and reindex/populate it back again through stopping filebeat and starting it
-### but in prod you should never do that.
-
-### gives output of actual documents within the filebeat-* dataview
-GET filebeat-*/_search
 
 
 
@@ -184,6 +162,16 @@ GET filebeat-*/_search
   }
 }
 
+### to test if the count has increased or decreased for the documents getting parsed into elasticsearch.
+GET filebeat-*/_count
+
+NOTE:
+### for testing its ok to delete the stream/index and reindex/populate it back again through stopping filebeat and starting it
+### but in prod you should never do that.
+
+### gives output of actual documents within the filebeat-* dataview
+GET filebeat-*/_search
+
 --------------------------------------------------------------
 
 ### RUFF: 
@@ -193,4 +181,31 @@ GET ${exampleVariable1} // _search
   "query": {
     "${exampleVariable2}": {} // match_all
   }
+}
+
+### APACHE INGEST PIPELINE E.G
+### these two pipelines are functionally similar, but they are not equivalent. They parse the same Apache log format, but they differ in field naming, structure, and downstream usefulness.
+### this ingest pipeline logs the unstructured apache logs to structured logs and add 
+### ignore the pipeline below
+PUT _ingest/pipeline/apache_logs_pipeline
+{
+  "description": "Parse Apache access logs safely",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "patterns": [
+          "%{IP:ip} - %{DATA:user} \\[%{HTTPDATE:timestamp}\\] \"%{WORD:method} %{URIPATHPARAM:uri} HTTP/%{NUMBER:http_version}\" %{NUMBER:response} %{NUMBER:bytes} \"%{DATA:referrer}\" \"%{DATA:user_agent}\""
+        ],
+        "ignore_failure": true
+      }
+    },
+    {
+      "date": {
+        "field": "timestamp",
+        "formats": ["dd/MMM/yyyy:HH:mm:ss Z"],
+        "ignore_failure": true
+      }
+    }
+  ]
 }
