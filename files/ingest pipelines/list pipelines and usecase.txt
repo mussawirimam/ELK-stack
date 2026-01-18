@@ -4,7 +4,10 @@ if its not indexing delete the stream from stack management > stop filebeat serv
 
 ### what is ingest pipeline: ingest pipeline is a json configuration where you define the name of the ingest pipeline, descripton, processors, and patthern if a processor requires. you can get more information how error handling will be used in code through
 official documentation of elasticsearch. 
-
+----------------------------------------------------------------------------
+SIMULATION:
+----------------------------------------------------------------------------
+### there are multiple ways to simulate. If the data structure is unstructured then use below simulate format. (note you will have to put \ for escaping characters like \"quotation\" so that it doesnt read it as the special character.
 ### simulating pipeline is the most important step, use the below json configuration: 
 POST _ingest/pipeline/apache_logs_pipeline/_simulate
 {
@@ -17,13 +20,38 @@ POST _ingest/pipeline/apache_logs_pipeline/_simulate
   ]
 }
 
+### with STRUCTURED DATA as in json you can use two method to follow:
+POST _ingest/pipeline/json_logs_pipeline/_simulate
+{
+  "docs": [
+    {
+      "_source": {
+        "message": "{\"targets\":[\"localhost:9100\"],\"labels\":{\"application\":\"linux\",\"host\":\"local\",\"region\":\"wsl\"}}"
+      }
+    }
+    ]
+}
+
+POST _ingest/pipeline/json_logs_pipeline/_simulate
+{
+  "docs": [
+    {
+      "_source": {
+        "message": """{"targets":["localhost:9100"],"labels":{"application":"linux","host":"local","region":"wsl"}}"""
+      }
+    }
+    ]
+}
+----------------------------------------------------------------------------
+
 ### to get the ingest pipeline thats been put
 GET _ingest/pipeline/my_pipeline
 
 ### searching for the default filebeat index which is created by the filebeat agent itself it not other index is specified in filebeat.yml configuration.  
 GET filebeat-*/_search 
 
-
+--------------------------------------------------------------
+APPLYING PIPELINES TO UNSTRUCTURED APACHE LOGS:
 --------------------------------------------------------------
 ### TARGET LOG that exists within the apache.log on server
 127.0.0.1 - dave [11/Jan/2026:12:09:33 +0000] "GET /api/data HTTP/1.1" 500 231 "-" "PostmanRuntime/7.36.1"
@@ -134,6 +162,10 @@ PUT _ingest/pipeline/apache_access_pipeline
 }
 ### OUTPUT FROM THE SIMULATION ENDS
 --------------------------------------------------------------
+
+
+--------------------------------------------------------------
+APPLYING PIPELINE TO STRUCTURE JSON LOGS:
 --------------------------------------------------------------
 ### TARGET LOG: is json structured logs
 {
