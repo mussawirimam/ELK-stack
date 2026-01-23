@@ -66,3 +66,5 @@ PUT _slm/policy/daily_snapshots
 Conclusion
 Snapshots ensure data safety in Elasticsearch. Teaching students how to configure, create, restore, and automate snapshots helps them manage ELK clusters effectively.
 
+-------------------------------------------------------------------------------------------------------
+--- write why we use the snapshot and restore here ---
