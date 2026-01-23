@@ -1,3 +1,107 @@
+quick guide:
+create an ILM policy from stack management > create a index template > add the index patterns and ilm in the setting and apply
+
+Below is the exact operational flow you would follow in Kibana to implement ILM correctly — from policy creation → template → rollover-ready indices.
+This is written as procedural notes you can use for labs, documentation, or interviews.
+📘 Implementing ILM via Kibana (Stack Management Workflow)
+✅ Step 1: Create an ILM policy
+Path in Kibana:
+Stack Management → Data → Index Lifecycle Policies → Create policy
+Actions:
+Click Create policy
+Name it (example):
+logs-ilm-policy
+Configure phases:
+🔥 Hot phase
+Enable Rollover
+Conditions (example):
+Max size: 50 GB
+Max age: 1 day
+Priority: 100
+🌤 Warm phase (optional)
+Min age: 7 days
+Enable:
+Allocate to warm tier
+Shrink shards (e.g., 1)
+Forcemerge (max 1 segment)
+Priority: 50
+❄️ Cold phase (optional)
+Min age: 30 days
+Allocate to cold tier
+(Optional) searchable snapshot
+Priority: 0
+🗑 Delete phase
+Min age: 90 days
+Enable Delete
+Click Save policy
+At this point, the lifecycle automation exists but is not attached to any index.
+✅ Step 2: Create an index template and attach ILM
+Path:
+Stack Management → Data → Index Management → Index Templates → Create template
+A. General
+Name: logs-template
+Index pattern:
+logs-*
+B. Settings
+Add ILM and rollover alias:
+{
+  "index.lifecycle.name": "logs-ilm-policy",
+  "index.lifecycle.rollover_alias": "logs-write",
+  "number_of_shards": 3,
+  "number_of_replicas": 1
+}
+This step is critical — without rollover_alias, rollover will fail.
+C. Mappings (optional)
+Define fields if needed (ecs/logs/etc).
+D. Aliases
+Add:
+logs-write → is_write_index: true
+This makes the alias the write target.
+E. Review → Create template
+Now every new matching index will automatically follow the ILM policy.
+✅ Step 3: Create the first rollover index (bootstrap)
+ILM cannot start until the first index exists.
+In Dev Tools:
+PUT logs-000001
+{
+  "aliases": {
+    "logs-write": {
+      "is_write_index": true
+    }
+  }
+}
+This attaches:
+the template
+the ILM policy
+the rollover alias
+Now ILM is active.
+✅ Step 4: Point ingestion to the alias
+All shippers must write to:
+logs-write
+Examples:
+Filebeat index: logs-write
+Logstash output index: logs-write
+App index: logs-write
+Never write to logs-000001 directly.
+✅ Step 5: Verify ILM is working
+Check policy:
+GET _ilm/policy/logs-ilm-policy
+Check index lifecycle:
+GET logs-000001/_ilm/explain
+Check alias:
+GET _alias/logs-write
+Check rollover conditions:
+GET logs-000001/_stats/store,docs
+⚠️ Common mistakes
+No rollover alias → ILM stuck
+Writing to physical index → rollover breaks
+No bootstrap index → nothing happens
+Oversharding hot indices
+No delete phase → disk fills
+🎯 Interview summary
+“In Kibana, we create an ILM policy under Stack Management, attach it to an index template with a rollover alias, bootstrap the first index, and send all ingestion to the alias. Rollover happens in the hot phase and older indices progress automatically.”
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 ILM (Index lifecycle management) and Index Rotation
 
 Pross :
