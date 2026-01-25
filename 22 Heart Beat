@@ -1,1 +1,75 @@
 
+📄 Heartbeat Installation and Configuration Guide
+📘 Overview
+Heartbeat is a lightweight shipper designed to monitor the availability of services by pinging them at regular intervals and shipping the results to Elastic search. It's commonly used with the ELK Stack for uptime monitoring and alerting.
+ 
+🔧 Prerequisites
+•	Elastic search and Kibana must be up and running.
+•	A Linux or Windows system to install Heartbeat.
+•	Internet access (for downloading packages).
+•	Sufficient privileges (sudo or admin access).
+ 
+🛠️ Installation Steps
+✅ On Debian/Ubuntu:
+wget https://artifacts.elastic.co/downloads/beats/heartbeat/heartbeat-8.12.0-amd64.deb
+sudo dpkg -i heartbeat-8.12.0-amd64.deb
+✅ On RHEL/CentOS:
+curl -L -O https://artifacts.elastic.co/downloads/beats/heartbeat/heartbeat-8.12.0-x86_64.rpm
+sudo rpm -vi heartbeat-8.12.0-x86_64.rpm
+✅ On Windows:
+1.	Download the ZIP from Elastic Downloads.
+2.	Extract the ZIP file.
+3.	Open PowerShell as Administrator and navigate to the extracted directory.
+ 
+⚙️ Configuration
+🔍 Main config file: heartbeat.yml
+Located at:
+•	Linux: /etc/heartbeat/heartbeat.yml
+•	Windows: <extracted-folder>\heartbeat.yml
+📝 Sample Configuration
+
+
+heartbeat.monitors:
+- type: http
+  id: my-web-check
+  name: My Web Check
+  schedule: '@every 10s'
+  hosts: ["https://example.com"]
+  check.response.status: 200
+
+- type: tcp
+  id: my-tcp-check
+  name: My TCP Check
+  schedule: '@every 30s'
+  hosts: ["example.com:22"]
+
+output.elasticsearch:
+  hosts: ["http://localhost:9200"]
+
+setup.kibana:
+  host: "http://localhost:5601"
+✅ You can use type: icmp, tcp, or http depending on your use case.
+ 
+🚀 Start Heartbeat
+On Linux:
+sudo systemctl enable heartbeat
+sudo systemctl start heartbeat
+On Windows:
+.\install-service-heartbeat.ps1
+Start-Service heartbeat
+ 
+📊 Visualize in Kibana
+1.	Navigate to Kibana → Uptime.
+2.	You should see your service checks listed.
+3.	Use filters, search, and tags to monitor specific checks.
+ 
+🔔 Alerting (Optional)
+To enable alerting:
+1.	Go to Kibana → Uptime → Alerts.
+2.	Create alert rules like "when monitor is down for more than X time".
+ 
+📌 Tips
+•	Use heartbeat test config to verify config syntax.
+•	Use heartbeat test output to check connection to Elasticsearch.
+•	Use journalctl -u heartbeat or heartbeat -e for logs and troubleshooting.
+
