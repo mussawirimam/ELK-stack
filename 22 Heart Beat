@@ -1,3 +1,67 @@
+im using an arm based ubuntu architecture
+Ahh got it — Ubuntu ARM (aarch64) inside Parallels 👍
+In that case you want the ARM64 .deb, not the amd64 one.
+✅ Correct download URL for Heartbeat 8.12.0 on ARM Ubuntu
+wget https://artifacts.elastic.co/downloads/beats/heartbeat/heartbeat-8.12.0-arm64.deb
+Install it
+sudo dpkg -i heartbeat-8.12.0-arm64.deb
+If you hit dependency issues (common on fresh installs):
+sudo apt-get -f install
+Verify architecture (optional but reassuring)
+uname -m
+You should see:
+aarch64
+
+Where things end up
+Config: /etc/heartbeat/heartbeat.yml
+Service: heartbeat
+Logs: /var/log/heartbeat/
+Start it:
+
+sudo systemctl start heartbeat
+sudo systemctl status heartbeat
+
+if the above command give you an error. Run it through the binaries
+
+3️⃣ Check if the service file exists
+Heartbeat should install this file:
+/lib/systemd/system/heartbeat.service
+Check:
+ls -l /lib/systemd/system | grep heartbeat
+If it exists, reload systemd:
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+Then start it:
+sudo systemctl start heartbeat
+4️⃣ Check if Heartbeat binary exists at all
+which heartbeat
+or:
+ls /usr/share/heartbeat/
+If Heartbeat is missing, the .deb did not install correctly.
+5️⃣ Quick sanity test (run manually)
+Even without systemd, you can test it:
+heartbeat version
+or:
+sudo /usr/share/heartbeat/heartbeat test config
+If this works, we’re very close.
+TL;DR (fastest path)
+Run these in order:
+dpkg -l | grep heartbeat
+sudo dpkg -i heartbeat-8.12.0-arm64.deb
+sudo apt-get -f install
+dpkg -l | grep heartbeat
+ls /lib/systemd/system/heartbeat.service
+
+root@elk:/etc/heartbeat# cd /usr/share/heartbeat/
+root@elk:/usr/share/heartbeat# cd bin/
+root@elk:/usr/share/heartbeat/bin# ls
+heartbeat  heartbeat-god
+root@elk:/usr/share/heartbeat/bin# pwd
+/usr/share/heartbeat/bin
+root@elk:/usr/share/heartbeat/bin# ./heartbeat
+
+
+
 
 📄 Heartbeat Installation and Configuration Guide
 📘 Overview
