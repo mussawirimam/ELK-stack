@@ -505,3 +505,148 @@ This guide provides a structured approach for students to learn about ingest pip
 Conclusion
 Using ingest pipelines with File beat simplifies log processing and enhances data quality before indexing. This approach makes Elastic Search more efficient for searching and analyzing log data.
 
+
+
+TOOL:
+GROKDEBUGGER.COM
+
+GROK PATTERN:
+%{IP:ip} - %{DATA:user} \[%{HTTPDATE:timestamp}\] "%{WORD:method} %{URIPATHPARAM:uri} HTTP/%{NUMBER:http_version}" %{NUMBER:response} %{NUMBER:bytes} "%{DATA:referrer}" "%{DATA:user_agent}"
+
+DATA TO BE PARSED:
+127.0.0.1 - - [10/Jan/2026:17:01:12 -0500] "GET / HTTP/1.1" 200 4521 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.45 - john [10/Jan/2026:17:01:20 -0500] "POST /login HTTP/1.1" 302 1123 "http://example.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+203.0.113.10 - - [10/Jan/2026:17:01:33 -0500] "GET /images/logo.png HTTP/1.1" 200 8932 "http://example.com/" "Mozilla/5.0 (X11; Linux x86_64)"
+10.0.0.15 - - [10/Jan/2026:17:02:01 -0500] "GET /admin HTTP/1.1" 403 721 "-" "curl/7.81.0"
+198.51.100.22 - - [10/Jan/2026:17:02:44 -0500] "GET /api/users HTTP/1.1" 500 231 "-" "PostmanRuntime/7.36.1"
+127.0.0.1 - testuser [11/Jan/2026:12:00:00 +0000] "GET /index.html HTTP/1.0" 200 123
+192.168.1.10 - alice [11/Jan/2026:12:05:10 +0000] "GET /home HTTP/1.1" 200 2345 "http://example.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+203.0.113.20 - bob [11/Jan/2026:12:06:22 +0000] "POST /login HTTP/1.1" 302 1123 "http://example.com/login" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+198.51.100.25 - - [11/Jan/2026:12:07:45 +0000] "GET /images/banner.png HTTP/1.1" 200 5432 "http://example.com/" "Mozilla/5.0 (X11; Linux x86_64)"
+10.0.0.18 - charlie [11/Jan/2026:12:08:11 +0000] "GET /admin HTTP/1.1" 403 721 "-" "curl/7.81.0"
+127.0.0.1 - dave [11/Jan/2026:12:09:33 +0000] "GET /api/data HTTP/1.1" 500 231 "-" "PostmanRuntime/7.36.1"
+
+PARSED DATA OUTPUT:
+[
+  {
+    "ip": "127.0.0.1",
+    "user": "-",
+    "timestamp": "10/Jan/2026:17:01:12 -0500",
+    "method": "GET",
+    "uri": "/",
+    "http_version": 1.1,
+    "response": 200,
+    "bytes": 4521,
+    "referrer": "-",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+  },
+  {
+    "ip": "192.168.1.45",
+    "user": "john",
+    "timestamp": "10/Jan/2026:17:01:20 -0500",
+    "method": "POST",
+    "uri": "/login",
+    "http_version": 1.1,
+    "response": 302,
+    "bytes": 1123,
+    "referrer": "http://example.com/",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+  },
+  {
+    "ip": "203.0.113.10",
+    "user": "-",
+    "timestamp": "10/Jan/2026:17:01:33 -0500",
+    "method": "GET",
+    "uri": "/images/logo.png",
+    "http_version": 1.1,
+    "response": 200,
+    "bytes": 8932,
+    "referrer": "http://example.com/",
+    "user_agent": "Mozilla/5.0 (X11; Linux x86_64)"
+  },
+  {
+    "ip": "10.0.0.15",
+    "user": "-",
+    "timestamp": "10/Jan/2026:17:02:01 -0500",
+    "method": "GET",
+    "uri": "/admin",
+    "http_version": 1.1,
+    "response": 403,
+    "bytes": 721,
+    "referrer": "-",
+    "user_agent": "curl/7.81.0"
+  },
+  {
+    "ip": "198.51.100.22",
+    "user": "-",
+    "timestamp": "10/Jan/2026:17:02:44 -0500",
+    "method": "GET",
+    "uri": "/api/users",
+    "http_version": 1.1,
+    "response": 500,
+    "bytes": 231,
+    "referrer": "-",
+    "user_agent": "PostmanRuntime/7.36.1"
+  },
+  null,
+  {
+    "ip": "192.168.1.10",
+    "user": "alice",
+    "timestamp": "11/Jan/2026:12:05:10 +0000",
+    "method": "GET",
+    "uri": "/home",
+    "http_version": 1.1,
+    "response": 200,
+    "bytes": 2345,
+    "referrer": "http://example.com/",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+  },
+  {
+    "ip": "203.0.113.20",
+    "user": "bob",
+    "timestamp": "11/Jan/2026:12:06:22 +0000",
+    "method": "POST",
+    "uri": "/login",
+    "http_version": 1.1,
+    "response": 302,
+    "bytes": 1123,
+    "referrer": "http://example.com/login",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+  },
+  {
+    "ip": "198.51.100.25",
+    "user": "-",
+    "timestamp": "11/Jan/2026:12:07:45 +0000",
+    "method": "GET",
+    "uri": "/images/banner.png",
+    "http_version": 1.1,
+    "response": 200,
+    "bytes": 5432,
+    "referrer": "http://example.com/",
+    "user_agent": "Mozilla/5.0 (X11; Linux x86_64)"
+  },
+  {
+    "ip": "10.0.0.18",
+    "user": "charlie",
+    "timestamp": "11/Jan/2026:12:08:11 +0000",
+    "method": "GET",
+    "uri": "/admin",
+    "http_version": 1.1,
+    "response": 403,
+    "bytes": 721,
+    "referrer": "-",
+    "user_agent": "curl/7.81.0"
+  },
+  {
+    "ip": "127.0.0.1",
+    "user": "dave",
+    "timestamp": "11/Jan/2026:12:09:33 +0000",
+    "method": "GET",
+    "uri": "/api/data",
+    "http_version": 1.1,
+    "response": 500,
+    "bytes": 231,
+    "referrer": "-",
+    "user_agent": "PostmanRuntime/7.36.1"
+  }
+]
