@@ -67,4 +67,138 @@ Conclusion
 Snapshots ensure data safety in Elasticsearch. Teaching students how to configure, create, restore, and automate snapshots helps them manage ELK clusters effectively.
 
 -------------------------------------------------------------------------------------------------------
+how to do snapshot and restore in kibana
+
+Summary
+
+Snapshots are stored in a snapshot repository (fs, s3, azure, gcs, etc.).
+In Kibana you register a repository, create snapshots, and restore from them via Stack Management → Snapshot and Restore.
+You can also use the Elasticsearch REST API for all tasks (examples provided).
+Prerequisites
+A snapshot repository available and accessible by every node in the cluster (file system path accessible by all nodes, or cloud store with correct credentials).
+If using S3/Azure/GCS you may need to install and enable the appropriate repository plugin or configure cloud settings (depends on ES distribution/version).
+Credentials must be set securely (elasticsearch keystore for plugins or secure settings in elasticsearch.yml / cloud provider integration).
+The user must have sufficient cluster privileges (manage_repository, manage_snapshot, monitor, manage_index_templates, etc.) or be a superuser.
+Register a repository (Kibana UI)
+Open Kibana → Stack Management → Snapshot and Restore (or Management → Elasticsearch → Snapshot and Restore).
+Click “Register repository” or “Add repository”.
+Choose repository type (fs, s3, azure, gcs, etc.) and fill required settings:
+fs: location (path on each node), compress, max_snapshot_bytes_per_sec, max_restore_bytes_per_sec
+s3: bucket, region, base_path, compress (credentials usually provided via node keystore or cloud IAM)
+Save. Kibana will call the Elasticsearch API to register the repository and validate it.
+Register repository (API examples)
+
+File system:
+JSON
+PUT _snapshot/my_fs_repo
+{
+  "type": "fs",
+  "settings": {
+    "location": "/mount/backups/my_backup",
+    "compress": true
+  }
+}
+S3:
+JSON
+PUT _snapshot/my_s3_repo
+{
+  "type": "s3",
+  "settings": {
+    "bucket": "my-es-backups",
+    "region": "us-east-1",
+    "base_path": "snapshots",
+    "compress": true
+  }
+}
+Check the repository list:
+
+Code
+GET _snapshot
+GET _snapshot/my_s3_repo/_all
+Create a snapshot (Kibana UI)
+In Snapshot and Restore, open the repository you registered.
+Click “Create snapshot”.
+Enter a snapshot name.
+Choose indices to include (All indices or specific index patterns).
+Options: include global state (true/false), ignore unavailable indices, partial snapshots (if you allow missing shards).
+Click Create. You can monitor progress in the UI.
+Create snapshot (API)
+
+Create a snapshot of specific indices, wait for completion:
+JSON
+PUT _snapshot/my_s3_repo/snapshot_2026_01_25?wait_for_completion=true
+{
+  "indices": "index_1,index_2",
+  "include_global_state": true
+}
+Snapshot all indices:
+Code
+PUT _snapshot/my_s3_repo/snapshot_all_2026_01_25?wait_for_completion=true
+{
+  "include_global_state": true
+}
+Check snapshot status:
+
+Code
+GET _snapshot/my_s3_repo/snapshot_2026_01_25/_status
+GET _snapshot/my_s3_repo/_all
+Restore a snapshot (Kibana UI)
+In the repository view → Snapshots, select the snapshot to restore.
+Click “Restore”.
+Select indices to restore (you can pick all or specific indices).
+Rename pattern/replace if restoring into new index names (helpful to avoid overwriting).
+Options: include global state, include aliases, partial, ignore index settings or override index settings (e.g., reduce number_of_replicas).
+If the target index already exists and you want to overwrite, you typically must close the existing index first (or use renaming).
+Start restore and monitor progress from the UI.
+Restore snapshot (API)
+
+Basic restore (rename index during restore and override index settings):
+JSON
+POST _snapshot/my_s3_repo/snapshot_2026_01_25/_restore?wait_for_completion=true
+{
+  "indices": "index_1",
+  "rename_pattern": "index_(.+)",
+  "rename_replacement": "restored_index_$1",
+  "include_global_state": false,
+  "index_settings": {
+    "index.number_of_replicas": 0
+  }
+}
+If restoring over an existing index, you must close the existing index first:
+Code
+POST /existing_index/_close
+POST _snapshot/my_s3_repo/snapshot_2026_01_25/_restore
+{
+  "indices": "existing_index",
+  "include_global_state": false
+}
+POST /existing_index/_open
+Snapshot Lifecycle Management (SLM)
+Kibana also exposes Snapshot Lifecycle Management (SLM) to automate scheduled snapshots and retention.
+In Kibana: Stack Management → Snapshot Policies (or Snapshot Lifecycle) → Create policy:
+Define schedule (cron), repository, snapshot name pattern, indices, retention (expire after X days).
+SLM automatically takes snapshots on the schedule and deletes old snapshots per retention rules.
+Restoring from SLM snapshots is the same as restoring from any snapshot.
+Kibana-specific considerations
+Kibana saved objects are stored in the Kibana index (commonly .kibana, .kibana_1, etc.). To fully back up Kibana state include those system indices in your snapshot.
+If you use the Fleet, APM, or other stack features, include their system indices too.
+Some users prefer exporting Kibana Saved Objects (Management → Saved Objects → Export) for portability, in addition to snapshotting the .kibana index.
+Common errors and troubleshooting
+Repository registration failed: check ES logs, repository settings (path permissions for fs repo; IAM, credentials, region and bucket for S3).
+Snapshot failed due to "no such index": the requested index was missing or closed; check indices and snapshot options (ignore_unavailable).
+Snapshot stuck or slow: check cluster health, disk space, snapshot throttling settings, network bandwidth.
+Restore fails because index exists: close/delete/rename the existing index or use rename during restore.
+Permissions: ensure the node user can access the repository location and that your ES user has required privileges. Useful APIs:
+Code
+GET /_cluster/health
+GET _cat/indices?v
+GET _snapshot/my_repo/_all
+GET _snapshot/my_repo/snapshot_name/_status
+Security / credentials (cloud stores)
+Do not put secret keys in elasticsearch.yml in plain text on disk; use the elasticsearch keystore:
+bin/elasticsearch-keystore add s3.client.default.secret_key (example)
+On cloud-managed Elasticsearch (Elastic Cloud), use the provider’s snapshot settings or take snapshots via the cloud console.
+
+
+-------------------------------------------------------------------------------------------------------
 --- write why we use the snapshot and restore here ---
