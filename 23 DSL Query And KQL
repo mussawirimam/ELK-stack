@@ -63,6 +63,17 @@ PUT students
     }
   }
 }
+
+### to get the mapping 
+GET my_class/_mapping
+### If you only want to check one field (example: joined_date)
+GET my_class/_mapping/field/joined_date
+### Or multiple fields:
+GET my_class/_mapping/field/name,age,grade
+### To confirm the index exists
+GET _cat/indices/my_class?v
+
+
 Bulk Insert Sample Data:
 POST _bulk
 { "index": { "_index": "students" } }
