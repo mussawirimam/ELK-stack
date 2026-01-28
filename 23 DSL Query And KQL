@@ -10,6 +10,13 @@ parameters
 etc
 }
 
+Tip3: if you want to add timestamp/date to any of your document for the testing purpose. You can copy that from any of your document, and look for the timestamp field from your json payload of your document and copy it from there. 
+POST _bulk
+{ "index": { "_index": "my_class" } }
+{ "name": "Chintaman", "date": "2025-04-09T14:37:19.666Z", "age": 31, "grade": "A", "subjects": ["Math", "English"], "score": 85.5, "joined_date": "2023-01-15" }
+
+GET my_class/_search
+
 NOTE: 
 querytypes: term, terms, and match queries
 DATATYPES: keyword and text
