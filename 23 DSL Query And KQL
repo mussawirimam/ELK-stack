@@ -120,6 +120,140 @@ GET my_class/_search
   }
 }
 
+### range
+POST _bulk
+{ "index": { "_index": "my_class" } }
+{ "name": "Sravanan", "date": "2025-04-08T14:37:19.666Z", "age": 35, "grade": "A", "subjects": ["Math", "English"], "score": 85.5, "joined_date": "2023-01-15" }
+{ "index": { "_index": "my_class" } }
+{ "name": "Rathore", "date": "2025-04-06T14:37:19.666Z", "age": 45, "grade": "A", "subjects": ["Math", "English"], "score": 85.5, "joined_date": "2023-01-15" }
+
+GET my_class/_search
+{
+  "query": {
+    "range": {
+      "age": {
+        "gte": 40,
+        "lte": 50
+      }
+    }
+  }
+}
+
+### range with timestamp/date if its timestamp instead of date field, you will add @timestamp instead of date in field
+### tip: I had to change 2026 and month in the records because I couldnt find record for 2025..
+POST _bulk
+{ "index": { "_index": "my_class" } }
+{ "name": "Mussa", "date": "2026-01-02T14:37:19.666Z", "age": 35, "grade": "A", "subjects": ["Math", "English"], "score": 85.5, "joined_date": "2023-01-15" }
+{ "index": { "_index": "my_class" } }
+{ "name": "Sirish", "date": "2026-01-01T14:37:19.666Z", "age": 45, "grade": "A", "subjects": ["Math", "English"], "score": 85.5, "joined_date": "2023-01-15" }
+
+GET my_class/_search
+{
+  "query": {
+    "range": {
+      "date": {
+        "gte": "now-30d",
+        "lt": "now"
+      }
+    }
+  }
+}
+or
+# you can as well add the timestamp to fetch the records within the greater then and less then or you can do it with relatable as shown above or with 24 hours etc
+GET my_class/_search
+{
+  "query": {
+    "range": {
+      "date": {
+        "gte": "2026-01-01T14:37:19.666Z",
+        "lt": "2026-02-01T14:37:19.666Z"
+      }
+    }
+  }
+}
+
+### if you are adding filter query match on top of the range, you will have ot use the bool query as in addition to it. So there are three pieces to the code now.
+# 1: bool, 2: must, 3: your filters (range and match or term)
+### Great — this is where you use a bool query.
+In Elasticsearch, whenever you want to combine multiple queries (range + match + term, etc.), you wrap them inside bool.
+Your current query has only a range. To add a match condition, you do this:
+✅ Range + Match together (most common pattern)
+### with match and range
+GET my_class/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "range": {
+            "date": {
+              "gte": "now-30d",
+              "lt": "now"
+            }
+          }
+        },
+        {
+          "match": {
+            "name": "Mussa"
+          }
+        }
+      ]
+    }
+  }
+}
+### with term and range
+GET my_class/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "range": {
+            "date": {
+              "gte": "now-30d",
+              "lt": "now"
+            }
+          }
+        },
+        {
+          "term": {
+            "name": {
+              "value": "Mussa"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+
+GET my_class/_search
+### inline
+{ "query": { "bool": { "filter": [ { "term": { "grade": "A" } }, { "range": { "age": { "gte": 40 } } } ] } } }
+or pretty formatted
+GET my_class/_search
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "term": {
+            "grade": "A"
+          }
+        },
+        {
+          "range": {
+            "age": {
+              "gte": 40
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+
+
 
 -------------------------------------------------------------------------
 DSL QUERY.docx
