@@ -1,4 +1,4 @@
-Tip: if you type in kql in the kibana discover search, at the backend it convert and run a DSL. To check that, you will have to click on inspect after KQL is searched > click on request to see the DSL
+Tip: if you type in kql in the kibana discover search, at the backend it convert and run a DSL. To check that, you will have to click on INSPECT after KQL is searched > click on REQUEST to see the DSL
 
 NOTE: 
 querytypes: term, terms, and match queries
