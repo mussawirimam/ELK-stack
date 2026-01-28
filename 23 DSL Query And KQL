@@ -35,10 +35,88 @@ we also can do filter, aggregation, sorting, and range based searches to filter 
 -------------------------------------------------------------------------
 DSL:
 -------------------------------------------------------------------------
+DELETE my_class
+### instead of delete you should do the reindex command
+PUT my_class
+{
+  "mappings": {
+    "properties": {
+      "name": { "type": "keyword" },
+      "age": { "type": "integer" },
+      "grade": { "type": "keyword" },
+      "subjects": { "type": "keyword" },
+      "score": { "type": "float" },
+      "joined_date": { "type": "date" }
+    }
+  }
+}
+GET my_class/_mapping
+
+### we can send upto 3000 records in single bulk request
+POST _bulk
+{ "index": { "_index": "my_class" } }
+{ "name": "Chintaman", "date": "2025-04-09T14:37:19.666Z", "age": 31, "grade": "A", "subjects": ["Math", "English"], "score": 85.5, "joined_date": "2023-01-15" }
+{ "index": { "_index": "my_class" } }
+{ "name": "Mohan", "date": "2025-04-07T14:37:19.666Z", "age": 31, "grade": "A", "subjects": ["Math", "English"], "score": 85.5, "joined_date": "2023-01-15" }
+
+POST _bulk
+{ "index": { "_index": "my_class" } }
+{ "name": "Mohan", "date": "2025-04-08T14:37:19.666Z", "age": 31, "grade": "A", "subjects": ["Math", "English"], "score": 85.5, "joined_date": "2023-01-15" }
+
+
+GET my_class/_search
+
 GET my_class/_search
 {
   "query": {
   "match_all": {}  
+  }
+}
+
+### for matching on specific field but generalized
+GET my_class/_search
+{
+  "query": {
+    "match": {
+      "name": "Chintaman"
+    }
+  }
+}
+
+### term to find single value
+GET my_class/_search
+{
+  "query": {
+    "term": {
+      "name": {
+        "value": "Chintaman"
+      }
+    }
+  }
+}
+or 
+GET my_class/_search
+{
+  "query": {
+    "term": {
+      "name.keyword": { #### <-------------- if KEYWORD is mapped with the name as a DATATYPE
+        "value": "Chintaman"
+      }
+    }
+  }
+}
+
+
+### terms to find multiple values
+GET my_class/_search
+{
+  "query": {
+    "terms": {
+      "name": [
+        "Chintaman",
+        "Mohan"
+      ]
+    }
   }
 }
 
@@ -67,6 +145,27 @@ PUT students
   "mappings": {
     "properties": {
       "name": { "type": "text" },
+      "age": { "type": "integer" },
+      "grade": { "type": "keyword" },
+      "subjects": { "type": "keyword" },
+      "score": { "type": "float" },
+      "joined_date": { "type": "date" }
+    }
+  }
+}
+### in this name is both text and keyword as how the mapping of the name should be
+PUT students
+{
+  "mappings": {
+    "properties": {
+      "name": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
       "age": { "type": "integer" },
       "grade": { "type": "keyword" },
       "subjects": { "type": "keyword" },
