@@ -253,6 +253,50 @@ GET my_class/_search
   }
 }
 
+### applying multiple 3 filters: adding bool, term, range of age, and rage of date
+GET my_class/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "term": {
+            "grade": "A"
+          }
+        },
+        {
+          "range": {
+            "age": {
+              "gte": 40
+            }
+          }
+        },
+        {
+          "range": {
+            "date": {
+              "gte": "now-90d",
+              "lte": "now"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+
+Bool also has should beside must
+----------------------------------------------
+AGGREGATIONS:
+----------------------------------------------
+When working with databases, you can use the GROUP BY clause in MSSQL. It summarizes data based on the values of one or more columns.
+e.g:
+SELECT COUNT(*) AS total, name
+FROM students
+WHERE date > GETDATE()
+GROUP BY name
+ORDER BY name DESC;
+
+
 
 
 -------------------------------------------------------------------------
