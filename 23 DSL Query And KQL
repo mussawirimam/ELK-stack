@@ -32,8 +32,20 @@ match is general tokenized TEXT DATATYPE based search
 ------------
 
 we also can do filter, aggregation, sorting, and range based searches to filter the search more etc
+-------------------------------------------------------------------------
+DSL:
+-------------------------------------------------------------------------
+GET my_class/_search
+{
+  "query": {
+  "match_all": {}  
+  }
+}
 
 
+-------------------------------------------------------------------------
+DSL QUERY.docx
+-------------------------------------------------------------------------
 Elasticsearch DSL Tutorial with Examples
 1️⃣ Introduction to DSL
 Elastic search DSL is a powerful query language based on JSON used to search, filter, and analyze data in Elasticsearch.
