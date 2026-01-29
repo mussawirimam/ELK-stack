@@ -288,6 +288,25 @@ Bool also has should beside must
 ----------------------------------------------
 AGGREGATIONS:
 ----------------------------------------------
+### The use case of aggregation is to summarize data into more sensible records
+what is the use of aggregation in elk in simple words tldr
+✅ TL;DR — Use of Aggregations in ELK (simple words)
+Aggregations in ELK are used to summarize and analyze data.
+They help you answer questions like:
+
+How many logs per level? (error, warn, info)
+Average response time?
+Top users?
+Events per day?
+👉 In simple words:
+Search finds documents. Aggregations turn documents into insights (counts, averages, groups, trends).
+Like:
+
+SQL GROUP BY
+Excel pivot tables
+Dashboard charts in Kibana
+That’s it. Search = find. Aggregations = understand.
+
 When working with databases, you can use the GROUP BY clause in MSSQL. It summarizes data based on the values of one or more columns.
 e.g:
 SELECT COUNT(*) AS total, name
@@ -296,9 +315,226 @@ WHERE date > GETDATE()
 GROUP BY name
 ORDER BY name DESC;
 
+### adding grade B
+POST _bulk
+{ "index": { "_index": "my_class" } }
+{ "name": "srk", "date": "2026-01-02T14:37:19.666Z", "age": 35, "grade": "B", "subjects": ["Math", "English"], "score": 85.5, "joined_date": "2023-01-15" }
+{ "index": { "_index": "my_class" } }
+{ "name": "salman", "date": "2026-01-01T14:37:19.666Z", "age": 45, "grade": "B", "subjects": ["Math", "English"], "score": 85.5, "joined_date": "2023-01-15" }
+
+### aggregation query
+GET my_class/_search
+{
+  "size": 0,
+  "aggs": {
+    "grades_count": {
+      "terms": {
+        "field": "grade"
+      }
+    }
+  }
+}
+
+### OUTPUT CONSOLE
+### grouping grade a are 6 and b are 2 in different documents.
+  "aggregations": {
+    "grades_count": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0,
+      "buckets": [
+        {
+          "key": "A",
+          "doc_count": 6
+        },
+        {
+          "key": "B",
+          "doc_count": 2
+        }
+      ]
+    }
+  }
+}
+
+### Aaggregation with bool
+GET my_class/_search
+{
+  "size": 0,
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "range": {
+            "score": {
+              "gte": 85
+            }
+          }
+        }
+      ]
+    }
+  },
+  "aggs": {
+    "grades_count": {
+      "terms": {
+        "field": "grade"
+      }
+    }
+  }
+}
+
+### OUTPUT
+ "aggregations": {
+    "grades_count": {
+      "doc_count_error_upper_bound": 0,
+      "sum_other_doc_count": 0,
+      "buckets": [
+        {
+          "key": "A",
+          "doc_count": 6
+        },
+        {
+          "key": "B",
+          "doc_count": 2
+        }
 
 
 
+### you can also do mathematical calculations as well, in this case avg or max
+
+POST _bulk
+{ "index": { "_index": "my_class" } }
+{ "name": "srk", "date": "2026-01-02T14:37:19.666Z", "age": 35, "grade": "B", "subjects": ["Math", "English"], "score": 85.5, "joined_date": "2023-01-15" }
+{ "index": { "_index": "my_class" } }
+{ "name": "Ali", "date": "2026-01-01T14:37:19.666Z", "age": 45, "grade": "B", "subjects": ["Math", "English"], "score": 99.5, "joined_date": "2023-01-15" }
+
+GET my_class/_search
+{
+  "size": 0,
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "range": {
+            "score": {
+              "gte": 85
+            }
+          }
+        }
+      ]
+    }
+  },
+  "aggs": {
+    "grades_count": {
+      "max": {
+        "field": "score"
+      }
+    }
+  }
+}
+GET my_class/_search
+{
+  "size": 0,
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "range": {
+            "score": {
+              "gte": 85
+            }
+          }
+        }
+      ]
+    }
+  },
+  "aggs": {
+    "grades_count": {
+      "min": {
+        "field": "score"
+      }
+    }
+  }
+}
+
+### multiple aggregation with min max etc
+GET my_class/_search
+{
+  "size": 0,
+  "query": {
+    "bool": {
+      "must": [
+        { "range": { "score": { "gte": 85 } } }
+      ]
+    }
+  },
+  "aggs": {
+    "grades_count": {
+      "max": {
+        "field": "score"
+      }
+    },
+    "min": {
+      "min": {
+        "field": "score"
+      }
+    }
+  }
+}
+
+### OUTPUT
+  },
+  "hits": {
+    "total": {
+      "value": 10,
+      "relation": "eq"
+    },
+    "max_score": null,
+    "hits": []
+  },
+  "aggregations": {
+    "min": {
+      "value": 85.5
+    },
+    "grades_count": {
+      "value": 99.5
+    }
+  }
+}
+
+### DSL is powerful because you can use it in your any language and also through POSTMAN we can use it for URI API calls to get the data
+
+### Cardinality in AGGS
+Cardinality Aggregation
+This query calculates the count of unique values (cardinality) for the grade field among documents with a score of 85 or higher.
+GET my_class/_search
+{
+  "size": 0,
+  "query": {
+    "bool": {
+      "must": [
+        { "range": { "score": { "gte": 85 } } }
+      ]
+    }
+  },
+  "aggs": {
+    "grades": {
+      "cardinality": {
+        "field": "grade"
+      }
+    }
+  }
+}
+Key Differences
+Query 1 returns the highest and lowest numerical scores (min max).
+Query 2 returns the count of unique grades (e.g., how many different types of grades exist in that score range).
+
+### OUTPUT:
+  },
+  "aggregations": {
+    "grades": {
+      "value": 2
+    }
+  }
+}
 -------------------------------------------------------------------------
 DSL QUERY.docx
 -------------------------------------------------------------------------
