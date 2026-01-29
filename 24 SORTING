@@ -1,0 +1,432 @@
+###
+Query Breakdown
+
+GET my_class/_search: This targets the index named my_class for a search operation.
+
+"size": 10000: Tells Elasticsearch to return up to 10,000 documents. By default, Elasticsearch only returns 10; this increases that limit significantly to capture a larger dataset.
+
+"query": Defines the criteria for which documents should be included.
+
+"bool": { "must": [...] }: Acts like a logical AND. The conditions inside the must array are required for a document to be a match.
+
+"range": { "score": { "gte": 85 } }: Filters the results to only include documents where the score field is greater than or equal to 85.
+
+"sort": Determines the order of the results.
+
+{ "date": "desc" }: Sorts the returned documents by the date field in descending order (newest records first).
++----------------+------------------------------------------------------------+
+| Component      | Function                                                   |
++----------------+------------------------------------------------------------+
+| Index          | searching 'my_class'                                       |
+| Result Limit   | 10,000 documents (increased from default 10)               |
+| Filter Logic   | Score MUST be 85 or higher (>= 85)                         |
+| Ordering       | Sorted by 'date', newest to oldest (DESC)                  |
++----------------+------------------------------------------------------------+
+
+GET my_class/_search
+{
+  "size": 10000,
+  "query": {
+    "bool": {
+      "must": [
+        { "range": { "score": { "gte": 85 } } }
+      ]
+    }
+  },
+  "sort": [
+    { "date": "desc" }
+  ]
+}
+
+### OUTPUT
+{
+  "took": 1,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 10,
+      "relation": "eq"
+    },
+    "max_score": null,
+    "hits": [
+      {
+        "_index": "my_class",
+        "_id": "PtnIBJwBwwN2Hi5tA32D",
+        "_score": null,
+        "_source": {
+          "name": "Mussa",
+          "date": "2026-01-02T14:37:19.666Z",
+          "age": 35,
+          "grade": "A",
+          "subjects": [
+            "Math",
+            "English"
+          ],
+          "score": 85.5,
+          "joined_date": "2023-01-15"
+        },
+        "sort": [
+          1767364639666
+        ]
+      },
+      {
+        "_index": "my_class",
+        "_id": "QNmaB5wBwwN2Hi5t2n2v",
+        "_score": null,
+        "_source": {
+          "name": "srk",
+          "date": "2026-01-02T14:37:19.666Z",
+          "age": 35,
+          "grade": "B",
+          "subjects": [
+            "Math",
+            "English"
+          ],
+          "score": 85.5,
+          "joined_date": "2023-01-15"
+        },
+        "sort": [
+          1767364639666
+        ]
+      },
+      {
+        "_index": "my_class",
+        "_id": "QtmkB5wBwwN2Hi5tg335",
+        "_score": null,
+        "_source": {
+          "name": "srk",
+          "date": "2026-01-02T14:37:19.666Z",
+          "age": 35,
+          "grade": "B",
+          "subjects": [
+            "Math",
+            "English"
+          ],
+          "score": 85.5,
+          "joined_date": "2023-01-15"
+        },
+        "sort": [
+          1767364639666
+        ]
+      },
+      {
+        "_index": "my_class",
+        "_id": "P9nIBJwBwwN2Hi5tA32D",
+        "_score": null,
+        "_source": {
+          "name": "Sirish",
+          "date": "2026-01-01T14:37:19.666Z",
+          "age": 45,
+          "grade": "A",
+          "subjects": [
+            "Math",
+            "English"
+          ],
+          "score": 85.5,
+          "joined_date": "2023-01-15"
+        },
+        "sort": [
+          1767278239666
+        ]
+      },
+      {
+        "_index": "my_class",
+        "_id": "QdmaB5wBwwN2Hi5t2n2v",
+        "_score": null,
+        "_source": {
+          "name": "salman",
+          "date": "2026-01-01T14:37:19.666Z",
+          "age": 45,
+          "grade": "B",
+          "subjects": [
+            "Math",
+            "English"
+          ],
+          "score": 85.5,
+          "joined_date": "2023-01-15"
+        },
+        "sort": [
+          1767278239666
+        ]
+      },
+      {
+        "_index": "my_class",
+        "_id": "Q9mkB5wBwwN2Hi5tg335",
+        "_score": null,
+        "_source": {
+          "name": "Ali",
+          "date": "2026-01-01T14:37:19.666Z",
+          "age": 45,
+          "grade": "B",
+          "subjects": [
+            "Math",
+            "English"
+          ],
+          "score": 99.5,
+          "joined_date": "2023-01-15"
+        },
+        "sort": [
+          1767278239666
+        ]
+      },
+      {
+        "_index": "my_class",
+        "_id": "OtmsBJwBwwN2Hi5tU33O",
+        "_score": null,
+        "_source": {
+          "name": "Chintaman",
+          "date": "2025-04-09T14:37:19.666Z",
+          "age": 31,
+          "grade": "A",
+          "subjects": [
+            "Math",
+            "English"
+          ],
+          "score": 85.5,
+          "joined_date": "2023-01-15"
+        },
+        "sort": [
+          1744209439666
+        ]
+      },
+      {
+        "_index": "my_class",
+        "_id": "O9mzBJwBwwN2Hi5t6X1N",
+        "_score": null,
+        "_source": {
+          "name": "Mohan",
+          "date": "2025-04-08T14:37:19.666Z",
+          "age": 31,
+          "grade": "A",
+          "subjects": [
+            "Math",
+            "English"
+          ],
+          "score": 85.5,
+          "joined_date": "2023-01-15"
+        },
+        "sort": [
+          1744123039666
+        ]
+      },
+      {
+        "_index": "my_class",
+        "_id": "PNnDBJwBwwN2Hi5tHH3r",
+        "_score": null,
+        "_source": {
+          "name": "Sravanan",
+          "date": "2025-04-08T14:37:19.666Z",
+          "age": 35,
+          "grade": "A",
+          "subjects": [
+            "Math",
+            "English"
+          ],
+          "score": 85.5,
+          "joined_date": "2023-01-15"
+        },
+        "sort": [
+          1744123039666
+        ]
+      },
+      {
+        "_index": "my_class",
+        "_id": "PdnDBJwBwwN2Hi5tHH3s",
+        "_score": null,
+        "_source": {
+          "name": "Rathore",
+          "date": "2025-04-06T14:37:19.666Z",
+          "age": 45,
+          "grade": "A",
+          "subjects": [
+            "Math",
+            "English"
+          ],
+          "score": 85.5,
+          "joined_date": "2023-01-15"
+        },
+        "sort": [
+          1743950239666
+        ]
+      }
+    ]
+  }
+}
+
+
+
+
+### Source Filtering Query
+This query is a filtered search designed to retrieve specific data fields for a large set of documents. Here is the breakdown for your notes:
+
+Query Breakdown
+
+GET my_class/_search: This is the endpoint used to search the index named my_class.
+
+"size": 10000: This overrides the default limit of 10 results, telling Elasticsearch to return up to 10,000 documents in a single response.
+
+"query": This section defines the selection criteria for the search.
+
+"bool": { "must": [...] }: This is a Boolean query where every condition inside the must array is required (acting like a logical AND).
+
+"range": { "score": { "gte": 85 } }: This filters the data to only include documents where the score field is greater than or equal to (gte) 85.
+
+"_source": ["name", "age"]: This is Source Filtering. Instead of returning the entire document (which could be very large), Elasticsearch only returns the "name" and "age" fields for each matching record.
+This query retrieves only the name field for up to 10,000 documents where the score is 85 or higher with name source only
++----------------+------------------------------------------------------------+
+| Component      | Function                                                   |
++----------------+------------------------------------------------------------+
+| Index          | Searching the 'my_class' dataset                           |
+| Result Limit   | Returns up to 10,000 matches                                |
+| Filter Logic   | ONLY includes documents with a score of 85 or higher       |
+| Data Returned  | ONLY includes 'name' and 'age' fields (saves bandwidth)    |
++----------------+------------------------------------------------------------+
+
+JSON
+GET my_class/_search
+{
+  "size": 10000,
+  "query": {
+    "bool": {
+      "must": [
+        { "range": { "score": { "gte": 85 } } }
+      ]
+    }
+  },
+  "_source": ["name", "age"]
+}
+
+
+### OUTPUT
+{
+  "took": 1,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 10,
+      "relation": "eq"
+    },
+    "max_score": 1,
+    "hits": [
+      {
+        "_index": "my_class",
+        "_id": "OtmsBJwBwwN2Hi5tU33O",
+        "_score": 1,
+        "_source": {
+          "name": "Chintaman",
+          "age": 31
+        }
+      },
+      {
+        "_index": "my_class",
+        "_id": "O9mzBJwBwwN2Hi5t6X1N",
+        "_score": 1,
+        "_source": {
+          "name": "Mohan",
+          "age": 31
+        }
+      },
+      {
+        "_index": "my_class",
+        "_id": "PNnDBJwBwwN2Hi5tHH3r",
+        "_score": 1,
+        "_source": {
+          "name": "Sravanan",
+          "age": 35
+        }
+      },
+      {
+        "_index": "my_class",
+        "_id": "PdnDBJwBwwN2Hi5tHH3s",
+        "_score": 1,
+        "_source": {
+          "name": "Rathore",
+          "age": 45
+        }
+      },
+      {
+        "_index": "my_class",
+        "_id": "PtnIBJwBwwN2Hi5tA32D",
+        "_score": 1,
+        "_source": {
+          "name": "Mussa",
+          "age": 35
+        }
+      },
+      {
+        "_index": "my_class",
+        "_id": "P9nIBJwBwwN2Hi5tA32D",
+        "_score": 1,
+        "_source": {
+          "name": "Sirish",
+          "age": 45
+        }
+      },
+      {
+        "_index": "my_class",
+        "_id": "QNmaB5wBwwN2Hi5t2n2v",
+        "_score": 1,
+        "_source": {
+          "name": "srk",
+          "age": 35
+        }
+      },
+      {
+        "_index": "my_class",
+        "_id": "QdmaB5wBwwN2Hi5t2n2v",
+        "_score": 1,
+        "_source": {
+          "name": "salman",
+          "age": 45
+        }
+      },
+      {
+        "_index": "my_class",
+        "_id": "QtmkB5wBwwN2Hi5tg335",
+        "_score": 1,
+        "_source": {
+          "name": "srk",
+          "age": 35
+        }
+      },
+      {
+        "_index": "my_class",
+        "_id": "Q9mkB5wBwwN2Hi5tg335",
+        "_score": 1,
+        "_source": {
+          "name": "Ali",
+          "age": 45
+        }
+      }
+    ]
+  }
+}
+Summary of All Queries
+
++--------------------+------------------------------+---------------------------+
+| Query Type         | Purpose                      | Key Parameters            |
++--------------------+------------------------------+---------------------------+
+| Metric Aggs        | Finds high/low scores.       | max, min on field score   |
+|                    |                              |                 |
++--------------------+------------------------------+---------------------------+
+| Cardinality Aggs   | Counts unique grades.        | cardinality on field      |
+|                    |                              | grade           |
++--------------------+------------------------------+---------------------------+
+| Sorted Search      | Lists documents by rank.     | sort by score: desc       |
+|                    |                              |                 |
++--------------------+------------------------------+---------------------------+
+| Source Search      | Lists specific fields only.  | _source: ["name"]         |
+|                    |                              |                 |
++--------------------+------------------------------+---------------------------+
