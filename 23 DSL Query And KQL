@@ -535,6 +535,34 @@ Query 2 returns the count of unique grades (e.g., how many different types of gr
     }
   }
 }
+
+# cardinality in names to find unique names
+GET my_class/_search
+{
+  "size": 0,
+  "query": {
+    "bool": {
+      "must": [
+        { "range": { "score": { "gte": 85 } } }
+      ]
+    }
+  },
+  "aggs": {
+    "grades": {
+      "cardinality": {
+        "field": "name"
+      }
+    }
+  }
+}
+### OUTPUT there are 9 unique names in the documents
+ },
+  "aggregations": {
+    "grades": {
+      "value": 9
+    }
+  }
+}
 -------------------------------------------------------------------------
 DSL QUERY.docx
 -------------------------------------------------------------------------
