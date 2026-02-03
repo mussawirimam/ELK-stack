@@ -1,0 +1,383 @@
+
+
+ELK Watchers.docx 1 # 2 is below 
+Elasticsearch Watchers - Step-by-Step Learning Guide
+🧠 What is a Watcher?
+A Watcher in Elasticsearch is a feature provided by the X-Pack Alerting module that allows you to monitor data and trigger actions when certain conditions are met (e.g., send an alert when an error rate goes high).
+ 
+✅ Prerequisites
+1.	ELK Stack installed and running (Elasticsearch + Kibana).
+2.	X-Pack enabled (comes bundled with the default Elasticsearch distribution).
+3.	Kibana access to create and manage watchers visually (or use Dev Tools for API).
+ 
+📂 Components of a Watch
+A Watch consists of:
+•	Trigger: When the watch should run (e.g., every 5 minutes).
+•	Input: What data should be queried.
+•	Condition: When to trigger the action (e.g., more than 5 errors).
+•	Action: What to do (e.g., send email, log, webhook).
+•	Transform (optional): Manipulate data before action.
+ 
+🧪 Step-by-Step Example: Create a Watcher Using Kibana
+Step 1: Open Kibana → Stack Management → Watcher
+•	Click on “Create advanced watch” (for full control).
+ 
+Step 2: Define the Watch
+Here’s a sample watch that monitors logs for errors:
+json
+CopyEdit
+{
+  "trigger": {
+    "schedule": {
+      "interval": "1m"
+    }
+  },
+  "input": {
+    "search": {
+      "request": {
+        "indices": [
+          "filebeat-*"
+        ],
+        "body": {
+          "query": {
+            "match": {
+              "log.level": "error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "condition": {
+    "compare": {
+      "ctx.payload.hits.total.value": {
+        "gt": 0
+      }
+    }
+  },
+  "actions": {
+    "log_error": {
+      "logging": {
+        "text": "Found {{ctx.payload.hits.total.value}} error logs in the last 1 minute."
+      }
+    }
+  }
+}
+ 
+Step 3: Save and Activate
+•	Give it a name: e.g., watch_error_logs.
+•	Save and activate the watch.
+ 
+Step 4: View Watch Results
+•	Go to the “Watcher” UI.
+•	Click on the watch name → See history.
+•	You can manually simulate it too.
+ 
+🛠️ Simulate a Watch (for Testing)
+Use the Dev Tools Console:
+json
+CopyEdit
+POST _watcher/watch/_execute
+{
+  "watch": {
+    "trigger": {
+      "schedule": {
+        "interval": "1m"
+      }
+    },
+    "input": {
+      "simple": {
+        "status": "testing"
+      }
+    },
+    "condition": {
+      "always": {}
+    },
+    "actions": {
+      "log_action": {
+        "logging": {
+          "text": "This is a test action. Status: {{ctx.payload.status}}"
+        }
+      }
+    }
+  }
+}
+ 
+📤 Adding Email Notifications
+You need to configure elasticsearch.yml:
+yaml
+CopyEdit
+xpack.notification.email.account:
+  work:
+    profile: standard
+    smtp:
+      auth: true
+      starttls.enable: true
+      host: smtp.gmail.com
+      port: 587
+      user: your-email@gmail.com
+      password: your-password
+Then add an email action:
+json
+CopyEdit
+"actions": {
+  "send_email": {
+    "email": {
+      "to": "admin@example.com",
+      "subject": "Error logs detected",
+      "body": "There are {{ctx.payload.hits.total.value}} error logs."
+    }
+  }
+}
+ 
+🧼 Cleanup (Optional)
+To delete a watch:
+bash
+CopyEdit
+DELETE _watcher/watch/watch_error_logs
+ 
+🧠 Extra Tips for Teaching
+•	Start with simple log alerts (errors, warnings).
+•	Demonstrate both UI and API usage.
+•	Explain real-world scenarios like CPU threshold alerts, failed jobs, disk space, etc.
+•	Simulate logs using logger or curl so students can see live data changes.
+•	Ask students to build their own watcher as homework.
+------------------------------------------------------------------------------------------------------------
+Elk watchers2.docx
+
+What is a Watcher?
+A Watcher in Elastic Search is part of the X-Pack feature that allows you to monitor data and trigger alerts based on conditions. You can use it to notify you of anomalies, failures, thresholds being breached, etc.
+ 
+🧱 Basic Components of a Watch
+1.	Trigger: When the watch runs (e.g., every 5 minutes)
+2.	Input: What data the watch will check (e.g., search query, HTTP, or none)
+3.	Condition: Logic that checks if the data meets certain criteria
+4.	Actions: What to do if the condition is true (e.g., send email, log, webhook)
+ 
+🧪 Example 1: Simple Watch with Search Input and Logging Action
+PUT _watcher/watch/error_log_alert
+{
+  "trigger": {
+    "schedule": {
+      "interval": "5m"
+    }
+  },
+  "input": {
+    "search": {
+      "request": {
+        "indices": ["logs-*"],
+        "body": {
+          "query": {
+            "match": {
+              "log.level": "error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "condition": {
+    "compare": {
+      "ctx.payload.hits.total.value": {
+        "gt": 0
+      }
+    }
+  },
+  "actions": {
+    "log_error": {
+      "logging": {
+        "text": "Found {{ctx.payload.hits.total.value}} error logs!"
+      }
+    }
+  }
+}
+ 
+⚙️ Example 2: Watch with http Input and email Action
+PUT _watcher/watch/check_api_health
+{
+  "trigger": {
+    "schedule": {
+      "interval": "1h"
+    }
+  },
+  "input": {
+    "http": {
+      "request": {
+        "method": "get",
+        "url": "https://your-api-url/health"
+      }
+    }
+  },
+  "condition": {
+    "compare": {
+      "ctx.payload.status_code": {
+        "not_eq": 200
+      }
+    }
+  },
+  "actions": {
+    "send_email": {
+      "email": {
+        "to": "admin@example.com",
+        "subject": "API Health Check Failed",
+        "body": {
+          "text": "The API returned status {{ctx.payload.status_code}}"
+        }
+      }
+    }
+  }
+}
+ 
+🔁 Example 3: Watch with No Input and Just a Log Message
+
+PUT _watcher/watch/static_log_message
+{
+  "trigger": {
+    "schedule": {
+      "interval": "10m"
+    }
+  },
+  "input": {
+    "none": {}
+  },
+  "condition": {
+    "always": {}
+  },
+  "actions": {
+    "log_action": {
+      "logging": {
+        "text": "This is a scheduled log message from Watcher."
+      }
+    }
+  }
+}
+ 
+📩 Example 4: Watch with Webhook Action (for Slack or REST API)
+PUT _watcher/watch/post_to_webhook
+{
+  "trigger": {
+    "schedule": {
+      "interval": "15m"
+    }
+  },
+  "input": {
+    "search": {
+      "request": {
+        "indices": ["system-metrics-*"],
+        "body": {
+          "query": {
+            "range": {
+              "cpu.usage": {
+                "gte": 90
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "condition": {
+    "compare": {
+      "ctx.payload.hits.total.value": {
+        "gt": 0
+      }
+    }
+  },
+  "actions": {
+    "notify_webhook": {
+      "webhook": {
+        "method": "POST",
+        "url": "https://your-webhook-url",
+        "body": {
+          "text": "⚠️ High CPU Usage Detected"
+        }
+      }
+    }
+  }
+}
+ 
+🔍 Example 5: Watch Using Aggregation Input and Email
+PUT _watcher/watch/log_count_alert
+{
+  "trigger": {
+    "schedule": {
+      "interval": "5m"
+    }
+  },
+  "input": {
+    "search": {
+      "request": {
+        "indices": ["logs-*"],
+        "body": {
+          "size": 0,
+          "aggs": {
+            "log_levels": {
+              "terms": {
+                "field": "log.level.keyword"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "condition": {
+    "script": {
+      "source": """
+        return ctx.payload.aggregations.log_levels.buckets.stream()
+          .anyMatch(bucket -> bucket.key == 'error' && bucket.doc_count > 10);
+      """
+    }
+  },
+  "actions": {
+    "email_admin": {
+      "email": {
+        "to": "alerts@example.com",
+        "subject": "Too many error logs!",
+        "body": {
+          "text": "There are more than 10 error logs in the last 5 minutes."
+        }
+      }
+    }
+  }
+}
+ 
+🧩 Bonus: Watch with Multiple Actions
+You can chain multiple actions together:
+"actions": {
+  "log_error": {
+    "logging": {
+      "text": "Error found"
+    }
+  },
+  "email_admin": {
+    "email": {
+      "to": "admin@example.com",
+      "subject": "Alert Triggered",
+      "body": {
+        "text": "Check logs immediately."
+      }
+    }
+  }
+}
+ 
+🛠 Teaching Tips
+•	Start with a simple logging action before moving to email/webhook
+•	Use Dev Tools in Kibana to create and test watchers
+•	Show how to simulate a watcher:
+bash
+CopyEdit
+POST _watcher/watch/<watch_id>/_execute
+•	Emphasize security: email and webhooks should be secured
+
+Cron Trigger
+{
+	"trigger": {
+		"schedule": {
+			"cron": ["*/10 * * * * ?"]
+		}
+	},
+	"checks": [],
+	"actions": [],
+}
+
