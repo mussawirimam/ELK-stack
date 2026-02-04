@@ -1,4 +1,8 @@
+### official documentation for watchers input docs below:
+https://www.elastic.co/docs/explore-analyze/alerts-cases/watcher/input
+https://www.elastic.co/guide/en/elasticsearch/reference/current/input-http.html
 
+### Note: below there are two word docuemnts watchers1 and 2 one explains it and one have the examples
 
 ELK Watchers.docx 1 # 2 is below 
 Elasticsearch Watchers - Step-by-Step Learning Guide
@@ -191,7 +195,7 @@ PUT _watcher/watch/error_log_alert
     }
   }
 }
- 
+https://www.elastic.co/guide/en/elasticsearch/reference/current/input-http.html 
 ⚙️ Example 2: Watch with http Input and email Action
 PUT _watcher/watch/check_api_health
 {
