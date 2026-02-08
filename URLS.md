@@ -1,6 +1,12 @@
 https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-indices-put-index-template
 
 ### Both Opensearch and ELK are based on the same search engine (Apache Lucene), different distributed wrappers.
+#### Historical note
+Elasticsearch used Lucene from day one.
+OpenSearch is a fork of Elasticsearch 7.10 → therefore also Lucene-based.
+So the answer is unequivocally:
+Yes — same core search engine (Lucene), different distributed wrappers.
+
 Here’s the official Apache Lucene documentation page — the authoritative reference from the project itself:
 👉 Apache Lucene Release Docs & Documentation:
 https://lucene.apache.org/core/documentation.html
