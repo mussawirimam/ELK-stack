@@ -1,3 +1,4 @@
+### Elasticsearch API and endpoints: https://www.elastic.co/docs/api/doc/elasticsearch/
 https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-indices-put-index-template
 
 ### Both Opensearch and ELK are based on the same search engine (Apache Lucene), different distributed wrappers.
