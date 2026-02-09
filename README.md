@@ -20,4 +20,4 @@ Here’s a direct example of a version-specific docs page:
 https://lucene.apache.org/core/9_11_1/index.html
 These pages contain the official manual, guides, and API references for Lucene — the core search library used by systems like Elasticsearch and OpenSearch.
 
-### <p>To see the DSL query while adding filter click on inspect > in inspector > click on request </p>
+### <p>To see the DSL query after adding filter click on inspect > in inspector > click on request </p>
